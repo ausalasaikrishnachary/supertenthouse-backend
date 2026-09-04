@@ -1,468 +1,10 @@
-// // backend/routes/customerOrderRoutes.js
-// const express = require("express");
-// const router = express.Router();
-// const db = require("../db");
-
-// // ==============================
-// // GET ALL ORDERS
-// // ==============================
-// router.get("/", async (req, res) => {
-//   try {
-//     console.log('📦 Fetching all orders');
-    
-//     const sql = `
-//       SELECT 
-//         o.*,
-//         c.name as customer_name,
-//         c.email as customer_email,
-//         c.phone as customer_phone
-//       FROM orders o
-//       LEFT JOIN customers c ON o.customer_id = c.id
-//       ORDER BY o.id DESC
-//     `;
-
-//     const [orders] = await db.promise().query(sql);
-
-//     // Parse items JSON for each order
-//     for (let order of orders) {
-//       if (order.items && typeof order.items === 'string') {
-//         try {
-//           order.items = JSON.parse(order.items);
-//         } catch (e) {
-//           order.items = [];
-//         }
-//       }
-//       if (!order.items) {
-//         order.items = [];
-//       }
-//     }
-
-//     res.json({
-//       success: true,
-//       message: "Orders fetched successfully",
-//       count: orders.length,
-//       data: orders
-//     });
-
-//   } catch (err) {
-//     console.error("Error fetching orders:", err);
-//     res.status(500).json({
-//       success: false,
-//       error: "Failed to fetch orders",
-//       message: err.message
-//     });
-//   }
-// });
-
-// // ==============================
-// // GET ORDERS BY CUSTOMER ID
-// // ==============================
-// router.get("/customer/:customerId", async (req, res) => {
-//   try {
-//     const { customerId } = req.params;
-    
-//     console.log('📦 Fetching orders for customer:', customerId);
-    
-//     const sql = `
-//       SELECT 
-//         o.*,
-//         c.name as customer_name,
-//         c.email as customer_email,
-//         c.phone as customer_phone
-//       FROM orders o
-//       LEFT JOIN customers c ON o.customer_id = c.id
-//       WHERE o.customer_id = ?
-//       ORDER BY o.id DESC
-//     `;
-
-//     const [orders] = await db.promise().query(sql, [customerId]);
-
-//     // Parse items JSON for each order
-//     for (let order of orders) {
-//       if (order.items && typeof order.items === 'string') {
-//         try {
-//           order.items = JSON.parse(order.items);
-//         } catch (e) {
-//           order.items = [];
-//         }
-//       }
-//       if (!order.items) {
-//         order.items = [];
-//       }
-//     }
-
-//     res.json({
-//       success: true,
-//       message: "Customer orders fetched successfully",
-//       count: orders.length,
-//       data: orders
-//     });
-
-//   } catch (err) {
-//     console.error("Error fetching customer orders:", err);
-//     res.status(500).json({
-//       success: false,
-//       error: "Failed to fetch orders",
-//       message: err.message
-//     });
-//   }
-// });
-
-// // ==============================
-// // GET SINGLE ORDER BY ID
-// // ==============================
-// router.get("/:id", async (req, res) => {
-//   try {
-//     const orderId = req.params.id;
-//     console.log('📦 Fetching order details for ID:', orderId);
-    
-//     const sql = `
-//       SELECT 
-//         o.*,
-//         c.name as customer_name,
-//         c.email as customer_email,
-//         c.phone as customer_phone
-//       FROM orders o
-//       LEFT JOIN customers c ON o.customer_id = c.id
-//       WHERE o.id = ?
-//     `;
-
-//     const [orders] = await db.promise().query(sql, [orderId]);
-
-//     if (orders.length === 0) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "Order not found"
-//       });
-//     }
-
-//     const order = orders[0];
-    
-//     if (order.items && typeof order.items === 'string') {
-//       try {
-//         order.items = JSON.parse(order.items);
-//       } catch (e) {
-//         order.items = [];
-//       }
-//     }
-//     if (!order.items) {
-//       order.items = [];
-//     }
-
-//     res.json({
-//       success: true,
-//       message: "Order details fetched successfully",
-//       data: order
-//     });
-
-//   } catch (err) {
-//     console.error("Error fetching order details:", err);
-//     res.status(500).json({
-//       success: false,
-//       error: "Failed to fetch order details",
-//       message: err.message
-//     });
-//   }
-// });
-
-// // ==============================
-// // UPDATE ORDER STATUS (APPROVE/REJECT)
-// // ==============================
-// // backend/routes/customerOrderRoutes.js - Update the status update route
-
-// // ─── UPDATE ORDER STATUS ─────────────────────────────────────────────────────
-// // router.put("/:id/status", async (req, res) => {
-// //   const { status } = req.body;
-// //   const orderId = req.params.id;
-
-// //   console.log('📦 Updating order status:', { orderId, status });
-
-// //   // Valid statuses: pending, approved, rejected, processing, completed, cancelled
-// //   const validStatuses = ['pending', 'approved', 'rejected', 'processing', 'completed', 'cancelled'];
-  
-// //   if (!validStatuses.includes(status.toLowerCase())) {
-// //     return res.status(400).json({
-// //       success: false,
-// //       message: `Invalid status. Valid values: ${validStatuses.join(', ')}`
-// //     });
-// //   }
-
-// //   try {
-// //     const query = `UPDATE orders SET status = ?, updated_at = NOW() WHERE id = ?`;
-// //     const [result] = await db.promise().query(query, [status.toLowerCase(), orderId]);
-
-// //     if (result.affectedRows === 0) {
-// //       return res.status(404).json({
-// //         success: false,
-// //         message: "Order not found"
-// //       });
-// //     }
-
-// //     // Fetch the updated order
-// //     const [updatedOrder] = await db.promise().query(
-// //       `SELECT * FROM orders WHERE id = ?`,
-// //       [orderId]
-// //     );
-
-// //     if (updatedOrder[0].items && typeof updatedOrder[0].items === 'string') {
-// //       try {
-// //         updatedOrder[0].items = JSON.parse(updatedOrder[0].items);
-// //       } catch (e) {
-// //         updatedOrder[0].items = [];
-// //       }
-// //     }
-
-// //     res.json({
-// //       success: true,
-// //       message: `Order ${status.toLowerCase()} successfully`,
-// //       data: updatedOrder[0]
-// //     });
-
-// //   } catch (err) {
-// //     console.error("Error updating order status:", err);
-// //     res.status(500).json({
-// //       success: false,
-// //       error: "Failed to update order status",
-// //       message: err.message
-// //     });
-// //   }
-// // });
-
-
-// // backend/routes/customerOrderRoutes.js - Add notification trigger
-
-// // ─── UPDATE ORDER STATUS ─────────────────────────────────────────────────────
-// // backend/routes/customerOrderRoutes.js - Add this to the updateOrderStatus function
-
-// // ─── UPDATE ORDER STATUS ─────────────────────────────────────────────────────
-// router.put("/:id/status", async (req, res) => {
-//   const { status } = req.body;
-//   const orderId = req.params.id;
-
-//   console.log('📦 Updating order status:', { orderId, status });
-
-//   const validStatuses = ['pending', 'approved', 'rejected', 'processing', 'completed', 'cancelled'];
-  
-//   if (!validStatuses.includes(status.toLowerCase())) {
-//     return res.status(400).json({
-//       success: false,
-//       message: `Invalid status. Valid values: ${validStatuses.join(', ')}`
-//     });
-//   }
-
-//   try {
-//     const query = `UPDATE orders SET status = ?, updated_at = NOW() WHERE id = ?`;
-//     const [result] = await db.promise().query(query, [status.toLowerCase(), orderId]);
-
-//     if (result.affectedRows === 0) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "Order not found"
-//       });
-//     }
-
-//     // Fetch the updated order
-//     const [updatedOrder] = await db.promise().query(
-//       `SELECT * FROM orders WHERE id = ?`,
-//       [orderId]
-//     );
-
-//     if (updatedOrder[0].items && typeof updatedOrder[0].items === 'string') {
-//       try {
-//         updatedOrder[0].items = JSON.parse(updatedOrder[0].items);
-//       } catch (e) {
-//         updatedOrder[0].items = [];
-//       }
-//     }
-
-//     // ─── CREATE NOTIFICATION FOR CUSTOMER ──────────────────────────────────
-//     const order = updatedOrder[0];
-//     const customerId = order.customer_id;
-    
-//     if (customerId) {
-//       let title, message, icon, type;
-      
-//       switch (status.toLowerCase()) {
-//         case 'approved':
-//           title = '✅ Order Approved!';
-//           message = `Your order #${order.order_number} has been approved and is being processed.`;
-//           icon = 'check-circle';
-//           type = 'order_approved';
-//           break;
-//         case 'rejected':
-//           title = '❌ Order Rejected';
-//           message = `Your order #${order.order_number} has been rejected. Please contact support for more information.`;
-//           icon = 'x-circle';
-//           type = 'order_rejected';
-//           break;
-//         case 'processing':
-//           title = '⏳ Order Processing';
-//           message = `Your order #${order.order_number} is now being processed.`;
-//           icon = 'clock';
-//           type = 'order_processing';
-//           break;
-//         case 'completed':
-//           title = '🎉 Order Completed!';
-//           message = `Your order #${order.order_number} has been completed successfully. Thank you for your business!`;
-//           icon = 'check-circle';
-//           type = 'order_completed';
-//           break;
-//         case 'cancelled':
-//           title = '❌ Order Cancelled';
-//           message = `Your order #${order.order_number} has been cancelled.`;
-//           icon = 'x-circle';
-//           type = 'order_cancelled';
-//           break;
-//         default:
-//           title = `📋 Order ${status}`;
-//           message = `Your order #${order.order_number} status has been updated to ${status}.`;
-//           icon = 'bell';
-//           type = 'order_updated';
-//       }
-
-//       const notifQuery = `
-//         INSERT INTO notifications (user_id, title, message, type, icon, data, created_at)
-//         VALUES (?, ?, ?, ?, ?, ?, NOW())
-//       `;
-      
-//       const notifData = JSON.stringify({ 
-//         orderId: order.id, 
-//         orderNumber: order.order_number,
-//         status: status.toLowerCase()
-//       });
-      
-//       await db.promise().query(notifQuery, [
-//         customerId,
-//         title,
-//         message,
-//         type,
-//         icon,
-//         notifData
-//       ]);
-      
-//       console.log(`📧 Notification created for customer ${customerId}: ${title}`);
-//     }
-
-//     res.json({
-//       success: true,
-//       message: `Order ${status.toLowerCase()} successfully`,
-//       data: updatedOrder[0]
-//     });
-
-//   } catch (err) {
-//     console.error("Error updating order status:", err);
-//     res.status(500).json({
-//       success: false,
-//       error: "Failed to update order status",
-//       message: err.message
-//     });
-//   }
-// });
-
-
-// // ==============================
-// // UPDATE ORDER STATUS AND PAYMENT
-// // ==============================
-// router.put("/:id/status-payment", async (req, res) => {
-//   const { status, payment_status } = req.body;
-//   const orderId = req.params.id;
-
-//   console.log('📦 Updating order status and payment:', { orderId, status, payment_status });
-
-//   const validStatuses = ['pending', 'approved', 'rejected', 'processing', 'completed', 'cancelled'];
-//   const validPaymentStatuses = ['pending', 'paid', 'failed', 'blocked'];
-
-//   let updates = [];
-//   let params = [];
-
-//   if (status && validStatuses.includes(status.toLowerCase())) {
-//     updates.push("status = ?");
-//     params.push(status.toLowerCase());
-//   } else if (status) {
-//     return res.status(400).json({
-//       success: false,
-//       error: `Invalid status. Valid values: ${validStatuses.join(', ')}`
-//     });
-//   }
-
-//   if (payment_status && validPaymentStatuses.includes(payment_status.toLowerCase())) {
-//     updates.push("payment_status = ?");
-//     params.push(payment_status.toLowerCase());
-//   } else if (payment_status) {
-//     return res.status(400).json({
-//       success: false,
-//       error: `Invalid payment_status. Valid values: ${validPaymentStatuses.join(', ')}`
-//     });
-//   }
-
-//   if (updates.length === 0) {
-//     return res.status(400).json({
-//       success: false,
-//       error: "At least one field (status or payment_status) is required"
-//     });
-//   }
-
-//   updates.push("updated_at = NOW()");
-
-//   try {
-//     const query = `UPDATE orders SET ${updates.join(", ")} WHERE id = ?`;
-//     const values = [...params, orderId];
-    
-//     const [result] = await db.promise().query(query, values);
-
-//     if (result.affectedRows === 0) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "Order not found"
-//       });
-//     }
-
-//     const [updatedOrder] = await db.promise().query(
-//       `SELECT 
-//         o.*,
-//         c.name as customer_name,
-//         c.email as customer_email,
-//         c.phone as customer_phone
-//       FROM orders o
-//       LEFT JOIN customers c ON o.customer_id = c.id
-//       WHERE o.id = ?`,
-//       [orderId]
-//     );
-
-//     if (updatedOrder[0].items && typeof updatedOrder[0].items === 'string') {
-//       try {
-//         updatedOrder[0].items = JSON.parse(updatedOrder[0].items);
-//       } catch (e) {
-//         updatedOrder[0].items = [];
-//       }
-//     }
-
-//     res.json({
-//       success: true,
-//       message: "Order updated successfully",
-//       data: updatedOrder[0]
-//     });
-
-//   } catch (err) {
-//     console.error("Error updating order:", err);
-//     res.status(500).json({
-//       success: false,
-//       error: "Failed to update order",
-//       message: err.message
-//     });
-//   }
-// });
-
-// module.exports = router;
-
-
-
-
-
+const invoiceRoutes = require("./invoiceRoutes");
 // backend/routes/customerOrderRoutes.js
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
+const { adminOnly } = require("../middleware/auth");
+const orderReader = require('../middleware/orderReader');
 
 // ─── Create Notification Helper ──────────────────────────────────────────────
 const createNotification = async (userId, title, message, type, icon, data = null) => {
@@ -487,7 +29,7 @@ const createNotification = async (userId, title, message, type, icon, data = nul
 // ==============================
 router.get("/", async (req, res) => {
   try {
-    console.log('📦 Fetching all orders');
+    console.log('Fetching all orders');
     
     const sql = `
       SELECT 
@@ -513,6 +55,11 @@ router.get("/", async (req, res) => {
       if (!order.items) {
         order.items = [];
       }
+      try {
+        order.invoice_number = await invoiceRoutes.getOrCreateInvoiceNumber({ orderId: order.id, orderSource: 'customer' });
+      } catch (err) {
+        console.error("Failed to generate/fetch invoice for user order in all-list:", order.id, err);
+      }
     }
 
     res.json({
@@ -533,15 +80,19 @@ router.get("/", async (req, res) => {
 });
 
 // ==============================
-// GET ORDERS BY CUSTOMER ID
+// GET ORDERS BY CUSTOMER ID - FIXED (Combines User orders & Admin-created orders)
 // ==============================
-router.get("/customer/:customerId", async (req, res) => {
+router.get("/customer/:customerId", orderReader, async (req, res) => {
   try {
     const { customerId } = req.params;
+    if (req.orderCustomerId && String(req.orderCustomerId) !== String(customerId)) {
+      return res.status(403).json({ message: 'You cannot view another customer’s orders' });
+    }
     
-    console.log('📦 Fetching orders for customer:', customerId);
+    console.log('Fetching merged orders for customer:', customerId);
     
-    const sql = `
+    // 1. Fetch user-initiated orders (from 'orders' table)
+    const sqlUserOrders = `
       SELECT 
         o.*,
         c.name as customer_name,
@@ -552,10 +103,10 @@ router.get("/customer/:customerId", async (req, res) => {
       WHERE o.customer_id = ?
       ORDER BY o.id DESC
     `;
+    const [userOrders] = await db.promise().query(sqlUserOrders, [customerId]);
 
-    const [orders] = await db.promise().query(sql, [customerId]);
-
-    for (let order of orders) {
+    for (let order of userOrders) {
+      order.orderSource = 'customer';
       if (order.items && typeof order.items === 'string') {
         try {
           order.items = JSON.parse(order.items);
@@ -566,13 +117,80 @@ router.get("/customer/:customerId", async (req, res) => {
       if (!order.items) {
         order.items = [];
       }
+      try {
+        order.invoice_number = await invoiceRoutes.getOrCreateInvoiceNumber({ orderId: order.id, orderSource: 'customer' });
+      } catch (err) {
+        console.error("Failed to generate/fetch invoice for user order:", order.id, err);
+      }
     }
+
+    // 2. Fetch admin-created orders (from 'admin_orders' table) for this customer
+    const sqlAdminOrders = `
+      SELECT 
+        o.id,
+        o.order_number,
+        o.customer_id,
+        o.total_amount AS total,
+        o.total_amount AS subtotal,
+        o.tax_amount AS tax,
+        o.grand_total,
+        o.order_date AS created_at,
+        o.status,
+        o.payment_status,
+        o.payment_method,
+        o.notes,
+        o.invoice_number,
+        c.name as customer_name,
+        c.email as customer_email,
+        c.phone as customer_phone
+      FROM admin_orders o
+      LEFT JOIN customers c ON o.customer_id = c.id
+      WHERE o.customer_id = ?
+      ORDER BY o.id DESC
+    `;
+    const [adminOrders] = await db.promise().query(sqlAdminOrders, [customerId]);
+
+    for (let order of adminOrders) {
+      order.orderSource = 'admin';
+      // Fetch admin order items
+      const [items] = await db.promise().query(
+        `
+        SELECT 
+          oi.product_id,
+          oi.product_name AS name,
+          oi.quantity,
+          oi.price,
+          oi.discount,
+          oi.subtotal,
+          oi.image_url AS image
+        FROM admin_order_items oi
+        WHERE oi.order_id = ?
+        `,
+        [order.id]
+      );
+      order.items = items || [];
+      try {
+        order.invoice_number = await invoiceRoutes.getOrCreateInvoiceNumber({ orderId: order.id, orderSource: 'admin' });
+      } catch (err) {
+        console.error("Failed to generate/fetch invoice for admin order:", order.id, err);
+      }
+    }
+
+    // Combine both arrays
+    const combinedOrders = [...userOrders, ...adminOrders];
+    
+    // Sort combined orders by date descending
+    combinedOrders.sort((a, b) => {
+      const dateA = new Date(a.created_at || a.order_date || 0);
+      const dateB = new Date(b.created_at || b.order_date || 0);
+      return dateB.getTime() - dateA.getTime();
+    });
 
     res.json({
       success: true,
       message: "Customer orders fetched successfully",
-      count: orders.length,
-      data: orders
+      count: combinedOrders.length,
+      data: combinedOrders
     });
 
   } catch (err) {
@@ -586,14 +204,19 @@ router.get("/customer/:customerId", async (req, res) => {
 });
 
 // ==============================
-// GET SINGLE ORDER BY ID
+// GET SINGLE ORDER BY ID - FIXED (Searches both User and Admin Orders)
 // ==============================
-router.get("/:id", async (req, res) => {
+router.get("/:id", orderReader, async (req, res) => {
   try {
     const orderId = req.params.id;
-    console.log('📦 Fetching order details for ID:', orderId);
+    const source = req.query.source || 'customer';
+    if (!['customer', 'admin'].includes(source) || !/^\d+$/.test(orderId)) {
+      return res.status(400).json({ message: 'Invalid order ID or source' });
+    }
+    console.log('Fetching merged order details for ID:', orderId);
     
-    const sql = `
+    // First, try searching in 'orders' (customer orders)
+    const sqlUser = `
       SELECT 
         o.*,
         c.name as customer_name,
@@ -603,33 +226,101 @@ router.get("/:id", async (req, res) => {
       LEFT JOIN customers c ON o.customer_id = c.id
       WHERE o.id = ?
     `;
+    const [userOrders] = source === 'customer'
+      ? await db.promise().query(sqlUser + (req.orderCustomerId ? ' AND o.customer_id = ?' : ''), req.orderCustomerId ? [orderId, req.orderCustomerId] : [orderId])
+      : [[]];
 
-    const [orders] = await db.promise().query(sql, [orderId]);
-
-    if (orders.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "Order not found"
+    if (userOrders.length > 0) {
+      const order = userOrders[0];
+      order.orderSource = 'customer';
+      if (order.items && typeof order.items === 'string') {
+        try {
+          order.items = JSON.parse(order.items);
+        } catch (e) {
+          order.items = [];
+        }
+      }
+      if (!order.items) {
+        order.items = [];
+      }
+      try {
+        order.invoice_number = await invoiceRoutes.getOrCreateInvoiceNumber({ orderId: order.id, orderSource: 'customer' });
+      } catch (err) {
+        console.error("Failed to generate/fetch invoice for user order detail:", order.id, err);
+      }
+      return res.json({
+        success: true,
+        message: "Order details fetched successfully",
+        data: order
       });
     }
 
-    const order = orders[0];
-    
-    if (order.items && typeof order.items === 'string') {
+    // If not found, try searching in 'admin_orders' (Admin panel created orders)
+    const sqlAdmin = `
+      SELECT 
+        o.id,
+        o.order_number,
+        o.customer_id,
+        o.total_amount AS total,
+        o.total_amount AS subtotal,
+        o.tax_amount AS tax,
+        o.grand_total,
+        o.order_date AS created_at,
+        o.status,
+        o.payment_status,
+        o.payment_method,
+        o.notes,
+        o.invoice_number,
+        c.name as customer_name,
+        c.email as customer_email,
+        c.phone as customer_phone
+      FROM admin_orders o
+      LEFT JOIN customers c ON o.customer_id = c.id
+      WHERE o.id = ?
+    `;
+    const [adminOrders] = source === 'admin'
+      ? await db.promise().query(sqlAdmin + (req.orderCustomerId ? ' AND o.customer_id = ?' : ''), req.orderCustomerId ? [orderId, req.orderCustomerId] : [orderId])
+      : [[]];
+
+    if (adminOrders.length > 0) {
+      const order = adminOrders[0];
+      order.orderSource = 'admin';
+      order.gst = order.tax;
+      
+      // Fetch admin order items
+      const [items] = await db.promise().query(
+        `
+        SELECT 
+          oi.product_id,
+          oi.product_name AS name,
+          oi.quantity,
+          oi.price,
+          oi.discount,
+          oi.subtotal,
+          oi.image_url AS image
+        FROM admin_order_items oi
+        WHERE oi.order_id = ?
+        `,
+        [order.id]
+      );
+      order.items = items || [];
+
       try {
-        order.items = JSON.parse(order.items);
-      } catch (e) {
-        order.items = [];
+        order.invoice_number = await invoiceRoutes.getOrCreateInvoiceNumber({ orderId: order.id, orderSource: 'admin' });
+      } catch (err) {
+        console.error("Failed to generate/fetch invoice for admin order detail:", order.id, err);
       }
-    }
-    if (!order.items) {
-      order.items = [];
+
+      return res.json({
+        success: true,
+        message: "Order details fetched successfully (Admin Order)",
+        data: order
+      });
     }
 
-    res.json({
-      success: true,
-      message: "Order details fetched successfully",
-      data: order
+    res.status(404).json({
+      success: false,
+      message: "Order not found"
     });
 
   } catch (err) {
@@ -645,11 +336,11 @@ router.get("/:id", async (req, res) => {
 // ==============================
 // UPDATE ORDER STATUS
 // ==============================
-router.put("/:id/status", async (req, res) => {
+router.put("/:id/status", ...adminOnly, async (req, res) => {
   const { status } = req.body;
   const orderId = req.params.id;
 
-  console.log('📦 Updating order status:', { orderId, status });
+  console.log('Updating order status:', { orderId, status });
 
   const validStatuses = ['pending', 'approved', 'rejected', 'processing', 'completed', 'cancelled'];
   
@@ -684,7 +375,7 @@ router.put("/:id/status", async (req, res) => {
       }
     }
 
-    // ─── Create Notification ──────────────────────────────────────────────────
+    // Create Notification
     await createOrderNotification(updatedOrder[0], status.toLowerCase());
 
     res.json({
@@ -706,11 +397,11 @@ router.put("/:id/status", async (req, res) => {
 // ==============================
 // UPDATE ORDER STATUS AND PAYMENT - WITH NOTIFICATION
 // ==============================
-router.put("/:id/status-payment", async (req, res) => {
+router.put("/:id/status-payment", ...adminOnly, async (req, res) => {
   const { status, payment_status } = req.body;
   const orderId = req.params.id;
 
-  console.log('📦 Updating order status and payment:', { orderId, status, payment_status });
+  console.log('Updating order status and payment:', { orderId, status, payment_status });
 
   const validStatuses = ['pending', 'approved', 'rejected', 'processing', 'completed', 'cancelled'];
   const validPaymentStatuses = ['pending', 'paid', 'failed', 'blocked'];
@@ -780,7 +471,7 @@ router.put("/:id/status-payment", async (req, res) => {
       }
     }
 
-    // ─── CREATE NOTIFICATION ──────────────────────────────────────────────────
+    // CREATE NOTIFICATION
     if (status) {
       await createOrderNotification(updatedOrder[0], status.toLowerCase());
     }
@@ -808,7 +499,7 @@ const createOrderNotification = async (order, status) => {
   const customerId = order.customer_id;
   
   if (!customerId) {
-    console.log('⚠️ No customer ID found, skipping notification');
+    console.log('No customer ID found, skipping notification');
     return;
   }
 
@@ -816,37 +507,37 @@ const createOrderNotification = async (order, status) => {
   
   switch (status) {
     case 'approved':
-      title = '✅ Order Approved!';
+      title = 'Order Approved!';
       message = `Your order #${order.order_number} has been approved and is being processed.`;
       icon = 'check-circle';
       type = 'order_approved';
       break;
     case 'rejected':
-      title = '❌ Order Rejected';
+      title = 'Order Rejected';
       message = `Your order #${order.order_number} has been rejected. Please contact support for more information.`;
       icon = 'x-circle';
       type = 'order_rejected';
       break;
     case 'processing':
-      title = '⏳ Order Processing';
+      title = 'Order Processing';
       message = `Your order #${order.order_number} is now being processed.`;
       icon = 'clock';
       type = 'order_processing';
       break;
     case 'completed':
-      title = '🎉 Order Completed!';
+      title = 'Order Completed!';
       message = `Your order #${order.order_number} has been completed successfully. Thank you for your business!`;
       icon = 'check-circle';
       type = 'order_completed';
       break;
     case 'cancelled':
-      title = '❌ Order Cancelled';
+      title = 'Order Cancelled';
       message = `Your order #${order.order_number} has been cancelled.`;
       icon = 'x-circle';
       type = 'order_cancelled';
       break;
     default:
-      title = `📋 Order ${status}`;
+      title = `Order ${status}`;
       message = `Your order #${order.order_number} status has been updated to ${status}.`;
       icon = 'bell';
       type = 'order_updated';
@@ -858,7 +549,7 @@ const createOrderNotification = async (order, status) => {
     status: status
   };
 
-  console.log(`📧 Creating notification for customer ${customerId}:`, { title, message });
+  console.log(`Creating notification for customer ${customerId}:`, { title, message });
 
   await createNotification(
     customerId,

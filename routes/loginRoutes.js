@@ -187,78 +187,7 @@ router.post("/login", (req, res) => {
 });
 
 // ─── SALESMAN LOGIN ──────────────────────────────────────────────────────────
-router.post("/salesman-login", (req, res) => {
-  const { email, password } = req.body;
-
-  console.log('📦 Salesman login attempt:', { email });
-
-  if (!email || !password) {
-    return res.status(400).json({
-      success: false,
-      message: "Email and password are required"
-    });
-  }
-
-  const query = "SELECT * FROM salesmen WHERE email = ? AND is_active = 1";
-
-  db.query(query, [email], (err, results) => {
-    if (err) {
-      console.error("❌ Salesman login error:", err);
-      return res.status(500).json({
-        success: false,
-        message: "Server error"
-      });
-    }
-
-    if (results.length === 0) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid email or account inactive"
-      });
-    }
-
-    const user = results[0];
-
-    // Check password (support both hashed and plain text)
-    let isMatch = false;
-    if (user.password.startsWith('$2a$') || user.password.startsWith('$2b$')) {
-      isMatch = bcrypt.compareSync(password, user.password);
-    } else {
-      isMatch = password === user.password;
-    }
-
-    if (!isMatch) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid password"
-      });
-    }
-
-    const token = jwt.sign(
-      {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        role: 'salesman'
-      },
-      SECRET,
-      { expiresIn: "1d" }
-    );
-
-    res.json({
-      success: true,
-      message: "Login successful",
-      token,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        role: 'salesman'
-      },
-    });
-  });
-});
+router.post("/salesman-login", require("../services/salesmanLogin").createSalesmanLogin(db));
 
 // ─── FORGOT PASSWORD ──────────────────────────────────────────────────────────
 router.post("/forgot-password", (req, res) => {

@@ -8,7 +8,7 @@ const db = require("../db");
 // ====================================
 router.get("/", (req, res) => {
   const sql = `
-    SELECT * FROM addons WHERE is_active = 1 ORDER BY id DESC
+    SELECT id, addon_name AS name, price, icon, description, category, is_active FROM add_ons WHERE is_active = 1 ORDER BY id DESC
   `;
 
   db.query(sql, (err, results) => {
@@ -24,7 +24,7 @@ router.get("/", (req, res) => {
 // GET SINGLE ADD-ON
 // ====================================
 router.get("/:id", (req, res) => {
-  const sql = `SELECT * FROM addons WHERE id = ?`;
+  const sql = `SELECT id, addon_name AS name, price, icon, description, category, is_active FROM add_ons WHERE id = ?`;
 
   db.query(sql, [req.params.id], (err, results) => {
     if (err) {
@@ -84,7 +84,7 @@ router.post("/", (req, res) => {
     });
 
     const sql = `
-      INSERT INTO addons (name, price, icon, description, category, is_active)
+      INSERT INTO add_ons (addon_name, price, icon, description, category, is_active)
       VALUES (?, ?, ?, ?, ?, ?)
     `;
 
@@ -163,9 +163,9 @@ router.put("/:id", (req, res) => {
     });
 
     const sql = `
-      UPDATE addons
+      UPDATE add_ons
       SET
-        name = ?,
+        addon_name = ?,
         price = ?,
         icon = ?,
         description = ?,
@@ -211,7 +211,7 @@ router.delete("/:id", (req, res) => {
   const id = req.params.id;
 
   // First check if the add-on exists
-  db.query("SELECT id FROM addons WHERE id = ?", [id], (err, results) => {
+  db.query("SELECT id FROM add_ons WHERE id = ?", [id], (err, results) => {
     if (err) {
       console.error("Error checking add-on:", err);
       return res.status(500).json({ error: err.message });
@@ -222,7 +222,7 @@ router.delete("/:id", (req, res) => {
     }
 
     // Delete the add-on
-    db.query("DELETE FROM addons WHERE id = ?", [id], (err) => {
+    db.query("DELETE FROM add_ons WHERE id = ?", [id], (err) => {
       if (err) {
         console.error("Error deleting add-on:", err);
         return res.status(500).json({ error: err.message });

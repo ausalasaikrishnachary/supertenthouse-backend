@@ -1,0 +1,37 @@
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+
+🚀 Server running on port 5000
+📍 Local: http://localhost:5000
+
+🔐 AUTH ENDPOINTS (via /api/auth):
+   ──────────────────────────────────────
+   POST /api/auth/register        - Register new user
+   POST /api/auth/login           - Login user
+   POST /api/auth/verify-otp      - Verify OTP
+   POST /api/auth/resend-otp      - Resend OTP
+   ──────────────────────────────────────
+   POST /api/customers/register   - Register (alternate)
+   POST /api/customers/login      - Login (alternate)
+   ──────────────────────────────────────
+
+📁 Static Files: http://localhost:5000/uploads/
+MySQL Connected ✅
+📡 GET /api/addons
+📡 GET /api/products/143
+GET /api/products/143 - Fetching single product
+📡 GET /api/products
+GET /api/products - Fetching all products
+Found 25 products
+📡 GET /api/products/22
+GET /api/products/22 - Fetching single product
+📡 GET /api/packages/1/addons
+📡 GET /api/packages/1/add_ons
+❌ 404 - Route not found: GET /api/packages/1/add_ons
+📡 GET /api/packages/1/add_ons
+❌ 404 - Route not found: GET /api/packages/1/add_ons
+📡 GET /api/packages
+📡 GET /api/packages/1

@@ -4968,6 +4968,67 @@ router.get("/search", (req, res) => {
 // ====================================
 // GET SINGLE PRODUCT - THIS MUST BE LAST
 // ====================================
+function getProductAddons(productId, callback) {
+  const sql = `
+    SELECT a.id, a.addon_name AS name, a.price, a.description, a.image_url, a.category, a.icon, a.is_active 
+    FROM add_ons a
+    INNER JOIN product_addons pa ON a.id = pa.addon_id
+    WHERE pa.product_id = ? AND a.is_active = 1
+  `;
+  db.query(sql, [productId], (err, results) => {
+    callback(err, results || []);
+  });
+}
+
+// ====================================
+// PRODUCT ADDON MANAGEMENT
+// ====================================
+router.post("/:id/addons", (req, res) => {
+  const productId = req.params.id;
+  const { addon_ids } = req.body; // Array of integers
+
+  if (!productId || isNaN(productId)) {
+    return res.status(400).json({ error: "Invalid product ID" });
+  }
+
+  // First delete existing associations
+  db.query("DELETE FROM product_addons WHERE product_id = ?", [productId], (err) => {
+    if (err) {
+      console.error("Error clearing product addons:", err);
+      return res.status(500).json({ error: err.message });
+    }
+
+    if (!addon_ids || !Array.isArray(addon_ids) || addon_ids.length === 0) {
+      return res.json({ message: "Product addons updated successfully (cleared all)" });
+    }
+
+    // Prepare insert values
+    const values = addon_ids.map(addonId => [productId, addonId]);
+    db.query("INSERT INTO product_addons (product_id, addon_id) VALUES ?", [values], (insertErr) => {
+      if (insertErr) {
+        console.error("Error inserting product addons:", insertErr);
+        return res.status(500).json({ error: insertErr.message });
+      }
+      res.json({ message: "Product addons updated successfully" });
+    });
+  });
+});
+
+router.get("/:id/addons", (req, res) => {
+  const productId = req.params.id;
+  if (!productId || isNaN(productId)) {
+    return res.status(400).json({ error: "Invalid product ID" });
+  }
+
+  getProductAddons(productId, (err, addons) => {
+    if (err) {
+      console.error("Error fetching product addons:", err);
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(addons);
+  });
+});
+
 router.get("/:id", (req, res) => {
   const productId = req.params.id;
   console.log(`GET /api/products/${productId} - Fetching single product`);
@@ -5065,20 +5126,29 @@ router.get("/:id", (req, res) => {
         product.color_images = {};
       }
 
-      // If no images found in product_images field, fetch from product_images table
-      if (!product.images || product.images.length === 0) {
-        getProductImages(productId, (imgErr, images) => {
-          if (imgErr) {
-            console.error("Error fetching product images:", imgErr);
-            product.images = [];
-          } else {
-            product.images = images || [];
-          }
+      getProductAddons(productId, (addonErr, addons) => {
+        if (addonErr) {
+          console.error("Error fetching product addons:", addonErr);
+          product.addons = [];
+        } else {
+          product.addons = addons || [];
+        }
+
+        // If no images found in product_images field, fetch from product_images table
+        if (!product.images || product.images.length === 0) {
+          getProductImages(productId, (imgErr, images) => {
+            if (imgErr) {
+              console.error("Error fetching product images:", imgErr);
+              product.images = [];
+            } else {
+              product.images = images || [];
+            }
+            res.json(product);
+          });
+        } else {
           res.json(product);
-        });
-      } else {
-        res.json(product);
-      }
+        }
+      });
     }
   );
 });

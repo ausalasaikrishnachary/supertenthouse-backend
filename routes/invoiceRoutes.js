@@ -7,7 +7,8 @@ const db = require('../db');
 
 const INVOICE_SOURCES = {
   customer: { table: 'orders', prefix: 'CUS' },
-  admin: { table: 'admin_orders', prefix: 'ADM' }
+  admin: { table: 'admin_orders', prefix: 'ADM' },
+  salesman: { table: 'salesman_orders', prefix: 'SAL' }
 };
 
 function normalizeOrderSource(orderSource) {
@@ -32,10 +33,14 @@ async function getNextInvoiceSequence() {
     'SELECT invoice_number FROM admin_orders WHERE invoice_number LIKE ?',
     [likePattern]
   );
+  const [salesmanRows] = await db.promise().query(
+    'SELECT invoice_number FROM salesman_orders WHERE invoice_number LIKE ?',
+    [likePattern]
+  );
 
   const usedSequences = new Set(
-    [...customerRows, ...adminRows]
-      .map(row => String(row.invoice_number || '').match(/^INV-(CUS|ADM)-\d{4}-(\d+)$/))
+    [...customerRows, ...adminRows, ...salesmanRows]
+      .map(row => String(row.invoice_number || '').match(/^INV-(CUS|ADM|SAL)-\d{4}-(\d+)$/))
       .filter(Boolean)
       .map(match => Number(match[2]))
       .filter(Number.isFinite)
@@ -545,4 +550,6 @@ function generateInvoiceHTML(order) {
   `;
 }
 
+router.getOrCreateInvoiceNumber = getOrCreateInvoiceNumber;
+router.getNextInvoiceSequence = getNextInvoiceSequence;
 module.exports = router;

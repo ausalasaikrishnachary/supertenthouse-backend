@@ -1,6 +1,9 @@
+const invoiceRoutes = require("./invoiceRoutes");
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
+const { adminOnly } = require("../middleware/auth");
+const { ensureSalesmanNotificationsTable, notifyAdminOrderCreated } = require('../services/salesmanNotificationService');
 
 // ==============================
 // CREATE NEW ORDER
@@ -12,16 +15,20 @@ router.post("/", async (req, res) => {
     return res.status(400).json({ error: "Customer ID is required" });
   }
 
-  if (!items || items.length === 0) {
+  if (!Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ error: "At least one product is required" });
   }
 
+  if (items.some(item => !item || !Number.isInteger(Number(item.product_id)) || Number(item.product_id) <= 0 || !Number.isInteger(Number(item.quantity)) || Number(item.quantity) <= 0 || !Number.isFinite(Number(item.price)) || Number(item.price) < 0)) {
+    return res.status(400).json({ message: 'Each item requires a valid product, positive quantity and non-negative price' });
+  }
   try {
+    await ensureSalesmanNotificationsTable();
     await db.promise().query("START TRANSACTION");
 
-    const subtotal = total_amount || 0;
-    const tax = subtotal * 0.18;
-    const grandTotal = subtotal + tax;
+    const subtotal = Math.round(items.reduce((sum, item) => sum + Number(item.price) * Number(item.quantity), 0) * 100) / 100;
+    const tax = Math.round(subtotal * 0.18 * 100) / 100;
+    const grandTotal = Math.round((subtotal + tax) * 100) / 100;
 
     const date = new Date();
     const year = date.getFullYear().toString().slice(-2);
@@ -116,8 +123,6 @@ router.post("/", async (req, res) => {
       );
     }
 
-    await db.promise().query("COMMIT");
-
     const [newOrder] = await db.promise().query(
       "SELECT * FROM admin_orders WHERE id = ?",
       [orderId]
@@ -128,6 +133,18 @@ router.post("/", async (req, res) => {
       [orderId]
     );
 
+    // Read the response before committing: a read failure must not leave a saved
+    // order behind while telling the client that creation failed.
+    await notifyAdminOrderCreated(db.promise(), { id: orderId, order_number: orderNumber, status: 'approved' });
+    await db.promise().query("COMMIT");
+
+    let createdInvoiceNum = null;
+    try {
+      createdInvoiceNum = await invoiceRoutes.getOrCreateInvoiceNumber({ orderId: orderId, orderSource: 'admin' });
+    } catch (err) {
+      console.error("Failed to generate invoice during order creation:", err);
+    }
+
     res.status(201).json({
       message: "Order placed successfully",
       order_id: orderId,
@@ -135,12 +152,15 @@ router.post("/", async (req, res) => {
       order: {
         id: orderId,
         ...newOrder[0],
+        invoice_number: createdInvoiceNum,
         items: orderItems
       }
     });
 
   } catch (err) {
-    await db.promise().query("ROLLBACK");
+    try { await db.promise().query("ROLLBACK"); } catch (rollbackError) {
+      console.error('Order rollback failed:', rollbackError);
+    }
     console.error("Error creating order:", err);
     res.status(500).json({
       error: "Failed to create order",
@@ -178,6 +198,11 @@ router.get("/", async (req, res) => {
         [order.id]
       );
       order.items = items;
+      try {
+        order.invoice_number = await invoiceRoutes.getOrCreateInvoiceNumber({ orderId: order.id, orderSource: 'admin' });
+      } catch (err) {
+        console.error("Failed to generate/fetch invoice for admin order:", order.id, err);
+      }
     }
 
     res.json({
@@ -228,6 +253,12 @@ router.get("/:id", async (req, res) => {
 
     order[0].items = items;
 
+    try {
+      order[0].invoice_number = await invoiceRoutes.getOrCreateInvoiceNumber({ orderId: order[0].id, orderSource: 'admin' });
+    } catch (err) {
+      console.error("Failed to generate/fetch invoice for admin order details:", order[0].id, err);
+    }
+
     res.json({
       message: "Order fetched successfully",
       data: order[0]
@@ -245,7 +276,7 @@ router.get("/:id", async (req, res) => {
 // ==============================
 // UPDATE ORDER STATUS
 // ==============================
-router.put("/:id/status", async (req, res) => {
+router.put("/:id/status", ...adminOnly, async (req, res) => {
   const { status } = req.body;
   
   const validStatuses = ['pending', 'processing', 'completed', 'cancelled'];
@@ -280,7 +311,7 @@ router.put("/:id/status", async (req, res) => {
 // ==============================
 // UPDATE PAYMENT STATUS
 // ==============================
-router.put("/:id/payment", async (req, res) => {
+router.put("/:id/payment", ...adminOnly, async (req, res) => {
   const { payment_status, payment_method } = req.body;
   
   const validPaymentStatuses = ['pending', 'paid', 'failed'];
@@ -324,7 +355,7 @@ router.put("/:id/payment", async (req, res) => {
 // ==============================
 // DELETE ORDER
 // ==============================
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", ...adminOnly, async (req, res) => {
   try {
     await db.promise().query("START TRANSACTION");
 
@@ -450,7 +481,7 @@ router.get("/stats/summary", async (req, res) => {
 // ==============================
 // UPDATE ADMIN ORDER STATUS AND PAYMENT STATUS
 // ==============================
-router.put("/:id/status-payment", async (req, res) => {
+router.put("/:id/status-payment", ...adminOnly, async (req, res) => {
   const { status, payment_status } = req.body;
 
   console.log('Received update request for admin order:', { 

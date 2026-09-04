@@ -1,6 +1,12 @@
+const invoiceRoutes = require("./invoiceRoutes");
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
+const { authenticate, requireRole, adminOnly } = require("../middleware/auth");
+const {
+    ensureSalesmanNotificationsTable,
+    createOrderStatusNotification
+} = require("../services/salesmanNotificationService");
 
 // ==============================
 // CREATE NEW ORDER (Salesman)
@@ -158,25 +164,29 @@ router.post("/", async (req, res) => {
 // ==============================
 // GET ALL SALESMAN ORDERS
 // ==============================
-router.get("/", async (req, res) => {
-    const { salesman_id } = req.query;
-    
+router.get("/", authenticate, requireRole("salesman", "admin"), async (req, res) => {
     try {
         let sql = `
             SELECT 
                 o.*,
                 c.name as customer_name,
                 c.email as customer_email,
-                c.phone as customer_phone
+                c.phone as customer_phone,
+                c.address_line1,
+                c.address_line2,
+                c.city as address_city,
+                c.state as address_state,
+                c.pincode as address_pincode,
+                c.country as address_country
             FROM salesman_orders o
             LEFT JOIN customers c ON o.customer_id = c.id
         `;
         
         const params = [];
         
-        if (salesman_id) {
+        if (req.user.role === "salesman") {
             sql += " WHERE o.salesman_id = ?";
-            params.push(salesman_id);
+            params.push(req.user.id);
         }
         
         sql += " ORDER BY o.id DESC";
@@ -189,6 +199,11 @@ router.get("/", async (req, res) => {
                 [order.id]
             );
             order.items = items;
+            try {
+                order.invoice_number = await invoiceRoutes.getOrCreateInvoiceNumber({ orderId: order.id, orderSource: 'salesman' });
+            } catch (err) {
+                console.error("Failed to generate/fetch invoice for salesman order:", order.id, err);
+            }
         }
 
         res.json({
@@ -209,20 +224,30 @@ router.get("/", async (req, res) => {
 // ==============================
 // GET SINGLE SALESMAN ORDER
 // ==============================
-router.get("/:id", async (req, res) => {
+router.get("/:id", authenticate, requireRole("salesman", "admin"), async (req, res) => {
     try {
+        const ownershipClause = req.user.role === "salesman" ? " AND o.salesman_id = ?" : "";
+        const queryParams = req.user.role === "salesman"
+            ? [req.params.id, req.user.id]
+            : [req.params.id];
         const [order] = await db.promise().query(
             `
             SELECT 
                 o.*,
                 c.name as customer_name,
                 c.email as customer_email,
-                c.phone as customer_phone
+                c.phone as customer_phone,
+                c.address_line1,
+                c.address_line2,
+                c.city as address_city,
+                c.state as address_state,
+                c.pincode as address_pincode,
+                c.country as address_country
             FROM salesman_orders o
             LEFT JOIN customers c ON o.customer_id = c.id
-            WHERE o.id = ?
+            WHERE o.id = ?${ownershipClause}
             `,
-            [req.params.id]
+            queryParams
         );
 
         if (order.length === 0) {
@@ -235,6 +260,12 @@ router.get("/:id", async (req, res) => {
         );
 
         order[0].items = items;
+
+        try {
+            order[0].invoice_number = await invoiceRoutes.getOrCreateInvoiceNumber({ orderId: order[0].id, orderSource: 'salesman' });
+        } catch (err) {
+            console.error("Failed to generate/fetch invoice for salesman order details:", order[0].id, err);
+        }
 
         res.json({
             message: "Salesman order fetched successfully",
@@ -253,7 +284,7 @@ router.get("/:id", async (req, res) => {
 // ==============================
 // UPDATE SALESMAN ORDER STATUS AND PAYMENT STATUS
 // ==============================
-router.put("/:id/status-payment", async (req, res) => {
+router.put("/:id/status-payment", ...adminOnly, async (req, res) => {
     const { status, payment_status } = req.body;
 
     const validStatuses = ['pending', 'approved', 'rejected', 'processing', 'completed', 'cancelled'];
@@ -287,16 +318,36 @@ router.put("/:id/status-payment", async (req, res) => {
     }
 
     try {
+        await ensureSalesmanNotificationsTable();
+        await db.promise().query("START TRANSACTION");
+
+        const [existingOrders] = await db.promise().query(
+            "SELECT id, order_number, salesman_id, status FROM salesman_orders WHERE id = ? FOR UPDATE",
+            [req.params.id]
+        );
+        if (existingOrders.length === 0) {
+            await db.promise().query("ROLLBACK");
+            return res.status(404).json({ message: "Salesman order not found" });
+        }
+
+        const existingOrder = { ...existingOrders[0], order_source: "salesman" };
+        const newStatus = status ? status.toLowerCase() : existingOrder.status;
         updates.push("updated_at = NOW()");
-        
-        const [result] = await db.promise().query(
+
+        await db.promise().query(
             `UPDATE salesman_orders SET ${updates.join(", ")} WHERE id = ?`,
             [...params, req.params.id]
         );
 
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ message: "Salesman order not found" });
-        }
+        await createOrderStatusNotification(
+            db.promise(),
+            existingOrder,
+            existingOrder.status,
+            newStatus,
+            req.user
+        );
+
+        await db.promise().query("COMMIT");
 
         const [updatedOrder] = await db.promise().query(
             "SELECT * FROM salesman_orders WHERE id = ?",
@@ -320,6 +371,7 @@ router.put("/:id/status-payment", async (req, res) => {
             data: orderData 
         });
     } catch (err) {
+        await db.promise().query("ROLLBACK");
         console.error("Error updating salesman order:", err);
         res.status(500).json({ 
             error: "Failed to update salesman order", 
@@ -331,7 +383,7 @@ router.put("/:id/status-payment", async (req, res) => {
 // ==============================
 // DELETE SALESMAN ORDER
 // ==============================
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", ...adminOnly, async (req, res) => {
     try {
         await db.promise().query("START TRANSACTION");
 

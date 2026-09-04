@@ -2041,6 +2041,7 @@ const couponRoutes = require("./routes/couponRoutes");
 const invoiceRoutes = require("./routes/invoiceRoutes");
 const salesmanRoutes = require("./routes/salesmanRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
+const salesmanNotificationRoutes = require("./routes/salesmanNotificationRoutes");
 
 // Additional routes
 const heroBannersRoutes = require("./routes/hero-banners");
@@ -2152,6 +2153,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/invoice", invoiceRoutes);
 app.use("/api/salesman", salesmanRoutes);
 app.use("/api", notificationRoutes);
+app.use("/api/salesman/notifications", salesmanNotificationRoutes);
 app.use("/api/salesman-orders", salesmanOrderRoutes);
 app.use("/api/customers", customerProfileRoutes);
 app.use("/api/customer-orders", customerOrderRoutes);

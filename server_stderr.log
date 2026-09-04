@@ -1,0 +1,24 @@
+Error fetching package add-ons: Error: Table 'e-com-tenthouse (1).addons' doesn't exist
+    at Packet.asError (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\node_modules\mysql2\lib\packets\packet.js:791:17)
+    at Query.execute (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\node_modules\mysql2\lib\commands\command.js:29:26)
+    at Connection.handlePacket (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\node_modules\mysql2\lib\base\connection.js:552:34)
+    at PacketParser.onPacket (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\node_modules\mysql2\lib\base\connection.js:102:12)
+    at PacketParser.executeStart (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\node_modules\mysql2\lib\packet_parser.js:75:16)
+    at Socket.<anonymous> (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\node_modules\mysql2\lib\base\connection.js:109:25)
+    at Socket.emit (node:events:519:28)
+    at addChunk (node:internal/streams/readable:561:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    at Readable.push (node:internal/streams/readable:392:5) {
+  code: 'ER_NO_SUCH_TABLE',
+  errno: 1146,
+  sqlState: '42S02',
+  sqlMessage: "Table 'e-com-tenthouse (1).addons' doesn't exist",
+  sql: '\n' +
+    '      SELECT \n' +
+    '        a.*,\n' +
+    '        pa.is_default\n' +
+    '      FROM addons a\n' +
+    '      INNER JOIN package_addons pa ON a.id = pa.addon_id\n' +
+    "      WHERE pa.package_id = '1' AND a.is_active = 1\n" +
+    '     ORDER BY pa.is_default DESC, a.name'
+}
