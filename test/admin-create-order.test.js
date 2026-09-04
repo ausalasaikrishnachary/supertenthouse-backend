@@ -17,6 +17,8 @@ function setup(failRead = false) {
     return [[]];
   } }) };
   const imports = { express: { Router: () => router }, '../db': db, '../middleware/auth': { adminOnly: [] }, './invoiceRoutes': { getOrCreateInvoiceNumber: async () => 'INV-TEST' } };
+  imports['../services/adminOrderStatus'] = { handler() {} };
+  imports['../services/salesmanNotificationService'] = { ensureSalesmanNotificationsTable: async () => {}, notifyAdminOrderCreated: require('../services/salesmanNotificationService').notifyAdminOrderCreated };
   vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../routes/orderRoutes.js'), 'utf8'), { require: id => imports[id], module: { exports: {} }, console });
   const res = { code: 200, status(code) { this.code = code; return this; }, json(body) { this.body = body; } };
   return { handler, queries, res };

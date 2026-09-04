@@ -359,7 +359,7 @@ router.patch("/:packageId/add_ons/:addonId/default", (req, res) => {
 // ====================================
 // CREATE PACKAGE
 // ====================================
-router.post("/", upload.array("images", 10), (req, res) => {
+router.post("/", upload.array("images", 10), require('../services/packageCustomServices').validateCustomServices, (req, res) => {
   try {
     const {
       package_name,
@@ -433,9 +433,9 @@ router.post("/", upload.array("images", 10), (req, res) => {
         rating, review_count, guest_capacity, description,
         includes, images, catering, stage_decoration,
         flower_decoration, lighting, photography,
-        videography, sound_system, dj_setup, is_active
+        videography, sound_system, dj_setup, is_active, custom_services
       )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     const values = [
@@ -459,6 +459,7 @@ router.post("/", upload.array("images", 10), (req, res) => {
       JSON.stringify(parsedSoundSystem),
       safeDjSetup,
       safeIsActive,
+      req.customServicesJSON || '[]',
     ];
 
     console.log("📦 SQL Values:", values);
@@ -538,7 +539,7 @@ router.post("/", upload.array("images", 10), (req, res) => {
 // ====================================
 // UPDATE PACKAGE
 // ====================================
-router.put("/:id", upload.array("images", 10), (req, res) => {
+router.put("/:id", upload.array("images", 10), require('../services/packageCustomServices').validateCustomServices, (req, res) => {
   try {
     const id = req.params.id;
     const {
@@ -643,7 +644,8 @@ router.put("/:id", upload.array("images", 10), (req, res) => {
             videography = ?,
             sound_system = ?,
             dj_setup = ?,
-            is_active = ?
+            is_active = ?,
+            custom_services = COALESCE(?, custom_services)
           WHERE id = ?
         `;
 
@@ -668,6 +670,7 @@ router.put("/:id", upload.array("images", 10), (req, res) => {
           JSON.stringify(parsedSoundSystem),
           safeDjSetup,
           safeIsActive,
+          req.customServicesJSON,
           id,
         ];
 

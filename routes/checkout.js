@@ -1215,6 +1215,9 @@ router.post("/order", async (req, res) => {
     );
 
     console.log("✅ Order created, ID:", result.insertId, "Order Number:", orderNumber);
+    let invoiceWarning;
+    try { await require('../services/invoiceNumbers').getOrCreateInvoiceNumber({ orderId: result.insertId, orderSource: 'customer' }); }
+    catch (error) { invoiceWarning = 'Order saved. Invoice generation is pending; do not place the order again.'; console.error('Invoice allocation failed:', error.message); }
 
     const order = await query(
       `SELECT * FROM orders WHERE id = ?`,
@@ -1224,6 +1227,7 @@ router.post("/order", async (req, res) => {
     res.json({
       success: true,
       message: "Order created successfully",
+      warning: invoiceWarning,
       data: {
         id: result.insertId,
         orderNumber: orderNumber,

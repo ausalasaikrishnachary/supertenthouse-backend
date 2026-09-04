@@ -7,9 +7,10 @@ const puppeteer = require('puppeteer');
 let handler;
 let renderedText = '';
 const db = { promise: () => ({ query: async (sql, params) => {
-  assert.match(sql, /^SELECT id, invoice_number FROM admin_orders/);
-  assert.deepEqual(Array.from(params), [12345]);
-  return [[{ id: 12345, invoice_number: 'INV-2026-000123' }]];
+  if (sql.includes('FROM admin_orders')) return [[{ id: 12345, customer_id: 5, invoice_number: 'INV-2026-000123', total_amount: 200, tax_amount: 36, grand_total: 236, payment_method: 'cash', payment_status: 'paid' }]];
+  if (sql.includes('FROM customers')) return [[{ name: 'Invoice Fixture Customer' }]];
+  if (sql.includes('FROM admin_order_items')) return [[{ product_name: 'Fixture Tent', price: 100, quantity: 2, subtotal: 200 }]];
+  throw new Error(`Unexpected query: ${sql}`);
 } }) };
 const browserAdapter = { launch: async options => {
   const browser = await puppeteer.launch(options);
@@ -25,7 +26,7 @@ const browserAdapter = { launch: async options => {
   };
   return browser;
 } };
-const router = { post: (url, callback) => { handler = callback; } };
+const router = { post: (url, ...callbacks) => { handler = callbacks.at(-1); } };
 vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../routes/invoiceRoutes.js'), 'utf8'), {
   require: name => name === '../db' ? db : name === 'express' ? { Router: () => router } : name === 'puppeteer' ? browserAdapter : require(name),
   module: { exports: {} }, process, console, Buffer,
@@ -36,7 +37,7 @@ vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../routes/invoiceRoutes
     orderId: 12345, orderSource: 'admin', orderNumber: 'ORDER-12345',
     customerName: 'Invoice Fixture Customer', customerEmail: 'fixture@example.invalid', customerPhone: '0000000000',
     items: [{ name: 'Fixture Tent', price: 100, quantity: 2, total: 200 }],
-    subtotal: 200, gst: 36, grandTotal: 236, paymentMethod: 'cash', paymentStatus: 'paid',
+    subtotal: 999, gst: 999, grandTotal: 999, paymentMethod: 'tampered', paymentStatus: 'paid',
   } } }, { setHeader: (key, value) => { headers[key] = value; }, send: value => { pdf = value; }, status: value => { status = value; return { json: value => { throw new Error(JSON.stringify(value)); } }; } });
   assert.equal(status, 200);
   assert.equal(headers['Content-Type'], 'application/pdf');

@@ -1,0 +1,150 @@
+◇ injected env (8) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+
+🚀 Server running on port 5000
+📍 Local: http://localhost:5000
+
+🔐 AUTH ENDPOINTS (via /api/auth):
+   ──────────────────────────────────────
+   POST /api/auth/register        - Register new user
+   POST /api/auth/login           - Login user
+   POST /api/auth/verify-otp      - Verify OTP
+   POST /api/auth/resend-otp      - Resend OTP
+   ──────────────────────────────────────
+   POST /api/customers/register   - Register (alternate)
+   POST /api/customers/login      - Login (alternate)
+   ──────────────────────────────────────
+
+📁 Static Files: http://localhost:5000/uploads/
+MySQL Connected ✅
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 POST /api/invoice/generate-pdf
+📄 Event Date formatted: 5 August 2026
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 POST /api/invoice/generate-pdf
+📄 Event Date formatted: N/A
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/customer-orders/
+Fetching all orders
+📡 GET /api/orders/
+📡 GET /api/salesman-orders/
+📡 GET /api/customers/details/14
+📡 GET /api/customers/details/14
+📡 GET /api/customers/details/14
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders

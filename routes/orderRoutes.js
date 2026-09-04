@@ -146,6 +146,7 @@ router.post("/", async (req, res) => {
     }
 
     res.status(201).json({
+      warning: createdInvoiceNum ? undefined : 'Order saved. Invoice generation is pending; do not place the order again.',
       message: "Order placed successfully",
       order_id: orderId,
       order_number: orderNumber,
@@ -276,37 +277,7 @@ router.get("/:id", async (req, res) => {
 // ==============================
 // UPDATE ORDER STATUS
 // ==============================
-router.put("/:id/status", ...adminOnly, async (req, res) => {
-  const { status } = req.body;
-  
-  const validStatuses = ['pending', 'processing', 'completed', 'cancelled'];
-  if (!validStatuses.includes(status)) {
-    return res.status(400).json({ error: "Invalid status" });
-  }
-
-  try {
-    const [result] = await db.promise().query(
-      "UPDATE admin_orders SET status = ? WHERE id = ?",
-      [status, req.params.id]
-    );
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Order not found" });
-    }
-
-    res.json({
-      message: "Order status updated successfully",
-      status: status
-    });
-
-  } catch (err) {
-    console.error("Error updating order status:", err);
-    res.status(500).json({
-      error: "Failed to update order status",
-      message: err.message
-    });
-  }
-});
+router.put("/:id/status", ...adminOnly, require('../services/adminOrderStatus').handler);
 
 // ==============================
 // UPDATE PAYMENT STATUS
@@ -481,89 +452,7 @@ router.get("/stats/summary", async (req, res) => {
 // ==============================
 // UPDATE ADMIN ORDER STATUS AND PAYMENT STATUS
 // ==============================
-router.put("/:id/status-payment", ...adminOnly, async (req, res) => {
-  const { status, payment_status } = req.body;
-
-  console.log('Received update request for admin order:', { 
-    id: req.params.id, 
-    status, 
-    payment_status 
-  });
-
-  // Valid statuses - including 'approved' and 'rejected'
-  const validStatuses = ['pending', 'approved', 'rejected', 'processing', 'completed', 'cancelled'];
-  const validPaymentStatuses = ['pending', 'completed', 'failed', 'blocked', 'paid'];
-
-  let updates = [];
-  let params = [];
-
-  if (status && validStatuses.includes(status.toLowerCase())) {
-    updates.push("status = ?");
-    params.push(status.toLowerCase());
-  } else if (status) {
-    return res.status(400).json({
-      error: `Invalid status. Valid values: ${validStatuses.join(', ')}`
-    });
-  }
-
-  if (payment_status && validPaymentStatuses.includes(payment_status.toLowerCase())) {
-    updates.push("payment_status = ?");
-    params.push(payment_status.toLowerCase());
-  } else if (payment_status) {
-    return res.status(400).json({
-      error: `Invalid payment_status. Valid values: ${validPaymentStatuses.join(', ')}`
-    });
-  }
-
-  if (updates.length === 0) {
-    return res.status(400).json({ 
-      error: "At least one field (status or payment_status) is required" 
-    });
-  }
-
-  try {
-    // Add updated_at timestamp
-    updates.push("updated_at = NOW()");
-    
-    const [result] = await db.promise().query(
-      `UPDATE admin_orders SET ${updates.join(", ")} WHERE id = ?`,
-      [...params, req.params.id]
-    );
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Order not found" });
-    }
-
-    const [updatedOrder] = await db.promise().query(
-      "SELECT * FROM admin_orders WHERE id = ?",
-      [req.params.id]
-    );
-
-    // Get customer details
-    const [customer] = await db.promise().query(
-      "SELECT name as customer_name, email as customer_email, phone as customer_phone FROM customers WHERE id = ?",
-      [updatedOrder[0].customer_id]
-    );
-
-    const orderData = {
-      ...updatedOrder[0],
-      customer_name: customer[0]?.customer_name || 'Unknown',
-      customer_email: customer[0]?.customer_email || '',
-      customer_phone: customer[0]?.customer_phone || ''
-    };
-
-    res.json({ 
-      message: "Order updated successfully", 
-      data: orderData 
-    });
-  } catch (err) {
-    console.error("Error updating admin order:", err);
-    res.status(500).json({ 
-      error: "Failed to update order", 
-      message: err.message 
-    });
-  }
-});
+router.put("/:id/status-payment", ...adminOnly, require('../services/adminOrderStatus').handler);
 
 
 module.exports = router;

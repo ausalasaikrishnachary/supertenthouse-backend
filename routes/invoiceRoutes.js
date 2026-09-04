@@ -4,6 +4,8 @@ const fs = require('fs');
 const router = express.Router();
 const puppeteer = require('puppeteer');
 const db = require('../db');
+const orderReader = require('../middleware/orderReader');
+const { loadInvoice, escapeInvoice } = require('../services/invoiceData');
 
 const INVOICE_SOURCES = {
   customer: { table: 'orders', prefix: 'CUS' },
@@ -54,55 +56,7 @@ async function getNextInvoiceSequence() {
   return sequence;
 }
 
-async function getOrCreateInvoiceNumber(orderData) {
-  const orderId = Number(orderData.orderId || orderData.id);
-  if (!Number.isInteger(orderId) || orderId <= 0) {
-    throw new Error('Valid orderId is required to generate invoice number');
-  }
-
-  const source = normalizeOrderSource(orderData.orderSource);
-  const { table } = INVOICE_SOURCES[source];
-
-  const [rows] = await db.promise().query(
-    `SELECT id, invoice_number FROM ${table} WHERE id = ? LIMIT 1`,
-    [orderId]
-  );
-
-  if (rows.length === 0) {
-    throw new Error(`${source === 'admin' ? 'Admin order' : 'Customer order'} not found for invoice: ${orderId}`);
-  }
-
-  if (rows[0].invoice_number) {
-    return rows[0].invoice_number;
-  }
-
-  let invoiceNumber;
-  let attempt = 0;
-
-  while (attempt < 3) {
-    attempt += 1;
-    invoiceNumber = formatInvoiceNumber(source, await getNextInvoiceSequence());
-
-    try {
-      await db.promise().query(
-        `UPDATE ${table} SET invoice_number = ? WHERE id = ? AND (invoice_number IS NULL OR invoice_number = '')`,
-        [invoiceNumber, orderId]
-      );
-      break;
-    } catch (error) {
-      if (error.code !== 'ER_DUP_ENTRY' || attempt >= 3) {
-        throw error;
-      }
-    }
-  }
-
-  const [updatedRows] = await db.promise().query(
-    `SELECT invoice_number FROM ${table} WHERE id = ? LIMIT 1`,
-    [orderId]
-  );
-
-  return updatedRows[0]?.invoice_number || invoiceNumber;
-}
+const { getOrCreateInvoiceNumber } = require('../services/invoiceNumbers');
 
 function getBrowserExecutablePath() {
   if (process.env.PUPPETEER_EXECUTABLE_PATH) {
@@ -124,7 +78,7 @@ function getBrowserExecutablePath() {
 }
 
 // ─── Generate PDF Invoice ─────────────────────────────────────────────────────
-router.post('/generate-pdf', async (req, res) => {
+router.post('/generate-pdf', orderReader, async (req, res) => {
   let browser;
 
   try {
@@ -136,20 +90,11 @@ router.post('/generate-pdf', async (req, res) => {
         message: 'Order data is required'
       });
     }
-    console.log('Generating PDF invoice for order:', orderData.orderNumber);
-    console.log('Order data received:', JSON.stringify(orderData, null, 2));
-
-    const invoiceNumber = await getOrCreateInvoiceNumber(orderData);
-    const invoiceOrderData = {
-      ...orderData,
-      invoiceNumber,
-      invoice_number: invoiceNumber,
-      orderSource: normalizeOrderSource(orderData.orderSource)
-    };
-    console.log('Using invoice number:', invoiceNumber);
+    const invoiceOrderData = await loadInvoice(db.promise(), orderData, req.orderCustomerId);
+    const invoiceNumber = invoiceOrderData.invoiceNumber;
     
     // Generate HTML invoice
-    const htmlContent = generateInvoiceHTML(invoiceOrderData);
+    const htmlContent = generateInvoiceHTML(escapeInvoice(invoiceOrderData));
     
     // Launch puppeteer and generate PDF
     const executablePath = getBrowserExecutablePath();
@@ -160,6 +105,9 @@ router.post('/generate-pdf', async (req, res) => {
     });
     
     const page = await browser.newPage();
+    await page.setJavaScriptEnabled(false);
+    await page.setRequestInterception(true);
+    page.on('request', request => request.abort());
     await page.setContent(htmlContent, {
       waitUntil: 'networkidle0'
     });
@@ -177,16 +125,16 @@ router.post('/generate-pdf', async (req, res) => {
     
     // Send PDF as response
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename=Invoice_${invoiceNumber}_${Date.now()}.pdf`);
+    res.setHeader('Content-Disposition', `attachment; filename="Invoice_${invoiceNumber.replace(/[^a-zA-Z0-9_-]/g, '_')}.pdf"`);
+    res.setHeader('Cache-Control', 'no-store');
     res.setHeader('Content-Length', pdf.length);
     res.send(pdf);
     
   } catch (error) {
     console.error('Error generating PDF:', error);
-    res.status(500).json({
+    res.status(error.status || 500).json({
       success: false,
-      message: 'Failed to generate PDF',
-      error: error.message
+      message: error.status ? error.message : 'Failed to generate PDF'
     });
   } finally {
     if (browser) {

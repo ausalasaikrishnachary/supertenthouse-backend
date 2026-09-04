@@ -140,7 +140,11 @@ router.post("/", async (req, res) => {
             [orderId]
         );
 
+        let invoiceWarning;
+        try { newOrder[0].invoice_number = await invoiceRoutes.getOrCreateInvoiceNumber({ orderId, orderSource: 'salesman' }); }
+        catch (error) { invoiceWarning = 'Order saved. Invoice generation is pending; do not place the order again.'; console.error('Invoice allocation failed:', error.message); }
         res.status(201).json({
+            warning: invoiceWarning,
             message: "Salesman order placed successfully",
             order_id: orderId,
             order_number: orderNumber,

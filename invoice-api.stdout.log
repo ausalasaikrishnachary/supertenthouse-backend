@@ -1,0 +1,1274 @@
+◇ injected env (8) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+
+🚀 Server running on port 5000
+📍 Local: http://localhost:5000
+
+🔐 AUTH ENDPOINTS (via /api/auth):
+   ──────────────────────────────────────
+   POST /api/auth/register        - Register new user
+   POST /api/auth/login           - Login user
+   POST /api/auth/verify-otp      - Verify OTP
+   POST /api/auth/resend-otp      - Resend OTP
+   ──────────────────────────────────────
+   POST /api/customers/register   - Register (alternate)
+   POST /api/customers/login      - Login (alternate)
+   ──────────────────────────────────────
+
+📁 Static Files: http://localhost:5000/uploads/
+MySQL Connected ✅
+📡 GET /api/packages
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/addons
+📡 GET /api/products
+GET /api/products - Fetching all products
+📡 GET /api/packages
+Found 25 products
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/categories
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications/admin-orders/1
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/2?source=admin
+Fetching merged order details for ID: 2
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/categories
+📡 GET /api/products/trending
+GET /api/products/trending - Fetching trending products
+📡 GET /api/products/best-sellers
+GET /api/products/best-sellers - Fetching best sellers
+📡 GET /api/products/new-arrivals
+GET /api/products/new-arrivals - Fetching new arrivals
+📡 GET /api/hero-banners
+📡 GET /api/testimonials
+📡 GET /api/why-choose-us
+📡 GET /api/packages
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/categories
+📡 GET /api/products/trending
+GET /api/products/trending - Fetching trending products
+📡 GET /api/products/best-sellers
+GET /api/products/best-sellers - Fetching best sellers
+📡 GET /api/products/new-arrivals
+GET /api/products/new-arrivals - Fetching new arrivals
+📡 GET /api/hero-banners
+📡 GET /api/testimonials
+📡 GET /api/why-choose-us
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/packages
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/categories
+📡 GET /api/products/trending
+GET /api/products/trending - Fetching trending products
+📡 GET /api/products/best-sellers
+GET /api/products/best-sellers - Fetching best sellers
+📡 GET /api/products/new-arrivals
+GET /api/products/new-arrivals - Fetching new arrivals
+📡 GET /api/hero-banners
+📡 GET /api/testimonials
+📡 GET /api/why-choose-us
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/packages
+📡 GET /api/categories
+📡 GET /api/products/trending
+GET /api/products/trending - Fetching trending products
+📡 GET /api/products/best-sellers
+GET /api/products/best-sellers - Fetching best sellers
+📡 GET /api/products/new-arrivals
+GET /api/products/new-arrivals - Fetching new arrivals
+📡 GET /api/hero-banners
+📡 GET /api/testimonials
+📡 GET /api/why-choose-us
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/packages
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/checkout/orders/14
+📦 Fetching orders for customer: 14
+📦 Orders found: 0
+📡 GET /api/checkout/addresses/14
+📦 Fetching addresses for customer: 14
+📦 Addresses found: 0
+📡 GET /api/categories
+📡 GET /api/products/trending
+GET /api/products/trending - Fetching trending products
+📡 GET /api/products/best-sellers
+GET /api/products/best-sellers - Fetching best sellers
+📡 GET /api/products/new-arrivals
+GET /api/products/new-arrivals - Fetching new arrivals
+📡 GET /api/hero-banners
+📡 GET /api/testimonials
+📡 GET /api/why-choose-us
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/packages
+📡 GET /api/products/26
+GET /api/products/26 - Fetching single product
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/categories
+📡 GET /api/categories
+📡 GET /api/products/category/9
+GET /api/products/category/9 - Fetching products by category
+SQL Query: 
+    SELECT 
+      p.*,
+      c.category_name,
+      c.id as category_id
+    FROM products p
+    LEFT JOIN product_categories c ON p.product_category_id = c.id
+    WHERE p.product_category_id = ?
+    ORDER BY p.id DESC
+  
+SQL Params: [ '9' ]
+Found 6 products for category 9
+📡 POST /api/cart
+📦 Adding to cart: {
+  customerId: '14',
+  product: {
+    id: '16',
+    name: 'Raju',
+    price: 1222,
+    image: 'http://localhost:5000/uploads/products/1785318522268-816321083.jpg',
+    quantity: 1
+  }
+}
+📦 Product data: {
+  productId: '16',
+  productName: 'Raju',
+  productPrice: 1222,
+  productImage: 'http://localhost:5000/uploads/products/1785318522268-816321083.jpg',
+  productQuantity: 1
+}
+📦 Existing item: []
+📦 Inserted new item with ID: 38
+📦 Cart items after update: 1
+📡 GET /api/cart/14
+📦 Fetching cart for customer: 14
+📦 Active cart items found: 1
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/products/16
+GET /api/products/16 - Fetching single product
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/cart/14
+📦 Fetching cart for customer: 14
+📡 GET /api/coupons/active
+📦 Fetching active coupons...
+✅ Found 0 active coupons
+📦 Active cart items found: 1
+📡 GET /api/checkout/addresses/14
+📦 Fetching addresses for customer: 14
+📦 Addresses found: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 POST /api/checkout/address
+📦 Adding address for customer: 14
+✅ Address added, ID: 7
+📡 GET /api/checkout/addresses/14
+📦 Fetching addresses for customer: 14
+📦 Addresses found: 1
+📡 POST /api/checkout/order
+📦 Creating order for customer: 14
+📦 Total received: undefined
+📦 Grand Total received: 2942
+📦 Advance Amount received: undefined
+📦 Address object: {
+  "id": "7",
+  "label": "uppal",
+  "fullName": "sai krishna",
+  "phone": "8106815633",
+  "line1": "chaitanya nagar",
+  "line2": "",
+  "city": "hyderabad",
+  "state": "telangana",
+  "pincode": "500088",
+  "country": "India"
+}
+✅ Order created, ID: 0 Order Number: ORD-1788520238696-441
+📡 DELETE /api/cart/14
+📦 Clearing cart for customer: 14
+📦 Deleted 1 items from cart
+📡 GET /api/cart/14
+📦 Fetching cart for customer: 14
+📦 Active cart items found: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/categories
+📡 GET /api/products/trending
+GET /api/products/trending - Fetching trending products
+📡 GET /api/products/best-sellers
+GET /api/products/best-sellers - Fetching best sellers
+📡 GET /api/products/new-arrivals
+GET /api/products/new-arrivals - Fetching new arrivals
+📡 GET /api/hero-banners
+📡 GET /api/testimonials
+📡 GET /api/why-choose-us
+📡 GET /api/packages
+📡 GET /api/cart/14
+📦 Fetching cart for customer: 14
+📡 GET /api/coupons/active
+📦 Fetching active coupons...
+✅ Found 0 active coupons
+📦 Active cart items found: 0
+📡 GET /api/customer-orders/customer/14
+Fetching merged orders for customer: 14
+📡 GET /api/customer-orders/2?source=admin
+Fetching merged order details for ID: 2
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/1?source=admin
+Fetching merged order details for ID: 1
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/categories
+📡 GET /api/customer-orders/
+Fetching all orders
+📡 GET /api/orders/
+📡 GET /api/salesman-orders/
+📡 GET /api/customers/details/14
+📡 GET /api/customers/details/14
+📡 GET /api/customers/all
+📡 GET /api/customers/details/14
+📡 GET /api/customer-orders/
+Fetching all orders
+📡 GET /api/orders/
+📡 GET /api/salesman-orders/
+📡 GET /api/customers/details/14
+📡 GET /api/customers/details/14
+📡 GET /api/notifications/14/unread-count
+📡 PUT /api/customer-orders/0/status-payment
+Updating order status and payment: { orderId: '0', status: 'approved', payment_status: 'paid' }
+Creating notification for customer 14: {
+  title: 'Order Approved!',
+  message: 'Your order #ORD-1788520238696-441 has been approved and is being processed.'
+}
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/customer/14
+Fetching merged orders for customer: 14
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 PUT /api/customer-orders/0/status-payment
+Updating order status and payment: { orderId: '0', status: 'processing', payment_status: 'pending' }
+Creating notification for customer 14: {
+  title: 'Order Processing',
+  message: 'Your order #ORD-1788520238696-441 is now being processed.'
+}
+📡 GET /api/customer-orders/customer/14
+Fetching merged orders for customer: 14
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/notifications/14/unread-count
+📡 PUT /api/customer-orders/0/status-payment
+Updating order status and payment: { orderId: '0', status: 'completed', payment_status: 'paid' }
+Creating notification for customer 14: {
+  title: 'Order Completed!',
+  message: 'Your order #ORD-1788520238696-441 has been completed successfully. Thank you for your business!'
+}
+📡 GET /api/customer-orders/customer/14
+Fetching merged orders for customer: 14
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/2?source=admin
+Fetching merged order details for ID: 2
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customers/all
+📡 GET /api/customers/details/14
+📡 GET /api/products
+GET /api/products - Fetching all products
+Found 25 products
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 POST /api/orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/
+Fetching all orders
+📡 GET /api/orders/
+📡 GET /api/salesman-orders/
+📡 GET /api/customers/details/14
+📡 GET /api/customers/details/14
+📡 GET /api/customers/details/14
+📡 GET /api/checkout/orders/14
+📦 Fetching orders for customer: 14
+📦 Orders found: 1
+📡 GET /api/checkout/addresses/14
+📦 Fetching addresses for customer: 14
+📦 Addresses found: 1
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/1?source=admin
+Fetching merged order details for ID: 1
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 POST /api/invoice/generate-pdf
+Generating PDF invoice for order: ORD-1788520238696-441
+Order data received: {
+  "orderId": 0,
+  "orderSource": "customer",
+  "orderNumber": "ORD-1788520238696-441",
+  "customerName": "sai krishna",
+  "customerEmail": "ssy.balu@gmail.com",
+  "customerPhone": "9381407314",
+  "orderDate": "2026-09-04T11:10:38.000Z",
+  "eventDate": "2026-09-03T18:30:00.000Z",
+  "eventTime": "12:00 PM",
+  "eventType": "Other",
+  "venue": "Not specified",
+  "guestCount": 0,
+  "specialInstructions": "",
+  "items": [
+    {
+      "name": "Raju",
+      "quantity": 1,
+      "price": 1222,
+      "total": 1222
+    }
+  ],
+  "subtotal": 1222,
+  "deliveryCharge": 1500,
+  "gst": 220,
+  "couponDiscount": 0,
+  "grandTotal": 2942,
+  "paymentMethod": "cod",
+  "paymentStatus": "paid",
+  "address": {
+    "fullName": "sai krishna",
+    "line1": "chaitanya nagar",
+    "line2": "",
+    "city": "hyderabad",
+    "state": "telangana",
+    "pincode": "500088",
+    "country": "India"
+  }
+}
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 POST /api/invoice/generate-pdf
+Generating PDF invoice for order: ORD-1788520238696-441
+Order data received: {
+  "orderId": 0,
+  "orderSource": "customer",
+  "orderNumber": "ORD-1788520238696-441",
+  "customerName": "sai krishna",
+  "customerEmail": "ssy.balu@gmail.com",
+  "customerPhone": "9381407314",
+  "orderDate": "2026-09-04T11:10:38.000Z",
+  "eventDate": "2026-09-03T18:30:00.000Z",
+  "eventTime": "12:00 PM",
+  "eventType": "Other",
+  "venue": "Not specified",
+  "guestCount": 0,
+  "specialInstructions": "",
+  "items": [
+    {
+      "name": "Raju",
+      "quantity": 1,
+      "price": 1222,
+      "total": 1222
+    }
+  ],
+  "subtotal": 1222,
+  "deliveryCharge": 1500,
+  "gst": 220,
+  "couponDiscount": 0,
+  "grandTotal": 2942,
+  "paymentMethod": "cod",
+  "paymentStatus": "paid",
+  "address": {
+    "fullName": "sai krishna",
+    "line1": "chaitanya nagar",
+    "line2": "",
+    "city": "hyderabad",
+    "state": "telangana",
+    "pincode": "500088",
+    "country": "India"
+  }
+}
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/customer-orders/customer/14
+Fetching merged orders for customer: 14
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/2?source=admin
+Fetching merged order details for ID: 2
+📡 POST /api/invoice/generate-pdf
+Generating PDF invoice for order: ORD-260904-8104
+Order data received: {
+  "orderId": 2,
+  "orderSource": "admin",
+  "orderNumber": "ORD-260904-8104",
+  "customerName": "sai krishna",
+  "customerEmail": "ssy.balu@gmail.com",
+  "customerPhone": "9381407314",
+  "orderDate": "2026-09-04T03:43:32.000Z",
+  "eventDate": "",
+  "eventTime": "",
+  "eventType": "N/A",
+  "venue": "N/A",
+  "guestCount": 0,
+  "specialInstructions": "",
+  "items": [
+    {
+      "name": "Decorative Wall Art",
+      "quantity": 1,
+      "price": "1999.20",
+      "total": 1999.2
+    }
+  ],
+  "subtotal": 1999.2,
+  "deliveryCharge": 0,
+  "gst": 359.86,
+  "couponDiscount": 0,
+  "grandTotal": 2359.06,
+  "paymentMethod": "cash",
+  "paymentStatus": "paid",
+  "address": {
+    "fullName": "N/A",
+    "line1": "",
+    "line2": "",
+    "city": "",
+    "state": "",
+    "pincode": "",
+    "country": "India"
+  }
+}
+Using invoice number: INV-ADM-2026-000026
+📄 Event Date formatted: N/A
+📡 GET /api/customer-orders/2?source=admin
+Fetching merged order details for ID: 2
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/2?source=admin
+Fetching merged order details for ID: 2
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 PUT /api/orders/3/status-payment
+📡 GET /api/customer-orders/customer/14
+Fetching merged orders for customer: 14
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 POST /api/invoice/generate-pdf
+Generating PDF invoice for order: ORD-260904-7047
+Order data received: {
+  "orderId": 3,
+  "orderSource": "admin",
+  "orderNumber": "ORD-260904-7047",
+  "customerName": "sai krishna",
+  "customerEmail": "ssy.balu@gmail.com",
+  "customerPhone": "9381407314",
+  "orderDate": "2026-09-04T11:14:04.000Z",
+  "eventDate": "",
+  "eventTime": "",
+  "eventType": "N/A",
+  "venue": "N/A",
+  "guestCount": 0,
+  "specialInstructions": "",
+  "items": [
+    {
+      "name": "hii",
+      "quantity": 1,
+      "price": "990.00",
+      "total": 990
+    }
+  ],
+  "subtotal": 990,
+  "deliveryCharge": 0,
+  "gst": 178.2,
+  "couponDiscount": 0,
+  "grandTotal": 1168.2,
+  "paymentMethod": "cash",
+  "paymentStatus": "paid",
+  "address": {
+    "fullName": "N/A",
+    "line1": "",
+    "line2": "",
+    "city": "",
+    "state": "",
+    "pincode": "",
+    "country": "India"
+  }
+}
+Using invoice number: INV-ADM-2026-000027
+📄 Event Date formatted: N/A
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/addons
+📡 GET /api/products
+GET /api/products - Fetching all products
+📡 GET /api/packages
+Found 25 products
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/categories
+📡 GET /api/products
+GET /api/products - Fetching all products
+Found 25 products
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/customer-orders/
+Fetching all orders
+📡 GET /api/orders/
+📡 GET /api/salesman-orders/
+📡 GET /api/customers/details/14
+📡 GET /api/customers/details/14
+📡 GET /api/customers/details/14
+📡 POST /api/invoice/generate-pdf
+Generating PDF invoice for order: ORD-1786019920806-400
+Order data received: {
+  "orderId": 18,
+  "orderSource": "customer",
+  "orderNumber": "ORD-1786019920806-400",
+  "invoiceNumber": "INV-CUS-2026-000006",
+  "customerName": "Yanamadala Rajesh",
+  "customerEmail": "rajeshyanamadala7@gmail.com",
+  "customerPhone": "9346843156",
+  "orderDate": "2026-08-06T12:38:40.000Z",
+  "eventDate": "2026-08-20T18:30:00.000Z",
+  "eventTime": "06:00 PM",
+  "eventType": "Wedding",
+  "venue": "uppal",
+  "guestCount": 300,
+  "specialInstructions": "hissk",
+  "subtotal": 30000,
+  "gst": 0,
+  "grandTotal": 30000,
+  "deliveryCharge": 0,
+  "couponDiscount": 0,
+  "couponCode": null,
+  "paymentMethod": "wallet",
+  "paymentStatus": "pending",
+  "address": {
+    "fullName": "YANAMADALA RAJESH",
+    "line1": "suryanagar",
+    "line2": "nacharam",
+    "city": "hyderabad",
+    "state": "telangana",
+    "pincode": "500076",
+    "country": "India"
+  },
+  "items": [
+    {
+      "name": "Indian Marriages",
+      "quantity": 1,
+      "price": 30000,
+      "total": 30000
+    }
+  ]
+}
+Using invoice number: INV-CUS-2026-000006
+📄 Event Date formatted: 21 August 2026
+📡 GET /api/notifications/14/unread-count
+📡 POST /api/invoice/generate-pdf
+Generating PDF invoice for order: ORD-260904-7047
+Order data received: {
+  "orderId": 3,
+  "orderSource": "admin",
+  "orderNumber": "ORD-260904-7047",
+  "invoiceNumber": "INV-ADM-2026-000027",
+  "customerName": "sai krishna",
+  "customerEmail": "ssy.balu@gmail.com",
+  "customerPhone": "9381407314",
+  "orderDate": "2026-09-04T11:14:04.000Z",
+  "guestCount": 0,
+  "subtotal": 990,
+  "gst": 178.2,
+  "grandTotal": 1168.2,
+  "deliveryCharge": 0,
+  "couponDiscount": 0,
+  "paymentMethod": "cash",
+  "paymentStatus": "paid",
+  "address": {
+    "fullName": "sai krishna",
+    "line1": "Hyd",
+    "line2": "Hyd",
+    "city": "Hyd",
+    "state": "Telangana",
+    "pincode": "500019",
+    "country": "India"
+  },
+  "items": [
+    {
+      "name": "hii",
+      "quantity": 1,
+      "price": 990,
+      "total": 990
+    }
+  ]
+}
+Using invoice number: INV-ADM-2026-000027
+📄 Event Date formatted: N/A
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 POST /api/invoice/generate-pdf
+Generating PDF invoice for order: ORD-260904-7047
+Order data received: {
+  "orderId": 3,
+  "orderSource": "admin",
+  "orderNumber": "ORD-260904-7047",
+  "invoiceNumber": "INV-ADM-2026-000027",
+  "customerName": "sai krishna",
+  "customerEmail": "ssy.balu@gmail.com",
+  "customerPhone": "9381407314",
+  "orderDate": "2026-09-04T11:14:04.000Z",
+  "guestCount": 0,
+  "subtotal": 990,
+  "gst": 178.2,
+  "grandTotal": 1168.2,
+  "deliveryCharge": 0,
+  "couponDiscount": 0,
+  "paymentMethod": "cash",
+  "paymentStatus": "paid",
+  "address": {
+    "fullName": "sai krishna",
+    "line1": "Hyd",
+    "line2": "Hyd",
+    "city": "Hyd",
+    "state": "Telangana",
+    "pincode": "500019",
+    "country": "India"
+  },
+  "items": [
+    {
+      "name": "hii",
+      "quantity": 1,
+      "price": 990,
+      "total": 990
+    }
+  ]
+}
+Using invoice number: INV-ADM-2026-000027
+📄 Event Date formatted: N/A
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
