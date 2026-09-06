@@ -1,0 +1,632 @@
+◇ injected env (8) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+
+🚀 Server running on port 5000
+📍 Local: http://localhost:5000
+
+🔐 AUTH ENDPOINTS (via /api/auth):
+   ──────────────────────────────────────
+   POST /api/auth/register        - Register new user
+   POST /api/auth/login           - Login user
+   POST /api/auth/verify-otp      - Verify OTP
+   POST /api/auth/resend-otp      - Resend OTP
+   ──────────────────────────────────────
+   POST /api/customers/register   - Register (alternate)
+   POST /api/customers/login      - Login (alternate)
+   ──────────────────────────────────────
+
+📁 Static Files: http://localhost:5000/uploads/
+MySQL Connected ✅
+📡 POST /api/admin/salesman-login
+📡 POST /api/admin/salesman-login
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 POST /api/admin/login
+📡 GET /api/customer-orders/
+Fetching all orders
+📡 GET /api/products
+GET /api/products - Fetching all products
+Found 25 products
+📡 GET /api/customers/
+📡 GET /api/products
+GET /api/products - Fetching all products
+📡 GET /api/addons
+📡 GET /api/packages
+Found 25 products
+📡 POST /api/packages
+📦 Creating package with: {
+  package_name: 'Sai Krishna',
+  tier: 'Basic',
+  price: '100',
+  original_price: undefined,
+  discount: undefined,
+  rating: undefined,
+  review_count: undefined,
+  guest_capacity: '2',
+  description: undefined,
+  includes: [ 'dfsdg', '["dfsdg"]' ],
+  dj_setup: '1',
+  is_active: '1',
+  addon_ids: '[5]'
+}
+📦 SQL Values: [
+  'Sai Krishna',
+  'Basic',
+  100,
+  100,
+  0,
+  0,
+  0,
+  2,
+  null,
+  '["dfsdg","[\\"dfsdg\\"]"]',
+  '[]',
+  '0',
+  '0',
+  '0',
+  '1',
+  '0',
+  '0',
+  '1',
+  1,
+  1,
+  '[]'
+]
+📡 POST /api/packages
+📦 Creating package with: {
+  package_name: 'Sai Krishna',
+  tier: 'Basic',
+  price: '100',
+  original_price: undefined,
+  discount: undefined,
+  rating: undefined,
+  review_count: undefined,
+  guest_capacity: '2',
+  description: undefined,
+  includes: [ 'dfsdg', '["dfsdg"]' ],
+  dj_setup: '1',
+  is_active: '1',
+  addon_ids: '[5]'
+}
+📦 SQL Values: [
+  'Sai Krishna',
+  'Basic',
+  100,
+  100,
+  0,
+  0,
+  0,
+  2,
+  null,
+  '["dfsdg","[\\"dfsdg\\"]"]',
+  '[]',
+  '0',
+  '0',
+  '0',
+  '1',
+  '0',
+  '0',
+  '1',
+  1,
+  1,
+  '[]'
+]
+📡 POST /api/packages
+📦 Creating package with: {
+  package_name: 'Sai Krishna',
+  tier: 'Basic',
+  price: '100',
+  original_price: undefined,
+  discount: undefined,
+  rating: undefined,
+  review_count: undefined,
+  guest_capacity: '2',
+  description: undefined,
+  includes: [ 'dfsdg', '["dfsdg"]' ],
+  dj_setup: '1',
+  is_active: '1',
+  addon_ids: '[5]'
+}
+📦 SQL Values: [
+  'Sai Krishna',
+  'Basic',
+  100,
+  100,
+  0,
+  0,
+  0,
+  2,
+  null,
+  '["dfsdg","[\\"dfsdg\\"]"]',
+  '[]',
+  '0',
+  '0',
+  '0',
+  '1',
+  '0',
+  '0',
+  '1',
+  1,
+  1,
+  '[]'
+]
+📡 GET /api/addons
+📡 GET /api/products
+GET /api/products - Fetching all products
+📡 GET /api/packages
+Found 25 products
+📡 POST /api/packages
+📦 Creating package with: {
+  package_name: 'Sai Krishna',
+  tier: 'Basic',
+  price: '100',
+  original_price: undefined,
+  discount: undefined,
+  rating: undefined,
+  review_count: undefined,
+  guest_capacity: '2',
+  description: undefined,
+  includes: [ 'dfsdg', '["dfsdg"]' ],
+  dj_setup: '1',
+  is_active: '1',
+  addon_ids: '[5]'
+}
+📦 SQL Values: [
+  'Sai Krishna',
+  'Basic',
+  100,
+  100,
+  0,
+  0,
+  0,
+  2,
+  null,
+  '["dfsdg","[\\"dfsdg\\"]"]',
+  '[]',
+  '0',
+  '0',
+  '0',
+  '1',
+  '0',
+  '0',
+  '1',
+  1,
+  1,
+  '[]'
+]
+📡 POST /api/packages
+📦 Creating package with: {
+  package_name: 'Sai Krishna',
+  tier: 'Basic',
+  price: '100',
+  original_price: undefined,
+  discount: undefined,
+  rating: undefined,
+  review_count: undefined,
+  guest_capacity: '2',
+  description: undefined,
+  includes: [ 'dfsdg', '["dfsdg"]' ],
+  dj_setup: '1',
+  is_active: '1',
+  addon_ids: undefined
+}
+📦 SQL Values: [
+  'Sai Krishna',
+  'Basic',
+  100,
+  100,
+  0,
+  0,
+  0,
+  2,
+  null,
+  '["dfsdg","[\\"dfsdg\\"]"]',
+  '[]',
+  '0',
+  '0',
+  '0',
+  '1',
+  '0',
+  '0',
+  '1',
+  1,
+  1,
+  '[]'
+]
+📡 POST /api/packages
+📦 Creating package with: {
+  package_name: 'Sai Krishna',
+  tier: 'Basic',
+  price: '100',
+  original_price: undefined,
+  discount: undefined,
+  rating: undefined,
+  review_count: undefined,
+  guest_capacity: '2',
+  description: undefined,
+  includes: [ 'dfsdg', '["dfsdg"]' ],
+  dj_setup: '1',
+  is_active: '1',
+  addon_ids: undefined
+}
+📦 SQL Values: [
+  'Sai Krishna',
+  'Basic',
+  100,
+  100,
+  0,
+  0,
+  0,
+  2,
+  null,
+  '["dfsdg","[\\"dfsdg\\"]"]',
+  '[]',
+  '0',
+  '0',
+  '0',
+  '1',
+  '0',
+  '0',
+  '1',
+  1,
+  1,
+  '[]'
+]
+📡 GET /api/customer-orders/
+Fetching all orders
+📡 GET /api/orders/
+📡 GET /api/salesman-orders/
+📡 GET /api/customers/details/14
+📡 GET /api/categories
+📡 GET /api/categories
+📡 GET /api/products
+GET /api/products - Fetching all products
+Found 25 products
+📡 GET /api/products
+GET /api/products - Fetching all products
+📡 GET /api/addons
+📡 GET /api/packages
+Found 25 products
+📡 POST /api/packages
+📦 Creating package with: {
+  package_name: 'Sai Krishna',
+  tier: 'Premium',
+  price: '111',
+  original_price: undefined,
+  discount: undefined,
+  rating: undefined,
+  review_count: undefined,
+  guest_capacity: '2',
+  description: undefined,
+  includes: undefined,
+  dj_setup: '0',
+  is_active: '1',
+  addon_ids: undefined
+}
+📦 SQL Values: [
+  'Sai Krishna', 'Premium',
+  111,           111,
+  0,             0,
+  0,             2,
+  null,          '[]',
+  '[]',          '0',
+  '0',           '0',
+  '0',           '0',
+  '0',           '0',
+  0,             1,
+  '[]'
+]
+📡 POST /api/packages
+📦 Creating package with: {
+  package_name: 'Sai Krishna',
+  tier: 'Premium',
+  price: '111',
+  original_price: undefined,
+  discount: undefined,
+  rating: undefined,
+  review_count: undefined,
+  guest_capacity: '2',
+  description: undefined,
+  includes: undefined,
+  dj_setup: '0',
+  is_active: '1',
+  addon_ids: undefined
+}
+📦 SQL Values: [
+  'Sai Krishna', 'Premium',
+  111,           111,
+  0,             0,
+  0,             2,
+  null,          '[]',
+  '[]',          '0',
+  '0',           '0',
+  '0',           '0',
+  '0',           '0',
+  0,             1,
+  '[]'
+]
+📡 POST /api/packages
+📦 Creating package with: {
+  package_name: 'Sai Krishna',
+  tier: 'Premium',
+  price: '111',
+  original_price: undefined,
+  discount: undefined,
+  rating: undefined,
+  review_count: undefined,
+  guest_capacity: '2',
+  description: undefined,
+  includes: undefined,
+  dj_setup: '0',
+  is_active: '1',
+  addon_ids: undefined
+}
+📦 SQL Values: [
+  'Sai Krishna', 'Premium',
+  111,           111,
+  0,             0,
+  0,             2,
+  null,          '[]',
+  '[]',          '0',
+  '0',           '0',
+  '0',           '0',
+  '0',           '0',
+  0,             1,
+  '[]'
+]
+📡 POST /api/packages
+📦 Creating package with: {
+  package_name: 'Sai Krishna',
+  tier: 'Premium',
+  price: '111',
+  original_price: undefined,
+  discount: undefined,
+  rating: undefined,
+  review_count: undefined,
+  guest_capacity: '2',
+  description: undefined,
+  includes: undefined,
+  dj_setup: '0',
+  is_active: '1',
+  addon_ids: undefined
+}
+📦 SQL Values: [
+  'Sai Krishna', 'Premium',
+  111,           111,
+  0,             0,
+  0,             2,
+  null,          '[]',
+  '[]',          '0',
+  '0',           '0',
+  '0',           '0',
+  '0',           '0',
+  0,             1,
+  '[]'
+]
+📡 POST /api/packages
+📦 Creating package with: {
+  package_name: 'Sai Krishna',
+  tier: 'Premium',
+  price: '111',
+  original_price: undefined,
+  discount: undefined,
+  rating: undefined,
+  review_count: undefined,
+  guest_capacity: '2',
+  description: undefined,
+  includes: undefined,
+  dj_setup: '0',
+  is_active: '1',
+  addon_ids: undefined
+}
+📦 SQL Values: [
+  'Sai Krishna', 'Premium',
+  111,           111,
+  0,             0,
+  0,             2,
+  null,          '[]',
+  '[]',          '0',
+  '0',           '0',
+  '0',           '0',
+  '0',           '0',
+  0,             1,
+  '[]'
+]
+📡 GET /api/addons
+📡 GET /api/products
+GET /api/products - Fetching all products
+📡 GET /api/packages
+Found 25 products
+📡 POST /api/packages
+📦 Creating package with: {
+  package_name: 'Sai Krishna',
+  tier: 'Basic',
+  price: '1111',
+  original_price: undefined,
+  discount: undefined,
+  rating: undefined,
+  review_count: undefined,
+  guest_capacity: '2',
+  description: undefined,
+  includes: [ 'dfsdg', '["dfsdg"]' ],
+  dj_setup: '1',
+  is_active: '1',
+  addon_ids: '[2]'
+}
+📦 SQL Values: [
+  'Sai Krishna',
+  'Basic',
+  1111,
+  1111,
+  0,
+  0,
+  0,
+  2,
+  null,
+  '["dfsdg","[\\"dfsdg\\"]"]',
+  '[]',
+  '0',
+  '0',
+  '0',
+  '1',
+  '0',
+  '0',
+  '1',
+  1,
+  1,
+  '[]'
+]
+📡 POST /api/packages
+📦 Creating package with: {
+  package_name: 'Sai Krishna',
+  tier: 'Basic',
+  price: '1111',
+  original_price: undefined,
+  discount: undefined,
+  rating: undefined,
+  review_count: undefined,
+  guest_capacity: '2',
+  description: undefined,
+  includes: [ 'dfsdg', '["dfsdg"]' ],
+  dj_setup: '1',
+  is_active: '1',
+  addon_ids: '[2]'
+}
+📦 SQL Values: [
+  'Sai Krishna',
+  'Basic',
+  1111,
+  1111,
+  0,
+  0,
+  0,
+  2,
+  null,
+  '["dfsdg","[\\"dfsdg\\"]"]',
+  '[]',
+  '0',
+  '0',
+  '0',
+  '1',
+  '0',
+  '0',
+  '1',
+  1,
+  1,
+  '[]'
+]
+📡 POST /api/admin/salesman-login
+📡 POST /api/admin/salesman-login
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 POST /api/admin/login
+📡 POST /api/admin/salesman-login
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count

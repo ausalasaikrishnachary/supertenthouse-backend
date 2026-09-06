@@ -86,7 +86,7 @@ test('legacy links default to customer orders, while staff reads retain admin ac
 });
 
 test('customer list, details and invoice keep the source discriminator', () => {
-  const root = path.join(__dirname, '../../supertenthouse-mobileapp/app');
+  const root = path.join(__dirname, '../../Super_Tent_House_Mobile_App/app');
   const list = fs.readFileSync(path.join(root, '(tabs)/orders.tsx'), 'utf8');
   const details = fs.readFileSync(path.join(root, 'order-details/[id].tsx'), 'utf8');
   assert.match(list, /\?source=\$\{item.orderSource/);

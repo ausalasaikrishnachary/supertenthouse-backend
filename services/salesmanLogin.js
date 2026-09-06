@@ -9,7 +9,7 @@ function createSalesmanLogin(db) {
     }
     try {
       const [rows] = await db.promise().query(
-        'SELECT id, name, email, phone, password FROM customers WHERE email = ? AND is_salesman = 1',
+        'SELECT id, name, email, phone, password FROM customers WHERE email = ? AND is_salesman = 1 AND is_active = 1',
         [email.trim()]
       );
       const user = rows.length === 1 ? rows[0] : null;

@@ -1,0 +1,385 @@
+node:events:505
+    throw er; // Unhandled 'error' event
+    ^
+
+Error: read ECONNRESET
+    at TCP.onStreamRead (node:internal/stream_base_commons:216:20)
+Emitted 'error' event on Connection instance at:
+    at Connection._notifyError (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:291:12)
+    at Connection._handleFatalError (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:222:10)
+    at Connection._handleNetworkError (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:235:10)
+    at Socket.emit (node:events:514:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  errno: -4077,
+  code: 'ECONNRESET',
+  syscall: 'read',
+  fatal: true
+}
+
+Node.js v24.20.0
+e: 400,
+  status: 400,
+  body: '{\\"email\\":\\"rajeshyanamadala2000@gmail.com\\",\\"password\\":\\"salesman123\\"}',
+  type: 'entity.parse.failed'
+}
+Error creating package: Error: Unknown column 'custom_services' in 'field list'
+    at Packet.asError (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packets\packet.js:791:17)
+    at Query.execute (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\commands\command.js:29:26)
+    at Connection.handlePacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:552:34)
+    at PacketParser.onPacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:102:12)
+    at PacketParser.executeStart (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packet_parser.js:75:16)
+    at Socket.<anonymous> (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:109:25)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:567:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:518:3)
+    at Readable.push (node:internal/streams/readable:398:5) {
+  code: 'ER_BAD_FIELD_ERROR',
+  errno: 1054,
+  sqlState: '42S22',
+  sqlMessage: "Unknown column 'custom_services' in 'field list'",
+  sql: '\n' +
+    '      INSERT INTO packages (\n' +
+    '        package_name, tier, price, original_price, discount,\n' +
+    '        rating, review_count, guest_capacity, description,\n' +
+    '        includes, images, catering, stage_decoration,\n' +
+    '        flower_decoration, lighting, photography,\n' +
+    '        videography, sound_system, dj_setup, is_active, custom_services\n' +
+    '      )\n' +
+    `      VALUES ('Sai Krishna', 'Basic', 100, 100, 0, 0, 0, 2, NULL, '[\\"dfsdg\\",\\"[\\\\\\"dfsdg\\\\\\"]\\"]', '[]', '0', '0', '0', '1', '0', '0', '1', 1, 1, '[]')\n` +
+    '    '
+}
+Error creating package: Error: Unknown column 'custom_services' in 'field list'
+    at Packet.asError (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packets\packet.js:791:17)
+    at Query.execute (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\commands\command.js:29:26)
+    at Connection.handlePacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:552:34)
+    at PacketParser.onPacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:102:12)
+    at PacketParser.executeStart (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packet_parser.js:75:16)
+    at Socket.<anonymous> (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:109:25)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:567:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:518:3)
+    at Readable.push (node:internal/streams/readable:398:5) {
+  code: 'ER_BAD_FIELD_ERROR',
+  errno: 1054,
+  sqlState: '42S22',
+  sqlMessage: "Unknown column 'custom_services' in 'field list'",
+  sql: '\n' +
+    '      INSERT INTO packages (\n' +
+    '        package_name, tier, price, original_price, discount,\n' +
+    '        rating, review_count, guest_capacity, description,\n' +
+    '        includes, images, catering, stage_decoration,\n' +
+    '        flower_decoration, lighting, photography,\n' +
+    '        videography, sound_system, dj_setup, is_active, custom_services\n' +
+    '      )\n' +
+    `      VALUES ('Sai Krishna', 'Basic', 100, 100, 0, 0, 0, 2, NULL, '[\\"dfsdg\\",\\"[\\\\\\"dfsdg\\\\\\"]\\"]', '[]', '0', '0', '0', '1', '0', '0', '1', 1, 1, '[]')\n` +
+    '    '
+}
+Error creating package: Error: Unknown column 'custom_services' in 'field list'
+    at Packet.asError (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packets\packet.js:791:17)
+    at Query.execute (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\commands\command.js:29:26)
+    at Connection.handlePacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:552:34)
+    at PacketParser.onPacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:102:12)
+    at PacketParser.executeStart (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packet_parser.js:75:16)
+    at Socket.<anonymous> (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:109:25)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:567:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:518:3)
+    at Readable.push (node:internal/streams/readable:398:5) {
+  code: 'ER_BAD_FIELD_ERROR',
+  errno: 1054,
+  sqlState: '42S22',
+  sqlMessage: "Unknown column 'custom_services' in 'field list'",
+  sql: '\n' +
+    '      INSERT INTO packages (\n' +
+    '        package_name, tier, price, original_price, discount,\n' +
+    '        rating, review_count, guest_capacity, description,\n' +
+    '        includes, images, catering, stage_decoration,\n' +
+    '        flower_decoration, lighting, photography,\n' +
+    '        videography, sound_system, dj_setup, is_active, custom_services\n' +
+    '      )\n' +
+    `      VALUES ('Sai Krishna', 'Basic', 100, 100, 0, 0, 0, 2, NULL, '[\\"dfsdg\\",\\"[\\\\\\"dfsdg\\\\\\"]\\"]', '[]', '0', '0', '0', '1', '0', '0', '1', 1, 1, '[]')\n` +
+    '    '
+}
+Error creating package: Error: Unknown column 'custom_services' in 'field list'
+    at Packet.asError (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packets\packet.js:791:17)
+    at Query.execute (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\commands\command.js:29:26)
+    at Connection.handlePacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:552:34)
+    at PacketParser.onPacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:102:12)
+    at PacketParser.executeStart (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packet_parser.js:75:16)
+    at Socket.<anonymous> (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:109:25)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:567:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:518:3)
+    at Readable.push (node:internal/streams/readable:398:5) {
+  code: 'ER_BAD_FIELD_ERROR',
+  errno: 1054,
+  sqlState: '42S22',
+  sqlMessage: "Unknown column 'custom_services' in 'field list'",
+  sql: '\n' +
+    '      INSERT INTO packages (\n' +
+    '        package_name, tier, price, original_price, discount,\n' +
+    '        rating, review_count, guest_capacity, description,\n' +
+    '        includes, images, catering, stage_decoration,\n' +
+    '        flower_decoration, lighting, photography,\n' +
+    '        videography, sound_system, dj_setup, is_active, custom_services\n' +
+    '      )\n' +
+    `      VALUES ('Sai Krishna', 'Basic', 100, 100, 0, 0, 0, 2, NULL, '[\\"dfsdg\\",\\"[\\\\\\"dfsdg\\\\\\"]\\"]', '[]', '0', '0', '0', '1', '0', '0', '1', 1, 1, '[]')\n` +
+    '    '
+}
+Error creating package: Error: Unknown column 'custom_services' in 'field list'
+    at Packet.asError (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packets\packet.js:791:17)
+    at Query.execute (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\commands\command.js:29:26)
+    at Connection.handlePacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:552:34)
+    at PacketParser.onPacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:102:12)
+    at PacketParser.executeStart (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packet_parser.js:75:16)
+    at Socket.<anonymous> (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:109:25)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:567:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:518:3)
+    at Readable.push (node:internal/streams/readable:398:5) {
+  code: 'ER_BAD_FIELD_ERROR',
+  errno: 1054,
+  sqlState: '42S22',
+  sqlMessage: "Unknown column 'custom_services' in 'field list'",
+  sql: '\n' +
+    '      INSERT INTO packages (\n' +
+    '        package_name, tier, price, original_price, discount,\n' +
+    '        rating, review_count, guest_capacity, description,\n' +
+    '        includes, images, catering, stage_decoration,\n' +
+    '        flower_decoration, lighting, photography,\n' +
+    '        videography, sound_system, dj_setup, is_active, custom_services\n' +
+    '      )\n' +
+    `      VALUES ('Sai Krishna', 'Basic', 100, 100, 0, 0, 0, 2, NULL, '[\\"dfsdg\\",\\"[\\\\\\"dfsdg\\\\\\"]\\"]', '[]', '0', '0', '0', '1', '0', '0', '1', 1, 1, '[]')\n` +
+    '    '
+}
+Error creating package: Error: Unknown column 'custom_services' in 'field list'
+    at Packet.asError (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packets\packet.js:791:17)
+    at Query.execute (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\commands\command.js:29:26)
+    at Connection.handlePacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:552:34)
+    at PacketParser.onPacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:102:12)
+    at PacketParser.executeStart (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packet_parser.js:75:16)
+    at Socket.<anonymous> (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:109:25)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:567:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:518:3)
+    at Readable.push (node:internal/streams/readable:398:5) {
+  code: 'ER_BAD_FIELD_ERROR',
+  errno: 1054,
+  sqlState: '42S22',
+  sqlMessage: "Unknown column 'custom_services' in 'field list'",
+  sql: '\n' +
+    '      INSERT INTO packages (\n' +
+    '        package_name, tier, price, original_price, discount,\n' +
+    '        rating, review_count, guest_capacity, description,\n' +
+    '        includes, images, catering, stage_decoration,\n' +
+    '        flower_decoration, lighting, photography,\n' +
+    '        videography, sound_system, dj_setup, is_active, custom_services\n' +
+    '      )\n' +
+    `      VALUES ('Sai Krishna', 'Basic', 100, 100, 0, 0, 0, 2, NULL, '[\\"dfsdg\\",\\"[\\\\\\"dfsdg\\\\\\"]\\"]', '[]', '0', '0', '0', '1', '0', '0', '1', 1, 1, '[]')\n` +
+    '    '
+}
+Error creating package: Error: Unknown column 'custom_services' in 'field list'
+    at Packet.asError (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packets\packet.js:791:17)
+    at Query.execute (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\commands\command.js:29:26)
+    at Connection.handlePacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:552:34)
+    at PacketParser.onPacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:102:12)
+    at PacketParser.executeStart (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packet_parser.js:75:16)
+    at Socket.<anonymous> (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:109:25)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:567:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:518:3)
+    at Readable.push (node:internal/streams/readable:398:5) {
+  code: 'ER_BAD_FIELD_ERROR',
+  errno: 1054,
+  sqlState: '42S22',
+  sqlMessage: "Unknown column 'custom_services' in 'field list'",
+  sql: '\n' +
+    '      INSERT INTO packages (\n' +
+    '        package_name, tier, price, original_price, discount,\n' +
+    '        rating, review_count, guest_capacity, description,\n' +
+    '        includes, images, catering, stage_decoration,\n' +
+    '        flower_decoration, lighting, photography,\n' +
+    '        videography, sound_system, dj_setup, is_active, custom_services\n' +
+    '      )\n' +
+    "      VALUES ('Sai Krishna', 'Premium', 111, 111, 0, 0, 0, 2, NULL, '[]', '[]', '0', '0', '0', '0', '0', '0', '0', 0, 1, '[]')\n" +
+    '    '
+}
+Error creating package: Error: Unknown column 'custom_services' in 'field list'
+    at Packet.asError (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packets\packet.js:791:17)
+    at Query.execute (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\commands\command.js:29:26)
+    at Connection.handlePacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:552:34)
+    at PacketParser.onPacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:102:12)
+    at PacketParser.executeStart (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packet_parser.js:75:16)
+    at Socket.<anonymous> (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:109:25)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:567:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:518:3)
+    at Readable.push (node:internal/streams/readable:398:5) {
+  code: 'ER_BAD_FIELD_ERROR',
+  errno: 1054,
+  sqlState: '42S22',
+  sqlMessage: "Unknown column 'custom_services' in 'field list'",
+  sql: '\n' +
+    '      INSERT INTO packages (\n' +
+    '        package_name, tier, price, original_price, discount,\n' +
+    '        rating, review_count, guest_capacity, description,\n' +
+    '        includes, images, catering, stage_decoration,\n' +
+    '        flower_decoration, lighting, photography,\n' +
+    '        videography, sound_system, dj_setup, is_active, custom_services\n' +
+    '      )\n' +
+    "      VALUES ('Sai Krishna', 'Premium', 111, 111, 0, 0, 0, 2, NULL, '[]', '[]', '0', '0', '0', '0', '0', '0', '0', 0, 1, '[]')\n" +
+    '    '
+}
+Error creating package: Error: Unknown column 'custom_services' in 'field list'
+    at Packet.asError (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packets\packet.js:791:17)
+    at Query.execute (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\commands\command.js:29:26)
+    at Connection.handlePacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:552:34)
+    at PacketParser.onPacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:102:12)
+    at PacketParser.executeStart (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packet_parser.js:75:16)
+    at Socket.<anonymous> (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:109:25)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:567:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:518:3)
+    at Readable.push (node:internal/streams/readable:398:5) {
+  code: 'ER_BAD_FIELD_ERROR',
+  errno: 1054,
+  sqlState: '42S22',
+  sqlMessage: "Unknown column 'custom_services' in 'field list'",
+  sql: '\n' +
+    '      INSERT INTO packages (\n' +
+    '        package_name, tier, price, original_price, discount,\n' +
+    '        rating, review_count, guest_capacity, description,\n' +
+    '        includes, images, catering, stage_decoration,\n' +
+    '        flower_decoration, lighting, photography,\n' +
+    '        videography, sound_system, dj_setup, is_active, custom_services\n' +
+    '      )\n' +
+    "      VALUES ('Sai Krishna', 'Premium', 111, 111, 0, 0, 0, 2, NULL, '[]', '[]', '0', '0', '0', '0', '0', '0', '0', 0, 1, '[]')\n" +
+    '    '
+}
+Error creating package: Error: Unknown column 'custom_services' in 'field list'
+    at Packet.asError (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packets\packet.js:791:17)
+    at Query.execute (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\commands\command.js:29:26)
+    at Connection.handlePacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:552:34)
+    at PacketParser.onPacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:102:12)
+    at PacketParser.executeStart (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packet_parser.js:75:16)
+    at Socket.<anonymous> (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:109:25)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:567:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:518:3)
+    at Readable.push (node:internal/streams/readable:398:5) {
+  code: 'ER_BAD_FIELD_ERROR',
+  errno: 1054,
+  sqlState: '42S22',
+  sqlMessage: "Unknown column 'custom_services' in 'field list'",
+  sql: '\n' +
+    '      INSERT INTO packages (\n' +
+    '        package_name, tier, price, original_price, discount,\n' +
+    '        rating, review_count, guest_capacity, description,\n' +
+    '        includes, images, catering, stage_decoration,\n' +
+    '        flower_decoration, lighting, photography,\n' +
+    '        videography, sound_system, dj_setup, is_active, custom_services\n' +
+    '      )\n' +
+    "      VALUES ('Sai Krishna', 'Premium', 111, 111, 0, 0, 0, 2, NULL, '[]', '[]', '0', '0', '0', '0', '0', '0', '0', 0, 1, '[]')\n" +
+    '    '
+}
+Error creating package: Error: Unknown column 'custom_services' in 'field list'
+    at Packet.asError (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packets\packet.js:791:17)
+    at Query.execute (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\commands\command.js:29:26)
+    at Connection.handlePacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:552:34)
+    at PacketParser.onPacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:102:12)
+    at PacketParser.executeStart (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packet_parser.js:75:16)
+    at Socket.<anonymous> (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:109:25)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:567:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:518:3)
+    at Readable.push (node:internal/streams/readable:398:5) {
+  code: 'ER_BAD_FIELD_ERROR',
+  errno: 1054,
+  sqlState: '42S22',
+  sqlMessage: "Unknown column 'custom_services' in 'field list'",
+  sql: '\n' +
+    '      INSERT INTO packages (\n' +
+    '        package_name, tier, price, original_price, discount,\n' +
+    '        rating, review_count, guest_capacity, description,\n' +
+    '        includes, images, catering, stage_decoration,\n' +
+    '        flower_decoration, lighting, photography,\n' +
+    '        videography, sound_system, dj_setup, is_active, custom_services\n' +
+    '      )\n' +
+    "      VALUES ('Sai Krishna', 'Premium', 111, 111, 0, 0, 0, 2, NULL, '[]', '[]', '0', '0', '0', '0', '0', '0', '0', 0, 1, '[]')\n" +
+    '    '
+}
+Error creating package: Error: Unknown column 'custom_services' in 'field list'
+    at Packet.asError (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packets\packet.js:791:17)
+    at Query.execute (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\commands\command.js:29:26)
+    at Connection.handlePacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:552:34)
+    at PacketParser.onPacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:102:12)
+    at PacketParser.executeStart (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packet_parser.js:75:16)
+    at Socket.<anonymous> (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:109:25)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:567:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:518:3)
+    at Readable.push (node:internal/streams/readable:398:5) {
+  code: 'ER_BAD_FIELD_ERROR',
+  errno: 1054,
+  sqlState: '42S22',
+  sqlMessage: "Unknown column 'custom_services' in 'field list'",
+  sql: '\n' +
+    '      INSERT INTO packages (\n' +
+    '        package_name, tier, price, original_price, discount,\n' +
+    '        rating, review_count, guest_capacity, description,\n' +
+    '        includes, images, catering, stage_decoration,\n' +
+    '        flower_decoration, lighting, photography,\n' +
+    '        videography, sound_system, dj_setup, is_active, custom_services\n' +
+    '      )\n' +
+    `      VALUES ('Sai Krishna', 'Basic', 1111, 1111, 0, 0, 0, 2, NULL, '[\\"dfsdg\\",\\"[\\\\\\"dfsdg\\\\\\"]\\"]', '[]', '0', '0', '0', '1', '0', '0', '1', 1, 1, '[]')\n` +
+    '    '
+}
+Error creating package: Error: Unknown column 'custom_services' in 'field list'
+    at Packet.asError (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packets\packet.js:791:17)
+    at Query.execute (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\commands\command.js:29:26)
+    at Connection.handlePacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:552:34)
+    at PacketParser.onPacket (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:102:12)
+    at PacketParser.executeStart (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\packet_parser.js:75:16)
+    at Socket.<anonymous> (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:109:25)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:567:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:518:3)
+    at Readable.push (node:internal/streams/readable:398:5) {
+  code: 'ER_BAD_FIELD_ERROR',
+  errno: 1054,
+  sqlState: '42S22',
+  sqlMessage: "Unknown column 'custom_services' in 'field list'",
+  sql: '\n' +
+    '      INSERT INTO packages (\n' +
+    '        package_name, tier, price, original_price, discount,\n' +
+    '        rating, review_count, guest_capacity, description,\n' +
+    '        includes, images, catering, stage_decoration,\n' +
+    '        flower_decoration, lighting, photography,\n' +
+    '        videography, sound_system, dj_setup, is_active, custom_services\n' +
+    '      )\n' +
+    `      VALUES ('Sai Krishna', 'Basic', 1111, 1111, 0, 0, 0, 2, NULL, '[\\"dfsdg\\",\\"[\\\\\\"dfsdg\\\\\\"]\\"]', '[]', '0', '0', '0', '1', '0', '0', '1', 1, 1, '[]')\n` +
+    '    '
+}
+node:events:505
+    throw er; // Unhandled 'error' event
+    ^
+
+Error: read ECONNRESET
+    at TCP.onStreamRead (node:internal/stream_base_commons:216:20)
+Emitted 'error' event on Connection instance at:
+    at Connection._notifyError (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:291:12)
+    at Connection._handleFatalError (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:222:10)
+    at Connection._handleNetworkError (C:\Users\asaik\OneDrive\Desktop\super-tenthouse-backend\node_modules\mysql2\lib\base\connection.js:235:10)
+    at Socket.emit (node:events:514:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  errno: -4077,
+  code: 'ECONNRESET',
+  syscall: 'read',
+  fatal: true
+}
+
+Node.js v24.20.0
