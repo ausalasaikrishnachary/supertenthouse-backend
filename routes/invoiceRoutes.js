@@ -394,36 +394,7 @@ function generateInvoiceHTML(order) {
             </div>
           </div>
 
-          <div class="event-details">
-            <div class="item">
-              <div class="label">Event Type</div>
-              <div class="value">${order.eventType || 'N/A'}</div>
-            </div>
-            <div class="item">
-              <div class="label">Event Date</div>
-              <div class="value">${eventDateFormatted}</div>
-            </div>
-            <div class="item">
-              <div class="label">Guest Count</div>
-              <div class="value">${order.guestCount || 0}</div>
-            </div>
-            <div class="item span-full">
-              <div class="label">Venue</div>
-              <div class="value">${order.venue || 'N/A'}</div>
-            </div>
-            ${order.eventTime ? `
-            <div class="item span-full">
-              <div class="label">Event Time</div>
-              <div class="value">${order.eventTime}</div>
-            </div>
-            ` : ''}
-            ${order.specialInstructions ? `
-            <div class="item span-full">
-              <div class="label">Special Instructions</div>
-              <div class="value">${order.specialInstructions}</div>
-            </div>
-            ` : ''}
-          </div>
+        
 
           <table class="items-table">
             <thead>

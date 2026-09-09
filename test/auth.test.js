@@ -61,20 +61,36 @@ test("admin-only role check allows admins", () => {
   assert.equal(res.statusCode, 200);
 });
 
-test("a valid salesman token is stopped before an admin-only delete handler", () => {
+test("a valid salesman token is stopped before an admin-only order status handler", () => {
   const token = jwt.sign({ id: 7, role: "salesman" }, secret);
   const req = { headers: { authorization: `Bearer ${token}` } };
   const res = response();
-  let deleteHandlerCalled = false;
+  let statusHandlerCalled = false;
 
   adminOnly[0](req, res, () => {
     adminOnly[1](req, res, () => {
-      deleteHandlerCalled = true;
+      statusHandlerCalled = true;
     });
   });
 
   assert.equal(res.statusCode, 403);
-  assert.equal(deleteHandlerCalled, false);
+  assert.equal(statusHandlerCalled, false);
+});
+
+test("a valid admin token reaches an admin-only order status handler", () => {
+  const token = jwt.sign({ id: 3, role: "admin" }, secret);
+  const req = { headers: { authorization: `Bearer ${token}` } };
+  const res = response();
+  let statusHandlerCalled = false;
+
+  adminOnly[0](req, res, () => {
+    adminOnly[1](req, res, () => {
+      statusHandlerCalled = true;
+    });
+  });
+
+  assert.equal(res.statusCode, 200);
+  assert.equal(statusHandlerCalled, true);
 });
 
 test("missing authentication is stopped before an admin-only delete handler", () => {

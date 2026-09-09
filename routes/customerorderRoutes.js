@@ -6,6 +6,42 @@ const db = require("../db");
 const { adminOnly } = require("../middleware/auth");
 const orderReader = require('../middleware/orderReader');
 
+// Admin and salesman orders do not persist checkout address fields. Resolve the
+// customer's preferred address at read time, retaining the customer-profile
+// address as a fallback for older installations and records.
+async function attachCustomerDeliveryAddress(order) {
+  let address = null;
+  try {
+    const [addresses] = await db.promise().query(
+      `SELECT id, label, full_name, phone, line1, line2, city, state, pincode, country
+       FROM customer_addresses
+       WHERE customer_id = ?
+       ORDER BY is_default DESC, created_at DESC
+       LIMIT 1`,
+      [order.customer_id]
+    );
+    address = addresses[0] || null;
+  } catch (error) {
+    // customer_addresses is created lazily by checkout. Do not make historical
+    // admin/salesman orders unavailable on deployments without that table.
+    if (error.code !== 'ER_NO_SUCH_TABLE') throw error;
+  }
+
+  return {
+    ...order,
+    address_id: address?.id ?? null,
+    address_label: address?.label ?? null,
+    address_full_name: address?.full_name || order.customer_name || '',
+    address_phone: address?.phone || order.customer_phone || '',
+    address_line1: address?.line1 || order.customer_address_line1 || '',
+    address_line2: address?.line2 || order.customer_address_line2 || '',
+    address_city: address?.city || order.customer_address_city || '',
+    address_state: address?.state || order.customer_address_state || '',
+    address_pincode: address?.pincode || order.customer_address_pincode || '',
+    address_country: address?.country || order.customer_address_country || 'India',
+  };
+}
+
 // ─── Create Notification Helper ──────────────────────────────────────────────
 const createNotification = async (userId, title, message, type, icon, data = null) => {
   try {
@@ -80,7 +116,7 @@ router.get("/", async (req, res) => {
 });
 
 // ==============================
-// GET ORDERS BY CUSTOMER ID - FIXED (Combines User orders & Admin-created orders)
+// GET ORDERS BY CUSTOMER ID - FIXED (Combines customer, admin, and salesman-created orders)
 // ==============================
 router.get("/customer/:customerId", orderReader, async (req, res) => {
   try {
@@ -142,7 +178,13 @@ router.get("/customer/:customerId", orderReader, async (req, res) => {
         o.invoice_number,
         c.name as customer_name,
         c.email as customer_email,
-        c.phone as customer_phone
+        c.phone as customer_phone,
+        c.address_line1 AS customer_address_line1,
+        c.address_line2 AS customer_address_line2,
+        c.city AS customer_address_city,
+        c.state AS customer_address_state,
+        c.pincode AS customer_address_pincode,
+        c.country AS customer_address_country
       FROM admin_orders o
       LEFT JOIN customers c ON o.customer_id = c.id
       WHERE o.customer_id = ?
@@ -152,6 +194,7 @@ router.get("/customer/:customerId", orderReader, async (req, res) => {
 
     for (let order of adminOrders) {
       order.orderSource = 'admin';
+      Object.assign(order, await attachCustomerDeliveryAddress(order));
       // Fetch admin order items
       const [items] = await db.promise().query(
         `
@@ -176,8 +219,64 @@ router.get("/customer/:customerId", orderReader, async (req, res) => {
       }
     }
 
-    // Combine both arrays
-    const combinedOrders = [...userOrders, ...adminOrders];
+    // 3. Fetch salesman-created orders for this customer. They remain linked to
+    // the salesman, while customer_id makes them part of the selected customer's history.
+    const sqlSalesmanOrders = `
+      SELECT
+        o.id,
+        o.order_number,
+        o.customer_id,
+        o.total_amount AS total,
+        o.total_amount AS subtotal,
+        o.tax_amount AS tax,
+        o.grand_total,
+        o.order_date AS created_at,
+        o.updated_at,
+        o.status,
+        o.payment_status,
+        o.payment_method,
+        o.notes,
+        o.invoice_number,
+        o.salesman_id,
+        o.salesman_name,
+        c.name as customer_name,
+        c.email as customer_email,
+        c.phone as customer_phone,
+        c.address_line1 AS customer_address_line1,
+        c.address_line2 AS customer_address_line2,
+        c.city AS customer_address_city,
+        c.state AS customer_address_state,
+        c.pincode AS customer_address_pincode,
+        c.country AS customer_address_country
+      FROM salesman_orders o
+      LEFT JOIN customers c ON o.customer_id = c.id
+      WHERE o.customer_id = ?
+      ORDER BY o.id DESC
+    `;
+    const [salesmanOrders] = await db.promise().query(sqlSalesmanOrders, [customerId]);
+
+    for (let order of salesmanOrders) {
+      order.orderSource = 'salesman';
+      Object.assign(order, await attachCustomerDeliveryAddress(order));
+      const [items] = await db.promise().query(
+        `
+        SELECT oi.product_id, oi.product_name AS name, oi.quantity, oi.price,
+               oi.discount, oi.subtotal, oi.image_url AS image
+        FROM salesman_order_items oi
+        WHERE oi.order_id = ?
+        `,
+        [order.id]
+      );
+      order.items = items || [];
+      try {
+        order.invoice_number = await invoiceRoutes.getOrCreateInvoiceNumber({ orderId: order.id, orderSource: 'salesman' });
+      } catch (err) {
+        console.error("Failed to generate/fetch invoice for salesman order:", order.id, err);
+      }
+    }
+
+    // Combine all order sources.
+    const combinedOrders = [...userOrders, ...adminOrders, ...salesmanOrders];
     
     // Sort combined orders by date descending
     combinedOrders.sort((a, b) => {
@@ -204,13 +303,13 @@ router.get("/customer/:customerId", orderReader, async (req, res) => {
 });
 
 // ==============================
-// GET SINGLE ORDER BY ID - FIXED (Searches both User and Admin Orders)
+// GET SINGLE ORDER BY ID - FIXED (Searches customer, admin, and salesman orders)
 // ==============================
 router.get("/:id", orderReader, async (req, res) => {
   try {
     const orderId = req.params.id;
     const source = req.query.source || 'customer';
-    if (!['customer', 'admin'].includes(source) || !/^\d+$/.test(orderId)) {
+    if (!['customer', 'admin', 'salesman'].includes(source) || !/^\d+$/.test(orderId)) {
       return res.status(400).json({ message: 'Invalid order ID or source' });
     }
     console.log('Fetching merged order details for ID:', orderId);
@@ -273,7 +372,13 @@ router.get("/:id", orderReader, async (req, res) => {
         o.invoice_number,
         c.name as customer_name,
         c.email as customer_email,
-        c.phone as customer_phone
+        c.phone as customer_phone,
+        c.address_line1 AS customer_address_line1,
+        c.address_line2 AS customer_address_line2,
+        c.city AS customer_address_city,
+        c.state AS customer_address_state,
+        c.pincode AS customer_address_pincode,
+        c.country AS customer_address_country
       FROM admin_orders o
       LEFT JOIN customers c ON o.customer_id = c.id
       WHERE o.id = ?
@@ -286,6 +391,7 @@ router.get("/:id", orderReader, async (req, res) => {
       const order = adminOrders[0];
       order.orderSource = 'admin';
       order.gst = order.tax;
+      Object.assign(order, await attachCustomerDeliveryAddress(order));
       
       // Fetch admin order items
       const [items] = await db.promise().query(
@@ -314,6 +420,70 @@ router.get("/:id", orderReader, async (req, res) => {
       return res.json({
         success: true,
         message: "Order details fetched successfully (Admin Order)",
+        data: order
+      });
+    }
+
+    const sqlSalesman = `
+      SELECT
+        o.id,
+        o.order_number,
+        o.customer_id,
+        o.total_amount AS total,
+        o.total_amount AS subtotal,
+        o.tax_amount AS tax,
+        o.grand_total,
+        o.order_date AS created_at,
+        o.updated_at,
+        o.status,
+        o.payment_status,
+        o.payment_method,
+        o.notes,
+        o.invoice_number,
+        o.salesman_id,
+        o.salesman_name,
+        c.name as customer_name,
+        c.email as customer_email,
+        c.phone as customer_phone,
+        c.address_line1 AS customer_address_line1,
+        c.address_line2 AS customer_address_line2,
+        c.city AS customer_address_city,
+        c.state AS customer_address_state,
+        c.pincode AS customer_address_pincode,
+        c.country AS customer_address_country
+      FROM salesman_orders o
+      LEFT JOIN customers c ON o.customer_id = c.id
+      WHERE o.id = ?
+    `;
+    const [salesmanOrders] = source === 'salesman'
+      ? await db.promise().query(sqlSalesman + (req.orderCustomerId ? ' AND o.customer_id = ?' : ''), req.orderCustomerId ? [orderId, req.orderCustomerId] : [orderId])
+      : [[]];
+
+    if (salesmanOrders.length > 0) {
+      const order = salesmanOrders[0];
+      order.orderSource = 'salesman';
+      order.gst = order.tax;
+      Object.assign(order, await attachCustomerDeliveryAddress(order));
+      const [items] = await db.promise().query(
+        `
+        SELECT oi.product_id, oi.product_name AS name, oi.quantity, oi.price,
+               oi.discount, oi.subtotal, oi.image_url AS image
+        FROM salesman_order_items oi
+        WHERE oi.order_id = ?
+        `,
+        [order.id]
+      );
+      order.items = items || [];
+
+      try {
+        order.invoice_number = await invoiceRoutes.getOrCreateInvoiceNumber({ orderId: order.id, orderSource: 'salesman' });
+      } catch (err) {
+        console.error("Failed to generate/fetch invoice for salesman order detail:", order.id, err);
+      }
+
+      return res.json({
+        success: true,
+        message: "Order details fetched successfully (Salesman Order)",
         data: order
       });
     }
