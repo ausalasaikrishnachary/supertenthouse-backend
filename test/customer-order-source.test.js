@@ -20,15 +20,18 @@ function fixture() {
     if (sql.includes('FROM admin_order_items')) return [[{ name: 'Admin Tent', price: 100, quantity: 1 }]];
     if (sql.includes('FROM salesman_order_items')) return [[{ name: 'Salesman Tent', price: 100, quantity: 1 }]];
     if (sql.includes('FROM salesman_orders') && sql.includes('WHERE o.customer_id = ?')) {
-      return [[{ id: 25, customer_id: 7, order_number: 'SALESMAN-25', tax: 18 }]];
+      return [[{ id: 25, customer_id: 7, order_number: 'SALESMAN-25', tax: 18, address_line1: 'Snapshot Road' }]];
     }
     if (params[0] !== '25' || (params.length > 1 && params[1] !== 7)) return [[]];
-    return [[{ id: 25, customer_id: 7, order_number: sql.includes('FROM salesman_orders') ? 'SALESMAN-25' : sql.includes('FROM admin_orders') ? 'ADMIN-25' : 'CUSTOMER-25', tax: 18, items: '[]' }]];
+    return [[{ id: 25, customer_id: 7, order_number: sql.includes('FROM salesman_orders') ? 'SALESMAN-25' : sql.includes('FROM admin_orders') ? 'ADMIN-25' : 'CUSTOMER-25', tax: 18, items: '[]', address_line1: 'Snapshot Road' }]];
   } }) };
   const imports = {
     express: { Router: () => router }, '../db': db,
     '../middleware/auth': { adminOnly: [] }, '../middleware/orderReader': orderReader,
     './invoiceRoutes': { getOrCreateInvoiceNumber: async data => { invoices.push(data); return 'INV-25'; } },
+    '../services/staffOrderPresentation': { ensureStaffOrderSnapshotColumns: async () => {}, enrichStaffOrderItems: async (_connection, table) => {
+      const [items] = await db.promise().query(`SELECT * FROM ${table}`, ['25']); return items;
+    } },
   };
   vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../routes/customerorderRoutes.js'), 'utf8'), {
     require: name => { if (!(name in imports)) throw new Error(name); return imports[name]; }, module: { exports: {} }, console,
@@ -102,7 +105,7 @@ test('legacy links default to customer orders, while staff reads retain admin ac
 });
 
 test('customer list, details and invoice keep the source discriminator', () => {
-  const root = path.join(__dirname, '../../Super_Tent_House_Mobile_App/app');
+  const root = path.join(__dirname, '../../supertenthouse-mobileapp/app');
   const list = fs.readFileSync(path.join(root, '(tabs)/orders.tsx'), 'utf8');
   const details = fs.readFileSync(path.join(root, 'order-details/[id].tsx'), 'utf8');
   assert.match(list, /\?source=\$\{item.orderSource/);

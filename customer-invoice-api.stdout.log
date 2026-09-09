@@ -148,3 +148,1092 @@ Fetching merged order details for ID: 3
 📡 GET /api/salesman/notifications
 📡 GET /api/salesman/notifications/unread-count
 📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 POST /api/invoice/generate-pdf
+📄 Event Date formatted: N/A
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/
+Fetching all orders
+📡 GET /api/orders/
+📡 GET /api/salesman-orders/
+📡 GET /api/customers/details/14
+📡 GET /api/customers/details/14
+📡 GET /api/customers/details/14
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/checkout/orders/14
+📦 Fetching orders for customer: 14
+📦 Orders found: 1
+📡 GET /api/checkout/addresses/14
+📦 Fetching addresses for customer: 14
+📦 Addresses found: 1
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/products/trending
+GET /api/products/trending - Fetching trending products
+📡 GET /api/categories
+📡 GET /api/products/best-sellers
+GET /api/products/best-sellers - Fetching best sellers
+📡 GET /api/products/new-arrivals
+GET /api/products/new-arrivals - Fetching new arrivals
+📡 GET /api/hero-banners
+📡 GET /api/testimonials
+📡 GET /api/why-choose-us
+📡 GET /api/packages
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/categories
+📡 GET /api/categories
+📡 GET /api/products/category/5
+GET /api/products/category/5 - Fetching products by category
+SQL Query: 
+    SELECT 
+      p.*,
+      c.category_name,
+      c.id as category_id
+    FROM products p
+    LEFT JOIN product_categories c ON p.product_category_id = c.id
+    WHERE p.product_category_id = ?
+    ORDER BY p.id DESC
+  
+SQL Params: [ '5' ]
+Found 2 products for category 5
+📡 POST /api/cart
+📦 Adding to cart: {
+  customerId: '14',
+  product: {
+    id: '11',
+    name: 'Decorative Vase Set',
+    price: 3999,
+    image: 'http://localhost:5000/uploads/products/1785312200285-171106594.jpg',
+    quantity: 1
+  }
+}
+📦 Product data: {
+  productId: '11',
+  productName: 'Decorative Vase Set',
+  productPrice: 3999,
+  productImage: 'http://localhost:5000/uploads/products/1785312200285-171106594.jpg',
+  productQuantity: 1
+}
+📦 Existing item: []
+📦 Inserted new item with ID: 39
+📦 Cart items after update: 1
+📡 GET /api/cart/14
+📦 Fetching cart for customer: 14
+📦 Active cart items found: 1
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/cart/14
+📦 Fetching cart for customer: 14
+📡 GET /api/coupons/active
+📦 Fetching active coupons...
+✅ Found 0 active coupons
+📦 Active cart items found: 1
+📡 GET /api/checkout/addresses/14
+📦 Fetching addresses for customer: 14
+📦 Addresses found: 1
+📡 POST /api/checkout/order
+📦 Creating order for customer: 14
+📦 Total received: undefined
+📦 Grand Total received: 6219
+📦 Advance Amount received: undefined
+📦 Address object: {
+  "id": "7",
+  "label": "uppal",
+  "fullName": "sai krishna",
+  "phone": "8106815633",
+  "line1": "chaitanya nagar",
+  "line2": "",
+  "city": "hyderabad",
+  "state": "telangana",
+  "pincode": "500088",
+  "country": "India"
+}
+✅ Order created, ID: 0 Order Number: ORD-1788528875545-488
+📡 DELETE /api/cart/14
+📦 Clearing cart for customer: 14
+📦 Deleted 1 items from cart
+📡 GET /api/cart/14
+📦 Fetching cart for customer: 14
+📦 Active cart items found: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/categories
+📡 GET /api/products/trending
+GET /api/products/trending - Fetching trending products
+📡 GET /api/products/best-sellers
+GET /api/products/best-sellers - Fetching best sellers
+📡 GET /api/products/new-arrivals
+GET /api/products/new-arrivals - Fetching new arrivals
+📡 GET /api/hero-banners
+📡 GET /api/testimonials
+📡 GET /api/why-choose-us
+📡 GET /api/packages
+📡 GET /api/customer-orders/customer/14
+Fetching merged orders for customer: 14
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/customer/14
+Fetching merged orders for customer: 14
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/1?source=admin
+Fetching merged order details for ID: 1
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/customer-orders/
+Fetching all orders
+📡 GET /api/orders/
+📡 GET /api/salesman-orders/
+📡 GET /api/customers/details/14
+📡 GET /api/customers/details/14
+📡 GET /api/customers/details/14
+📡 GET /api/notifications/14/unread-count
+📡 PUT /api/customer-orders/0/status-payment
+Updating order status and payment: { orderId: '0', status: 'approved', payment_status: 'paid' }
+Creating notification for customer 14: {
+  title: 'Order Approved!',
+  message: 'Your order #ORD-1788520238696-441 has been approved and is being processed.'
+}
+📡 GET /api/customer-orders/
+Fetching all orders
+📡 GET /api/orders/
+📡 GET /api/salesman-orders/
+📡 GET /api/customers/details/14
+📡 GET /api/customers/details/14
+📡 GET /api/customers/details/14
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/customer/14
+Fetching merged orders for customer: 14
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 PUT /api/customer-orders/0/status-payment
+Updating order status and payment: { orderId: '0', status: 'pending', payment_status: 'pending' }
+Creating notification for customer 14: {
+  title: 'Order pending',
+  message: 'Your order #ORD-1788520238696-441 status has been updated to pending.'
+}
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/customer-orders/customer/14
+Fetching merged orders for customer: 14
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/customer-orders/customer/14
+Fetching merged orders for customer: 14
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/customer-orders/
+Fetching all orders
+📡 GET /api/orders/
+📡 GET /api/salesman-orders/
+📡 GET /api/customers/details/14
+📡 GET /api/customers/details/14
+📡 GET /api/customers/details/14
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/notifications/14/unread-count
+📡 PUT /api/customer-orders/0/status-payment
+Updating order status and payment: { orderId: '0', status: 'completed', payment_status: 'paid' }
+Creating notification for customer 14: {
+  title: 'Order Completed!',
+  message: 'Your order #ORD-1788520238696-441 has been completed successfully. Thank you for your business!'
+}
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/
+Fetching all orders
+📡 GET /api/orders/
+📡 GET /api/salesman-orders/
+📡 GET /api/customers/details/14
+📡 GET /api/customers/details/14
+📡 GET /api/customers/details/14
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/checkout/orders/14
+📦 Fetching orders for customer: 14
+📦 Orders found: 0
+📡 GET /api/checkout/addresses/14
+📦 Fetching addresses for customer: 14
+📦 Addresses found: 1
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/categories
+📡 GET /api/products/trending
+GET /api/products/trending - Fetching trending products
+📡 GET /api/products/best-sellers
+GET /api/products/best-sellers - Fetching best sellers
+📡 GET /api/products/new-arrivals
+GET /api/products/new-arrivals - Fetching new arrivals
+📡 GET /api/hero-banners
+📡 GET /api/testimonials
+📡 GET /api/why-choose-us
+📡 GET /api/packages
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/packages
+📡 GET /api/packages/3
+📡 GET /api/packages/3/addons
+❌ 404 - Route not found: GET /api/packages/3/addons
+📡 GET /api/addons
+📡 POST /api/cart
+📦 Adding to cart: {
+  customerId: '14',
+  product: {
+    id: '3',
+    name: 'Birthdays',
+    price: 2000,
+    image: 'http://localhost:5000/uploads/packages/1785343705859-762140346.jpg',
+    quantity: 1
+  }
+}
+📦 Product data: {
+  productId: '3',
+  productName: 'Birthdays',
+  productPrice: 2000,
+  productImage: 'http://localhost:5000/uploads/packages/1785343705859-762140346.jpg',
+  productQuantity: 1
+}
+📦 Existing item: []
+📦 Inserted new item with ID: 40
+📦 Cart items after update: 1
+📡 GET /api/cart/14
+📦 Fetching cart for customer: 14
+📦 Active cart items found: 1
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/cart/14
+📦 Fetching cart for customer: 14
+📡 GET /api/coupons/active
+📦 Fetching active coupons...
+✅ Found 0 active coupons
+📦 Active cart items found: 1
+📡 GET /api/checkout/addresses/14
+📦 Fetching addresses for customer: 14
+📦 Addresses found: 1
+📡 POST /api/checkout/order
+📦 Creating order for customer: 14
+📦 Total received: undefined
+📦 Grand Total received: 3860
+📦 Advance Amount received: undefined
+📦 Address object: {
+  "id": "7",
+  "label": "uppal",
+  "fullName": "sai krishna",
+  "phone": "8106815633",
+  "line1": "chaitanya nagar",
+  "line2": "",
+  "city": "hyderabad",
+  "state": "telangana",
+  "pincode": "500088",
+  "country": "India"
+}
+✅ Order created, ID: 0 Order Number: ORD-1788532482863-901
+📡 DELETE /api/cart/14
+📦 Clearing cart for customer: 14
+📦 Deleted 1 items from cart
+📡 GET /api/cart/14
+📦 Fetching cart for customer: 14
+📦 Active cart items found: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/
+Fetching all orders
+📡 GET /api/orders/
+📡 GET /api/salesman-orders/
+📡 GET /api/customers/details/14
+📡 GET /api/customers/details/14
+📡 GET /api/customers/details/14
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/categories
+📡 GET /api/products/trending
+GET /api/products/trending - Fetching trending products
+📡 GET /api/products/best-sellers
+GET /api/products/best-sellers - Fetching best sellers
+📡 GET /api/products/new-arrivals
+GET /api/products/new-arrivals - Fetching new arrivals
+📡 GET /api/hero-banners
+📡 GET /api/testimonials
+📡 GET /api/why-choose-us
+📡 GET /api/packages
+📡 GET /api/customer-orders/customer/14
+Fetching merged orders for customer: 14
+📡 PUT /api/customer-orders/0/status-payment
+Updating order status and payment: { orderId: '0', status: 'completed', payment_status: 'paid' }
+Creating notification for customer 14: {
+  title: 'Order Completed!',
+  message: 'Your order #ORD-1788532482863-901 has been completed successfully. Thank you for your business!'
+}
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/3?source=admin
+Fetching merged order details for ID: 3
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/customer/14
+Fetching merged orders for customer: 14
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/salesman-orders
+📡 GET /api/salesman/notifications
+📡 GET /api/salesman/notifications/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/customer-orders/0?source=customer
+Fetching merged order details for ID: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/checkout/orders/14
+📦 Fetching orders for customer: 14
+📦 Orders found: 0
+📡 GET /api/checkout/addresses/14
+📦 Fetching addresses for customer: 14
+📦 Addresses found: 1
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/categories
+📡 GET /api/products/trending
+GET /api/products/trending - Fetching trending products
+📡 GET /api/products/best-sellers
+GET /api/products/best-sellers - Fetching best sellers
+📡 GET /api/products/new-arrivals
+GET /api/products/new-arrivals - Fetching new arrivals
+📡 GET /api/hero-banners
+📡 GET /api/testimonials
+📡 GET /api/why-choose-us
+📡 GET /api/packages
+📡 GET /api/categories
+📡 GET /api/categories
+📡 GET /api/products/category/5
+GET /api/products/category/5 - Fetching products by category
+SQL Query: 
+    SELECT 
+      p.*,
+      c.category_name,
+      c.id as category_id
+    FROM products p
+    LEFT JOIN product_categories c ON p.product_category_id = c.id
+    WHERE p.product_category_id = ?
+    ORDER BY p.id DESC
+  
+SQL Params: [ '5' ]
+Found 2 products for category 5
+📡 GET /api/products/11
+GET /api/products/11 - Fetching single product
+📡 GET /api/notifications/14/unread-count
+📡 POST /api/cart
+📦 Adding to cart: {
+  customerId: '14',
+  product: {
+    id: '11',
+    name: 'Decorative Vase Set',
+    price: 3999,
+    image: 'http://localhost:5000/uploads/products/1785312200285-171106594.jpg',
+    quantity: 1
+  }
+}
+📦 Product data: {
+  productId: '11',
+  productName: 'Decorative Vase Set',
+  productPrice: 3999,
+  productImage: 'http://localhost:5000/uploads/products/1785312200285-171106594.jpg',
+  productQuantity: 1
+}
+📦 Existing item: []
+📦 Inserted new item with ID: 41
+📦 Cart items after update: 1
+📡 GET /api/cart/14
+📦 Fetching cart for customer: 14
+📦 Active cart items found: 1
+📡 GET /api/cart/14
+📦 Fetching cart for customer: 14
+📦 Active cart items found: 1
+📡 GET /api/checkout/addresses/14
+📦 Fetching addresses for customer: 14
+📦 Addresses found: 1
+📡 POST /api/checkout/order
+📦 Creating order for customer: 14
+📦 Total received: undefined
+📦 Grand Total received: 6219
+📦 Advance Amount received: undefined
+📦 Address object: {
+  "id": "7",
+  "label": "uppal",
+  "fullName": "sai krishna",
+  "phone": "8106815633",
+  "line1": "chaitanya nagar",
+  "line2": "",
+  "city": "hyderabad",
+  "state": "telangana",
+  "pincode": "500088",
+  "country": "India"
+}
+✅ Order created, ID: 2 Order Number: ORD-1788532747569-264
+📡 DELETE /api/cart/14
+📦 Clearing cart for customer: 14
+📦 Deleted 1 items from cart
+📡 GET /api/cart/14
+📦 Fetching cart for customer: 14
+📦 Active cart items found: 0
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/categories
+📡 GET /api/products/trending
+GET /api/products/trending - Fetching trending products
+📡 GET /api/products/best-sellers
+GET /api/products/best-sellers - Fetching best sellers
+📡 GET /api/products/new-arrivals
+GET /api/products/new-arrivals - Fetching new arrivals
+📡 GET /api/hero-banners
+📡 GET /api/testimonials
+📡 GET /api/why-choose-us
+📡 GET /api/packages
+📡 GET /api/customer-orders/customer/14
+Fetching merged orders for customer: 14
+📡 GET /api/customer-orders/
+Fetching all orders
+📡 GET /api/orders/
+📡 GET /api/salesman-orders/
+📡 GET /api/customers/details/14
+📡 GET /api/customers/details/14
+📡 GET /api/customers/details/14
+📡 GET /api/notifications/14/unread-count
+📡 PUT /api/customer-orders/2/status-payment
+Updating order status and payment: { orderId: '2', status: 'completed', payment_status: 'paid' }
+Creating notification for customer 14: {
+  title: 'Order Completed!',
+  message: 'Your order #ORD-1788532747569-264 has been completed successfully. Thank you for your business!'
+}
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/customer/14
+Fetching merged orders for customer: 14
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/2?source=customer
+Fetching merged order details for ID: 2
+📡 POST /api/invoice/generate-pdf
+📄 Event Date formatted: 4 September 2026
+📡 GET /api/customer-orders/2?source=customer
+Fetching merged order details for ID: 2
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/customer-orders/2?source=customer
+Fetching merged order details for ID: 2
+📡 GET /api/customer-orders/2?source=customer
+Fetching merged order details for ID: 2
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count
+📡 GET /api/notifications/14/unread-count

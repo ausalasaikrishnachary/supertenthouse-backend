@@ -3,3 +3,225 @@ Failed to generate/fetch invoice for user order in all-list: 0 Error: Valid orde
     at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
     at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
     at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:59:32
+Failed to generate/fetch invoice for user order in all-list: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:59:32
+Invoice allocation failed: Valid order source and ID required
+Failed to generate/fetch invoice for user order: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:121:32
+Failed to generate/fetch invoice for user order: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:121:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Failed to generate/fetch invoice for user order: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:121:32
+Failed to generate/fetch invoice for user order: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:121:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Failed to generate/fetch invoice for user order in all-list: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:59:32
+Failed to generate/fetch invoice for user order in all-list: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:59:32
+Failed to generate/fetch invoice for user order in all-list: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:59:32
+Failed to generate/fetch invoice for user order in all-list: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:59:32
+Failed to generate/fetch invoice for user order: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:121:32
+Failed to generate/fetch invoice for user order: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:121:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Failed to generate/fetch invoice for user order: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:121:32
+Failed to generate/fetch invoice for user order: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:121:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Failed to generate/fetch invoice for user order: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:121:32
+Failed to generate/fetch invoice for user order: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:121:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Failed to generate/fetch invoice for user order in all-list: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:59:32
+Failed to generate/fetch invoice for user order in all-list: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:59:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Invoice allocation failed: Valid order source and ID required
+Failed to generate/fetch invoice for user order in all-list: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:59:32
+Failed to generate/fetch invoice for user order: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:121:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Failed to generate/fetch invoice for user order: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:121:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32
+Failed to generate/fetch invoice for user order detail: 0 Error: Valid order source and ID required
+    at allocate (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:5:86)
+    at Function.getOrCreateInvoiceNumber (C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\services\invoiceNumbers.js:33:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\bharg\Documents\saikrishna\supertenthouse-backend\routes\customerOrderRoutes.js:247:32

@@ -5,11 +5,22 @@ const router = express.Router();
 const db = require("../db");
 const { adminOnly } = require("../middleware/auth");
 const orderReader = require('../middleware/orderReader');
+const { ensureStaffOrderSnapshotColumns, enrichStaffOrderItems } = require('../services/staffOrderPresentation');
 
 // Admin and salesman orders do not persist checkout address fields. Resolve the
 // customer's preferred address at read time, retaining the customer-profile
 // address as a fallback for older installations and records.
 async function attachCustomerDeliveryAddress(order) {
+  // New staff orders carry an immutable delivery snapshot. Historical records
+  // fall through to the current default/profile address below.
+  if (order.address_line1 || order.address_city || order.address_pincode) {
+    return {
+      ...order,
+      address_full_name: order.address_full_name || order.customer_name || '',
+      address_phone: order.address_phone || order.customer_phone || '',
+      address_country: order.address_country || 'India',
+    };
+  }
   let address = null;
   try {
     const [addresses] = await db.promise().query(
@@ -124,6 +135,7 @@ router.get("/customer/:customerId", orderReader, async (req, res) => {
     if (req.orderCustomerId && String(req.orderCustomerId) !== String(customerId)) {
       return res.status(403).json({ message: 'You cannot view another customer’s orders' });
     }
+    await ensureStaffOrderSnapshotColumns(db.promise());
     
     console.log('Fetching merged orders for customer:', customerId);
     
@@ -176,6 +188,9 @@ router.get("/customer/:customerId", orderReader, async (req, res) => {
         o.payment_method,
         o.notes,
         o.invoice_number,
+        o.address_id, o.address_label, o.address_full_name, o.address_phone,
+        o.address_line1, o.address_line2, o.address_city, o.address_state,
+        o.address_pincode, o.address_country,
         c.name as customer_name,
         c.email as customer_email,
         c.phone as customer_phone,
@@ -211,7 +226,7 @@ router.get("/customer/:customerId", orderReader, async (req, res) => {
         `,
         [order.id]
       );
-      order.items = items || [];
+      order.items = await enrichStaffOrderItems(db.promise(), 'admin_order_items', order.id, items);
       try {
         order.invoice_number = await invoiceRoutes.getOrCreateInvoiceNumber({ orderId: order.id, orderSource: 'admin' });
       } catch (err) {
@@ -237,6 +252,9 @@ router.get("/customer/:customerId", orderReader, async (req, res) => {
         o.payment_method,
         o.notes,
         o.invoice_number,
+        o.address_id, o.address_label, o.address_full_name, o.address_phone,
+        o.address_line1, o.address_line2, o.address_city, o.address_state,
+        o.address_pincode, o.address_country,
         o.salesman_id,
         o.salesman_name,
         c.name as customer_name,
@@ -267,7 +285,7 @@ router.get("/customer/:customerId", orderReader, async (req, res) => {
         `,
         [order.id]
       );
-      order.items = items || [];
+      order.items = await enrichStaffOrderItems(db.promise(), 'salesman_order_items', order.id, items);
       try {
         order.invoice_number = await invoiceRoutes.getOrCreateInvoiceNumber({ orderId: order.id, orderSource: 'salesman' });
       } catch (err) {
@@ -312,6 +330,7 @@ router.get("/:id", orderReader, async (req, res) => {
     if (!['customer', 'admin', 'salesman'].includes(source) || !/^\d+$/.test(orderId)) {
       return res.status(400).json({ message: 'Invalid order ID or source' });
     }
+    await ensureStaffOrderSnapshotColumns(db.promise());
     console.log('Fetching merged order details for ID:', orderId);
     
     // First, try searching in 'orders' (customer orders)
@@ -370,6 +389,9 @@ router.get("/:id", orderReader, async (req, res) => {
         o.payment_method,
         o.notes,
         o.invoice_number,
+        o.address_id, o.address_label, o.address_full_name, o.address_phone,
+        o.address_line1, o.address_line2, o.address_city, o.address_state,
+        o.address_pincode, o.address_country,
         c.name as customer_name,
         c.email as customer_email,
         c.phone as customer_phone,
@@ -409,7 +431,7 @@ router.get("/:id", orderReader, async (req, res) => {
         `,
         [order.id]
       );
-      order.items = items || [];
+      order.items = await enrichStaffOrderItems(db.promise(), 'admin_order_items', order.id, items);
 
       try {
         order.invoice_number = await invoiceRoutes.getOrCreateInvoiceNumber({ orderId: order.id, orderSource: 'admin' });
@@ -440,6 +462,9 @@ router.get("/:id", orderReader, async (req, res) => {
         o.payment_method,
         o.notes,
         o.invoice_number,
+        o.address_id, o.address_label, o.address_full_name, o.address_phone,
+        o.address_line1, o.address_line2, o.address_city, o.address_state,
+        o.address_pincode, o.address_country,
         o.salesman_id,
         o.salesman_name,
         c.name as customer_name,
@@ -473,7 +498,7 @@ router.get("/:id", orderReader, async (req, res) => {
         `,
         [order.id]
       );
-      order.items = items || [];
+      order.items = await enrichStaffOrderItems(db.promise(), 'salesman_order_items', order.id, items);
 
       try {
         order.invoice_number = await invoiceRoutes.getOrCreateInvoiceNumber({ orderId: order.id, orderSource: 'salesman' });

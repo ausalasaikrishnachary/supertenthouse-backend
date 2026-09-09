@@ -4,6 +4,7 @@ const router = express.Router();
 const db = require("../db");
 const { adminOnly } = require("../middleware/auth");
 const { ensureSalesmanNotificationsTable, notifyAdminOrderCreated } = require('../services/salesmanNotificationService');
+const { addressFields, addressValues, ensureStaffOrderSnapshotColumns, getCustomerDeliveryAddress } = require('../services/staffOrderPresentation');
 
 // ==============================
 // CREATE NEW ORDER
@@ -24,7 +25,9 @@ router.post("/", async (req, res) => {
   }
   try {
     await ensureSalesmanNotificationsTable();
+    await ensureStaffOrderSnapshotColumns(db.promise());
     await db.promise().query("START TRANSACTION");
+    const deliveryAddress = await getCustomerDeliveryAddress(db.promise(), customer_id);
 
     const subtotal = Math.round(items.reduce((sum, item) => sum + Number(item.price) * Number(item.quantity), 0) * 100) / 100;
     const tax = Math.round(subtotal * 0.18 * 100) / 100;
@@ -40,9 +43,9 @@ router.post("/", async (req, res) => {
     const orderSql = `
       INSERT INTO admin_orders (
         customer_id, order_number, total_amount, tax_amount, grand_total, 
-        order_date, status, payment_status, payment_method
+        order_date, status, payment_status, payment_method, ${addressFields.join(', ')}
       )
-      VALUES (?, ?, ?, ?, ?, ?, 'approved', 'pending', 'cash')
+      VALUES (?, ?, ?, ?, ?, ?, 'approved', 'pending', 'cash', ${addressFields.map(() => '?').join(', ')})
     `;
 
     const [orderResult] = await db.promise().query(orderSql, [
@@ -51,7 +54,8 @@ router.post("/", async (req, res) => {
       subtotal,
       tax,
       grandTotal,
-      order_date || new Date()
+      order_date || new Date(),
+      ...addressValues(deliveryAddress)
     ]);
 
     const orderId = orderResult.insertId;

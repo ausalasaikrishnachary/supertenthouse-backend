@@ -7,6 +7,7 @@ const {
     ensureSalesmanNotificationsTable,
     createOrderStatusNotification
 } = require("../services/salesmanNotificationService");
+const { addressFields, addressValues, ensureStaffOrderSnapshotColumns, getCustomerDeliveryAddress } = require('../services/staffOrderPresentation');
 
 // ==============================
 // CREATE NEW ORDER (Salesman)
@@ -36,7 +37,9 @@ router.post("/", async (req, res) => {
     }
 
     try {
+        await ensureStaffOrderSnapshotColumns(db.promise());
         await db.promise().query("START TRANSACTION");
+        const deliveryAddress = await getCustomerDeliveryAddress(db.promise(), customer_id);
 
         const subtotal = total_amount || items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         const tax = subtotal * 0.18;
@@ -53,9 +56,9 @@ router.post("/", async (req, res) => {
             INSERT INTO salesman_orders (
                 customer_id, order_number, total_amount, tax_amount, grand_total, 
                 order_date, status, payment_status, payment_method, notes,
-                salesman_id, salesman_name, order_by
+                salesman_id, salesman_name, order_by, ${addressFields.join(', ')}
             )
-            VALUES (?, ?, ?, ?, ?, ?, 'pending', 'pending', ?, ?, ?, ?, 'salesman')
+            VALUES (?, ?, ?, ?, ?, ?, 'pending', 'pending', ?, ?, ?, ?, 'salesman', ${addressFields.map(() => '?').join(', ')})
         `;
 
         const [orderResult] = await db.promise().query(orderSql, [
@@ -68,7 +71,8 @@ router.post("/", async (req, res) => {
             payment_method,
             notes,
             salesman_id,
-            salesman_name
+            salesman_name,
+            ...addressValues(deliveryAddress)
         ]);
 
         const orderId = orderResult.insertId;
