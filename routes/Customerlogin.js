@@ -287,6 +287,7 @@ require("dotenv").config();
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 const { sendOTPEmail } = require("../utils/email");
 
 const query = (sql, values) => {
@@ -305,6 +306,7 @@ const generateOTP = () => {
 
 // In-memory OTP storage (for development)
 const otpStore = {};
+const passwordResetStore = {};
 
 // REGISTER API - UPDATED WITH ADDRESS
 router.post("/register", async (req, res) => {
@@ -367,6 +369,7 @@ router.post("/register", async (req, res) => {
     otpStore[email] = {
       otp,
       expiresAt,
+      purpose: "email-verification",
       name,
       phone
     };
@@ -401,6 +404,10 @@ router.post("/verify-otp", async (req, res) => {
     
     if (!storedOTP) {
       return res.status(400).json({ message: "OTP not found or expired" });
+    }
+
+    if (storedOTP.purpose && storedOTP.purpose !== "email-verification") {
+      return res.status(400).json({ message: "This OTP is not valid for email verification" });
     }
 
     if (storedOTP.otp !== otp) {
@@ -477,7 +484,8 @@ router.post("/resend-otp", async (req, res) => {
     otpStore[email] = {
       ...userData,
       otp,
-      expiresAt
+      expiresAt,
+      purpose: "email-verification"
     };
 
     // Send new OTP via email
@@ -524,6 +532,7 @@ router.post("/login", async (req, res) => {
       otpStore[email] = {
         otp,
         expiresAt,
+        purpose: "email-verification",
         name: user.name,
         phone: user.phone
       };
@@ -571,6 +580,83 @@ router.post("/login", async (req, res) => {
 
   } catch (error) {
     console.error("LOGIN ERROR:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// CUSTOMER FORGOT PASSWORD - kept separate from Admin password reset routes.
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const email = String(req.body.email || "").trim().toLowerCase();
+    if (!email) return res.status(400).json({ message: "Email required" });
+
+    const users = await query("SELECT id, name, email FROM customers WHERE email = ?", [email]);
+    if (!users.length) return res.status(404).json({ message: "Customer email not found" });
+
+    const otp = generateOTP();
+    otpStore[email] = {
+      otp,
+      expiresAt: new Date(Date.now() + 10 * 60 * 1000),
+      purpose: "password-reset",
+      customerId: users[0].id,
+      name: users[0].name
+    };
+    await sendOTPEmail(email, otp, users[0].name || "Customer");
+    console.log(`Password reset OTP generated for ${email}`);
+
+    res.json({ message: "OTP sent successfully", email, requiresOTP: true, purpose: "password-reset" });
+  } catch (error) {
+    console.error("CUSTOMER FORGOT PASSWORD ERROR:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.post("/verify-reset-otp", async (req, res) => {
+  try {
+    const email = String(req.body.email || "").trim().toLowerCase();
+    const otp = String(req.body.otp || "");
+    const stored = otpStore[email];
+
+    if (!stored || stored.purpose !== "password-reset" || stored.otp !== otp) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+    if (new Date() > new Date(stored.expiresAt)) {
+      delete otpStore[email];
+      return res.status(400).json({ message: "OTP has expired" });
+    }
+
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    passwordResetStore[resetToken] = {
+      email,
+      customerId: stored.customerId,
+      expiresAt: Date.now() + 10 * 60 * 1000
+    };
+    delete otpStore[email];
+    res.json({ message: "OTP verified successfully", resetToken });
+  } catch (error) {
+    console.error("CUSTOMER RESET OTP ERROR:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.post("/reset-password", async (req, res) => {
+  try {
+    const { resetToken, password } = req.body;
+    const reset = passwordResetStore[resetToken];
+    if (!reset || Date.now() > reset.expiresAt) {
+      if (resetToken) delete passwordResetStore[resetToken];
+      return res.status(400).json({ message: "Password reset session is invalid or expired" });
+    }
+    if (typeof password !== "string" || password.length < 6) {
+      return res.status(400).json({ message: "Password must be at least 6 characters" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await query("UPDATE customers SET password = ? WHERE id = ?", [hashedPassword, reset.customerId]);
+    delete passwordResetStore[resetToken];
+    res.json({ message: "Password reset successful" });
+  } catch (error) {
+    console.error("CUSTOMER RESET PASSWORD ERROR:", error);
     res.status(500).json({ message: "Server error" });
   }
 });
