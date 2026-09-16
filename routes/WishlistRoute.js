@@ -2,6 +2,10 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
+const ITEM_TYPES = new Set(["product", "package"]);
+const normalizeItemType = value => ITEM_TYPES.has(String(value || "product").toLowerCase())
+  ? String(value || "product").toLowerCase()
+  : null;
 
 // ✅ Promise wrapper
 const query = (sql, values) => {
@@ -14,7 +18,7 @@ const query = (sql, values) => {
 };
 
 // ✅ Ensure table exists
-const ensureTable = async () => {
+const ensureTableWork = async () => {
   try {
     const tableCheck = await query(
       "SELECT COUNT(*) as count FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'wishlist_items'"
@@ -26,14 +30,30 @@ const ensureTable = async () => {
           id INT AUTO_INCREMENT PRIMARY KEY,
           customer_id VARCHAR(255) NOT NULL,
           product_id VARCHAR(255) NOT NULL,
+          item_type VARCHAR(20) NOT NULL DEFAULT 'product',
           product_name VARCHAR(255),
           price DECIMAL(10, 2),
           image VARCHAR(500),
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          UNIQUE KEY unique_wishlist_item (customer_id, product_id)
+          UNIQUE KEY unique_wishlist_typed (customer_id, item_type, product_id)
         )
       `);
       console.log("📦 Created wishlist_items table");
+    }
+    const typeColumn = await query("SHOW COLUMNS FROM wishlist_items LIKE 'item_type'");
+    if (typeColumn.length === 0) {
+      await query("ALTER TABLE wishlist_items ADD COLUMN item_type VARCHAR(20) NOT NULL DEFAULT 'product' AFTER product_id");
+      await query(`UPDATE wishlist_items wi
+        INNER JOIN packages p ON CAST(p.id AS CHAR) = wi.product_id
+          AND LOWER(TRIM(p.package_name)) = LOWER(TRIM(wi.product_name))
+        SET wi.item_type = 'package'
+        WHERE wi.item_type = 'product'`);
+    }
+    const oldIndex = await query("SHOW INDEX FROM wishlist_items WHERE Key_name = 'unique_wishlist_item'");
+    if (oldIndex.length > 0) await query("ALTER TABLE wishlist_items DROP INDEX unique_wishlist_item");
+    const typedIndex = await query("SHOW INDEX FROM wishlist_items WHERE Key_name = 'unique_wishlist_typed'");
+    if (typedIndex.length === 0) {
+      await query("ALTER TABLE wishlist_items ADD UNIQUE KEY unique_wishlist_typed (customer_id, item_type, product_id)");
     }
     return true;
   } catch (error) {
@@ -41,23 +61,38 @@ const ensureTable = async () => {
     return false;
   }
 };
+let tableReady;
+const ensureTable = () => {
+  if (!tableReady) tableReady = ensureTableWork().then(ok => {
+    if (!ok) tableReady = null;
+    return ok;
+  });
+  return tableReady;
+};
 
 // ✅ ADD TO WISHLIST
 router.post("/add", async (req, res) => {
   try {
     const { customerId, productId, productName, price, image } = req.body;
+    const itemType = normalizeItemType(req.body.itemType || req.body.item_type);
 
     console.log("📦 Adding to wishlist:", { customerId, productId, productName, price });
 
-    if (!customerId || !productId) {
+    if (!customerId || !productId || !itemType) {
       return res.status(400).json({ success: false, message: "Missing data" });
     }
 
     await ensureTable();
 
+    const sourceTable = itemType === "package" ? "packages" : "products";
+    const sourceItem = await query(`SELECT id FROM ${sourceTable} WHERE id = ? LIMIT 1`, [productId]);
+    if (sourceItem.length === 0) {
+      return res.status(404).json({ success: false, message: `${itemType === "package" ? "Package" : "Product"} not found` });
+    }
+
     const existingItem = await query(
-      `SELECT * FROM wishlist_items WHERE customer_id = ? AND product_id = ?`,
-      [customerId, productId]
+      `SELECT * FROM wishlist_items WHERE customer_id = ? AND item_type = ? AND product_id = ?`,
+      [customerId, itemType, productId]
     );
 
     if (existingItem.length > 0) {
@@ -71,11 +106,12 @@ router.post("/add", async (req, res) => {
 
     const insertResult = await query(
       `INSERT INTO wishlist_items 
-      (customer_id, product_id, product_name, price, image)
-      VALUES (?, ?, ?, ?, ?)`,
+      (customer_id, product_id, item_type, product_name, price, image)
+      VALUES (?, ?, ?, ?, ?, ?)`,
       [
         customerId,
         productId,
+        itemType,
         productName || '',
         price || 0,
         image || ''
@@ -114,10 +150,11 @@ router.delete("/remove", async (req, res) => {
     // Also check body if query params are not present (fallback)
     const finalCustomerId = customerId || req.body.customerId;
     const finalProductId = productId || req.body.productId;
+    const itemType = normalizeItemType(req.query.itemType || req.body.itemType || req.query.item_type || req.body.item_type);
 
     console.log("🗑️ Final values:", { finalCustomerId, finalProductId });
 
-    if (!finalCustomerId || !finalProductId) {
+    if (!finalCustomerId || !finalProductId || !itemType) {
       console.log("❌ Missing customerId or productId");
       return res.status(400).json({ 
         success: false, 
@@ -130,8 +167,8 @@ router.delete("/remove", async (req, res) => {
 
     // First check if item exists
     const existingItem = await query(
-      `SELECT * FROM wishlist_items WHERE customer_id = ? AND product_id = ?`,
-      [finalCustomerId, finalProductId]
+      `SELECT * FROM wishlist_items WHERE customer_id = ? AND item_type = ? AND product_id = ?`,
+      [finalCustomerId, itemType, finalProductId]
     );
 
     console.log("📦 Existing item:", existingItem);
@@ -140,14 +177,17 @@ router.delete("/remove", async (req, res) => {
       return res.json({ 
         success: true, 
         message: "Item not found in wishlist",
-        exists: false
+        exists: false,
+        affectedRows: 0,
+        itemId: String(finalProductId),
+        itemType
       });
     }
 
     // Delete the item
     const result = await query(
-      `DELETE FROM wishlist_items WHERE customer_id = ? AND product_id = ?`,
-      [finalCustomerId, finalProductId]
+      `DELETE FROM wishlist_items WHERE customer_id = ? AND item_type = ? AND product_id = ?`,
+      [finalCustomerId, itemType, finalProductId]
     );
 
     console.log("🗑️ Removed from wishlist successfully, affected rows:", result.affectedRows);
@@ -155,7 +195,9 @@ router.delete("/remove", async (req, res) => {
     res.json({ 
       success: true, 
       message: "Removed from wishlist",
-      affectedRows: result.affectedRows
+      affectedRows: result.affectedRows,
+      itemId: String(finalProductId),
+      itemType
     });
 
   } catch (err) {
@@ -179,7 +221,9 @@ router.get("/:customerId", async (req, res) => {
     await ensureTable();
 
     const items = await query(
-      `SELECT * FROM wishlist_items WHERE customer_id = ? ORDER BY created_at DESC`,
+      `SELECT id AS wishlist_id, product_id AS item_id, product_id, item_type,
+              product_name, price, image, created_at
+       FROM wishlist_items WHERE customer_id = ? ORDER BY created_at DESC`,
       [customerId]
     );
 
@@ -203,12 +247,14 @@ router.get("/:customerId", async (req, res) => {
 router.get("/check/:customerId/:productId", async (req, res) => {
   try {
     const { customerId, productId } = req.params;
+    const itemType = normalizeItemType(req.query.itemType);
+    if (!itemType) return res.status(400).json({ success: false, message: "Invalid item type" });
 
     await ensureTable();
 
     const item = await query(
-      `SELECT * FROM wishlist_items WHERE customer_id = ? AND product_id = ?`,
-      [customerId, productId]
+      `SELECT * FROM wishlist_items WHERE customer_id = ? AND item_type = ? AND product_id = ?`,
+      [customerId, itemType, productId]
     );
 
     res.json({ 

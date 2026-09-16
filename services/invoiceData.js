@@ -1,6 +1,7 @@
 const tables = { customer: ['orders', null], admin: ['admin_orders', 'admin_order_items'], salesman: ['salesman_orders', 'salesman_order_items'] };
 const fail = (status, message) => { throw Object.assign(new Error(message), { status }); };
 const num = value => Number.isFinite(Number(value)) ? Number(value) : 0;
+const isCompletedOrder = status => String(status || '').trim().toLowerCase() === 'completed';
 async function loadInvoice(connection, input, customerId) {
   const source = input?.orderSource || 'customer';
   const id = Number(input?.orderId);
@@ -9,6 +10,7 @@ async function loadInvoice(connection, input, customerId) {
   const [rows] = await connection.query(`SELECT * FROM ${table} WHERE id = ?${customerId != null ? ' AND customer_id = ?' : ''}`, customerId != null ? [id, customerId] : [id]);
   const order = rows[0];
   if (!order) fail(404, 'Order not found');
+  if (!isCompletedOrder(order.status)) fail(409, 'Invoice is available only after the order is completed');
   if (!order.invoice_number?.trim()) fail(409, 'Invoice has not been generated');
   const [[customer = {}]] = await connection.query('SELECT * FROM customers WHERE id = ?', [order.customer_id]);
   let items = order.items;
@@ -38,4 +40,4 @@ function escapeInvoice(value) {
   if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, escapeInvoice(entry)]));
   return value;
 }
-module.exports = { loadInvoice, escapeInvoice };
+module.exports = { loadInvoice, escapeInvoice, isCompletedOrder };

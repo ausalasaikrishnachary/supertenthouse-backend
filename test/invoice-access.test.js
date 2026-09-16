@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const jwt = require('jsonwebtoken');
 const reader = require('../middleware/orderReader');
 const { loadInvoice, escapeInvoice } = require('../services/invoiceData');
-function fixture(invoice = 'INV-CUS-2026-000001') {
+function fixture(invoice = 'INV-CUS-2026-000001', status = 'completed') {
   const queries = [];
   return { queries, query: async (sql, params) => {
     queries.push(sql);
@@ -11,16 +11,27 @@ function fixture(invoice = 'INV-CUS-2026-000001') {
     if (sql.includes('FROM customers')) return [[{ name: 'Customer' }]];
     if (sql.includes('_order_items')) return [[{ product_name: 'Tent', price: 100, quantity: 2, subtotal: 190 }]];
     if (params.length === 2 && params[1] !== 5) return [[]];
-    return [[{ customer_id: 5, invoice_number: invoice, status: 'approved', items: JSON.stringify([{ name: 'Tent', price: 100, quantity: 2 }]), subtotal: 200, gst: 36, grand_total: 236 }]];
+    return [[{ customer_id: 5, invoice_number: invoice, status, items: JSON.stringify([{ name: 'Tent', price: 100, quantity: 2 }]), subtotal: 200, gst: 36, grand_total: 236 }]];
   } };
 }
-test('all sources use stored invoice data, ignore tampering and permit approved orders', async () => {
+test('all sources use stored invoice data, ignore tampering and permit completed orders', async () => {
   for (const orderSource of ['customer', 'admin', 'salesman']) {
     const result = await loadInvoice(fixture(), { orderId: 1, orderSource, grandTotal: 1, invoiceNumber: 'FAKE' }, 5);
     assert.equal(result.grandTotal, 236);
     assert.equal(result.invoiceNumber, 'INV-CUS-2026-000001');
     assert.equal(result.items[0].name, 'Tent');
   }
+});
+test('every non-completed status is rejected even when an invoice number exists', async () => {
+  for (const status of ['pending', 'approved', 'processing', 'rejected', 'cancelled', '', null]) {
+    await assert.rejects(loadInvoice(fixture(undefined, status), { orderId: 1 }, 5), {
+      status: 409,
+      message: 'Invoice is available only after the order is completed'
+    });
+  }
+});
+test('completed status matching is case-insensitive and whitespace-safe', async () => {
+  await assert.doesNotReject(loadInvoice(fixture(undefined, ' Completed '), { orderId: 1 }, 5));
 });
 test('wrong owner, missing invoice and invalid source fail without writes', async () => {
   await assert.rejects(loadInvoice(fixture(), { orderId: 1 }, 99), { status: 404 });
