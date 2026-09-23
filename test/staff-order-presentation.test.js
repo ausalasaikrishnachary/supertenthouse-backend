@@ -9,9 +9,10 @@ test('schema setup adds only missing nullable snapshot columns', async () => {
     alterations.push(sql); return [{}];
   } };
   await ensureStaffOrderSnapshotColumns(connection);
-  assert.equal(alterations.length, 18);
-  assert.ok(alterations.every(sql => /ALTER TABLE (admin_orders|salesman_orders) ADD COLUMN address_/.test(sql) && sql.endsWith(' NULL')));
+  assert.equal(alterations.length, 22);
+  assert.ok(alterations.every(sql => /ALTER TABLE (admin_orders|salesman_orders|admin_order_items|salesman_order_items) ADD COLUMN (address_|selected_)/.test(sql) && sql.endsWith(' NULL')));
   assert.equal(alterations.some(sql => /ADD COLUMN address_id/.test(sql)), false);
+  assert.equal(alterations.filter(sql => /ADD COLUMN selected_(size|color)/.test(sql)).length, 4);
 });
 
 test('captures the default delivery address as an ordered snapshot', async () => {

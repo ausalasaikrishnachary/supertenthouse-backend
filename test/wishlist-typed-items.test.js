@@ -15,6 +15,9 @@ test('wishlist persistence uses a composite customer/type/item identity', () => 
   assert.match(route, /DELETE FROM wishlist_items WHERE customer_id = \? AND item_type = \? AND product_id = \?/);
   assert.match(route, /id AS wishlist_id, product_id AS item_id/);
   assert.match(route, /INNER JOIN packages p/);
+  assert.match(route, /quantity INT NOT NULL DEFAULT 1/);
+  assert.match(route, /selected_color VARCHAR\(100\)/);
+  assert.match(route, /product_name, price, image, quantity, selected_color/);
 });
 
 test('mobile state distinguishes colliding product and package IDs', () => {
@@ -37,6 +40,8 @@ test('package adds and Wishlist rendering retain package type', () => {
   assert.match(wishlist, /params: \{ customerId, productId, itemType \}/);
   assert.match(wishlist, /Number\(response\.data\.affectedRows\) > 0/);
   assert.match(wishlist, /remove\(productId, itemType\)/);
+  assert.match(wishlist, /Quantity: \{item\.quantity\}/);
+  assert.match(wishlist, /Colour: \{item\.selectedColor\}/);
   assert.match(wishlist, /p\.id === productId && p\.itemType === itemType/);
 });
 

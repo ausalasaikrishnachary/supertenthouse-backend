@@ -29,7 +29,9 @@ async function loadInvoice(connection, input, customerId) {
     address: { fullName: order.address_full_name || customer.name, line1: order.address_line1 ?? customer.address_line1,
       line2: order.address_line2 ?? customer.address_line2, city: order.address_city ?? customer.city,
       state: order.address_state ?? customer.state, pincode: order.address_pincode ?? customer.pincode, country: order.address_country ?? customer.country },
-    items: items.map(item => ({ name: item.name || item.product_name, quantity: num(item.quantity), price: num(item.price), total: num(item.total ?? item.subtotal ?? num(item.price) * num(item.quantity)) }))
+    items: items.map(item => ({ name: item.name || item.product_name, quantity: num(item.quantity),
+      size: item.selectedSize || item.selected_size || null, color: item.selectedColor || item.selected_color || null,
+      price: num(item.price), total: num(item.total ?? item.subtotal ?? num(item.price) * num(item.quantity)) }))
   };
 }
 // Stored text must not become executable HTML inside Chromium.

@@ -23,6 +23,7 @@ function setup(failRead = false) {
     addressFields: ['address_id'], addressValues: address => [address.address_id],
     ensureStaffOrderSnapshotColumns: async () => {}, getCustomerDeliveryAddress: async () => ({ address_id: 3 })
   };
+  imports['../services/productVariants'] = { resolveOrderItemVariant: async (_connection, item) => ({ price: Number(item.price), selected_size: null, selected_color: null }) };
   vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../routes/orderRoutes.js'), 'utf8'), { require: id => imports[id], module: { exports: {} }, console });
   const res = { code: 200, status(code) { this.code = code; return this; }, json(body) { this.body = body; } };
   return { handler, queries, res };

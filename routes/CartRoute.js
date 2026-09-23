@@ -467,6 +467,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
+const { resolveOrderItemVariant } = require('../services/productVariants');
 
 // ✅ Promise wrapper
 const query = (sql, values) => {
@@ -476,6 +477,22 @@ const query = (sql, values) => {
       resolve(results);
     });
   });
+};
+let cartVariantSchemaPromise;
+const ensureCartVariantSchema = () => {
+  if (!cartVariantSchemaPromise) cartVariantSchemaPromise = (async () => {
+    const [table] = await query("SELECT COUNT(*) count FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'cart_items'");
+    if (!table?.count) return;
+    const columns = await query('SHOW COLUMNS FROM cart_items');
+    const names = new Set(columns.map(column => column.Field));
+    if (!names.has('selected_size')) await query("ALTER TABLE cart_items ADD COLUMN selected_size VARCHAR(100) NOT NULL DEFAULT ''");
+    if (!names.has('selected_color')) await query("ALTER TABLE cart_items ADD COLUMN selected_color VARCHAR(100) NOT NULL DEFAULT ''");
+    const oldIndex = await query("SHOW INDEX FROM cart_items WHERE Key_name = 'unique_cart_item'");
+    if (oldIndex.length) await query('ALTER TABLE cart_items DROP INDEX unique_cart_item');
+    const typedIndex = await query("SHOW INDEX FROM cart_items WHERE Key_name = 'unique_cart_variant'");
+    if (!typedIndex.length) await query('ALTER TABLE cart_items ADD UNIQUE KEY unique_cart_variant (customer_id, product_id, selected_size, selected_color)');
+  })().catch(error => { cartVariantSchemaPromise = undefined; throw error; });
+  return cartVariantSchemaPromise;
 };
 
 // ✅ ADD TO CART - FIXED
@@ -504,20 +521,25 @@ router.post("/cart", async (req, res) => {
           price DECIMAL(10, 2),
           quantity INT DEFAULT 1,
           image VARCHAR(500),
+          selected_size VARCHAR(100) NOT NULL DEFAULT '',
+          selected_color VARCHAR(100) NOT NULL DEFAULT '',
           saved_for_later BOOLEAN DEFAULT FALSE,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-          UNIQUE KEY unique_cart_item (customer_id, product_id)
+          UNIQUE KEY unique_cart_variant (customer_id, product_id, selected_size, selected_color)
         )
       `);
       console.log("📦 Created cart_items table");
     }
+    await ensureCartVariantSchema();
 
     const productId = String(product.id || product.productId || '');
     const productName = product.name || '';
     const productPrice = parseFloat(product.price) || 0;
     const productImage = product.image || '';
     const productQuantity = parseInt(product.quantity) || 1;
+    const selectedSize = String(product.selectedSize || product.selected_size || '').trim();
+    const selectedColor = String(product.selectedColor || product.selected_color || '').trim();
 
     console.log("📦 Product data:", { 
       productId, 
@@ -537,8 +559,8 @@ router.post("/cart", async (req, res) => {
     // Check if item already exists
     const existingItem = await query(
       `SELECT * FROM cart_items 
-       WHERE customer_id = ? AND product_id = ? AND (saved_for_later IS NULL OR saved_for_later = 0)`,
-      [customerId, productId]
+       WHERE customer_id = ? AND product_id = ? AND selected_size = ? AND selected_color = ? AND (saved_for_later IS NULL OR saved_for_later = 0)`,
+      [customerId, productId, selectedSize, selectedColor]
     );
 
     console.log("📦 Existing item:", existingItem);
@@ -553,38 +575,43 @@ router.post("/cart", async (req, res) => {
              price = ?, 
              image = ?,
              updated_at = NOW()
-         WHERE customer_id = ? AND product_id = ? AND (saved_for_later IS NULL OR saved_for_later = 0)`,
+         WHERE customer_id = ? AND product_id = ? AND selected_size = ? AND selected_color = ? AND (saved_for_later IS NULL OR saved_for_later = 0)`,
         [
           newQuantity,
           productName,
           productPrice,
           productImage || "",
           customerId,
-          productId
+          productId,
+          selectedSize,
+          selectedColor
         ]
       );
       console.log("📦 Updated existing item, quantity now:", newQuantity);
     } else {
       result = await query(
         `INSERT INTO cart_items 
-        (customer_id, product_id, product_name, price, quantity, image, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+        (customer_id, product_id, product_name, price, quantity, image, selected_size, selected_color, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
         [
           customerId,
           productId,
           productName,
           productPrice,
           productQuantity,
-          productImage || ""
+          productImage || "",
+          selectedSize,
+          selectedColor
         ]
       );
       console.log("📦 Inserted new item with ID:", result.insertId);
     }
 
     const items = await query(
-      `SELECT * FROM cart_items 
-       WHERE customer_id = ? AND (saved_for_later IS NULL OR saved_for_later = 0)
-       ORDER BY updated_at DESC`,
+      `SELECT ci.*, p.sizes AS available_sizes, p.colors AS available_colors
+       FROM cart_items ci LEFT JOIN products p ON p.id = ci.product_id
+       WHERE ci.customer_id = ? AND (ci.saved_for_later IS NULL OR ci.saved_for_later = 0)
+       ORDER BY ci.updated_at DESC`,
       [customerId]
     );
 
@@ -610,6 +637,7 @@ router.post("/cart", async (req, res) => {
 router.get("/cart/:customerId", async (req, res) => {
   try {
     const { customerId } = req.params;
+    await ensureCartVariantSchema();
 
     console.log("📦 Fetching cart for customer:", customerId);
 
@@ -638,6 +666,38 @@ router.get("/cart/:customerId", async (req, res) => {
       success: false, 
       message: "Error fetching cart" 
     });
+  }
+});
+
+// ✅ UPDATE QUANTITY
+router.put('/cart/variant', async (req, res) => {
+  try {
+    const { customerId, cartItemId, productId, selectedSize, selectedColor } = req.body;
+    if (!customerId || !cartItemId || !productId) return res.status(400).json({ success: false, message: 'Missing data' });
+    await ensureCartVariantSchema();
+    const variant = await resolveOrderItemVariant(db.promise(), { product_id: productId, selectedSize, selectedColor });
+    const target = await query(
+      `SELECT id, quantity FROM cart_items WHERE customer_id = ? AND product_id = ? AND selected_size = ? AND selected_color = ? AND id <> ? LIMIT 1`,
+      [customerId, productId, variant.selected_size || '', variant.selected_color || '', cartItemId]
+    );
+    let result;
+    if (target[0]) {
+      const current = await query('SELECT quantity FROM cart_items WHERE id = ? AND customer_id = ? LIMIT 1', [cartItemId, customerId]);
+      if (!current[0]) return res.status(404).json({ success: false, message: 'Cart item not found' });
+      await query('UPDATE cart_items SET quantity = ?, price = ?, updated_at = NOW() WHERE id = ?', [Number(target[0].quantity) + Number(current[0].quantity), variant.price, target[0].id]);
+      result = await query('DELETE FROM cart_items WHERE id = ? AND customer_id = ?', [cartItemId, customerId]);
+      result.affectedRows = 1;
+    } else {
+      result = await query(
+        `UPDATE cart_items SET selected_size = ?, selected_color = ?, price = ?, updated_at = NOW()
+         WHERE id = ? AND customer_id = ?`,
+        [variant.selected_size || '', variant.selected_color || '', variant.price, cartItemId, customerId]
+      );
+    }
+    if (!result.affectedRows) return res.status(404).json({ success: false, message: 'Cart item not found' });
+    res.json({ success: true, data: { selectedSize: variant.selected_size, selectedColor: variant.selected_color, price: variant.price } });
+  } catch (error) {
+    res.status(error.status || 500).json({ success: false, message: error.message });
   }
 });
 

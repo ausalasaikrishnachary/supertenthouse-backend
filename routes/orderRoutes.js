@@ -5,6 +5,7 @@ const db = require("../db");
 const { adminOnly } = require("../middleware/auth");
 const { ensureSalesmanNotificationsTable, notifyAdminOrderCreated } = require('../services/salesmanNotificationService');
 const { addressFields, addressValues, ensureStaffOrderSnapshotColumns, getCustomerDeliveryAddress } = require('../services/staffOrderPresentation');
+const { resolveOrderItemVariant } = require('../services/productVariants');
 
 // ==============================
 // CREATE NEW ORDER
@@ -29,7 +30,9 @@ router.post("/", async (req, res) => {
     await db.promise().query("START TRANSACTION");
     const deliveryAddress = await getCustomerDeliveryAddress(db.promise(), customer_id);
 
-    const subtotal = Math.round(items.reduce((sum, item) => sum + Number(item.price) * Number(item.quantity), 0) * 100) / 100;
+    const resolvedItems = [];
+    for (const item of items) resolvedItems.push({ ...item, ...(await resolveOrderItemVariant(db.promise(), item)) });
+    const subtotal = Math.round(resolvedItems.reduce((sum, item) => sum + Number(item.price) * Number(item.quantity), 0) * 100) / 100;
     const tax = Math.round(subtotal * 0.18 * 100) / 100;
     const grandTotal = Math.round((subtotal + tax) * 100) / 100;
 
@@ -61,7 +64,7 @@ router.post("/", async (req, res) => {
     const orderId = orderResult.insertId;
 
     // Insert order items
-    for (const item of items) {
+    for (const item of resolvedItems) {
       // Get product details
       const [product] = await db.promise().query(
         "SELECT product_name, product_code, discount FROM products WHERE id = ?",
@@ -103,9 +106,9 @@ router.post("/", async (req, res) => {
       const itemSql = `
         INSERT INTO admin_order_items (
           order_id, product_id, product_name, product_code, 
-          quantity, price, discount, subtotal, image_url
+          quantity, price, discount, subtotal, image_url, selected_size, selected_color
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
 
       await db.promise().query(itemSql, [
@@ -117,7 +120,9 @@ router.post("/", async (req, res) => {
         item.price,
         discount,
         subtotalItem,
-        imageUrl
+        imageUrl,
+        item.selected_size,
+        item.selected_color
       ]);
 
       // Update product stock

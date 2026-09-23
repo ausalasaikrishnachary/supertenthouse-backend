@@ -759,6 +759,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
+const { resolveOrderItemVariant } = require('../services/productVariants');
 
 // ✅ Promise wrapper
 const query = (sql, values) => {
@@ -1159,6 +1160,12 @@ router.post("/order", async (req, res) => {
       });
     }
 
+    const resolvedItems = [];
+    for (const item of items) {
+      const variant = await resolveOrderItemVariant(db.promise(), { ...item, product_id: item.product_id ?? item.productId });
+      resolvedItems.push({ ...item, selectedSize: variant.selected_size, selectedColor: variant.selected_color, price: variant.price });
+    }
+
     // Generate unique order number
     const orderNumber = `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
@@ -1198,7 +1205,7 @@ router.post("/order", async (req, res) => {
         venue || null,
         guestCount ? parseInt(guestCount) : null,
         specialInstructions || null,
-        JSON.stringify(items),
+        JSON.stringify(resolvedItems),
         parseFloat(subtotal) || 0,
         parseFloat(deliveryCharge) || 0,
         parseFloat(gst) || 0,

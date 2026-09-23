@@ -8,6 +8,7 @@ const snapshotDefinitions = {
   address_city: 'VARCHAR(150) NULL', address_state: 'VARCHAR(150) NULL', address_pincode: 'VARCHAR(30) NULL',
   address_country: 'VARCHAR(100) NULL'
 };
+const itemSnapshotDefinitions = { selected_size: 'VARCHAR(100) NULL', selected_color: 'VARCHAR(100) NULL' };
 let schemaPromise;
 function ensureStaffOrderSnapshotColumns(connection) {
   if (!schemaPromise) schemaPromise = (async () => {
@@ -15,6 +16,13 @@ function ensureStaffOrderSnapshotColumns(connection) {
       const [existing] = await connection.query(`SHOW COLUMNS FROM ${table}`);
       const names = new Set(existing.map(column => column.Field));
       for (const [name, definition] of Object.entries(snapshotDefinitions)) {
+        if (!names.has(name)) await connection.query(`ALTER TABLE ${table} ADD COLUMN ${name} ${definition}`);
+      }
+    }
+    for (const table of ['admin_order_items', 'salesman_order_items']) {
+      const [existing] = await connection.query(`SHOW COLUMNS FROM ${table}`);
+      const names = new Set(existing.map(column => column.Field));
+      for (const [name, definition] of Object.entries(itemSnapshotDefinitions)) {
         if (!names.has(name)) await connection.query(`ALTER TABLE ${table} ADD COLUMN ${name} ${definition}`);
       }
     }
@@ -60,7 +68,7 @@ async function enrichStaffOrderItems(connection, table, orderId, existingItems) 
   let items = existingItems;
   if (!Array.isArray(items)) [items] = await connection.query(
     `SELECT oi.product_id, oi.product_name AS name, oi.quantity, oi.price,
-            oi.discount, oi.subtotal, oi.image_url
+            oi.discount, oi.subtotal, oi.image_url, oi.selected_size, oi.selected_color
      FROM ${table} oi WHERE oi.order_id = ?`, [orderId]
   );
   for (const item of items) {

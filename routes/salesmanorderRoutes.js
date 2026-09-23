@@ -8,6 +8,7 @@ const {
     createOrderStatusNotification
 } = require("../services/salesmanNotificationService");
 const { addressFields, addressValues, ensureStaffOrderSnapshotColumns, getCustomerDeliveryAddress } = require('../services/staffOrderPresentation');
+const { resolveOrderItemVariant } = require('../services/productVariants');
 
 // ==============================
 // CREATE NEW ORDER (Salesman)
@@ -41,7 +42,9 @@ router.post("/", async (req, res) => {
         await db.promise().query("START TRANSACTION");
         const deliveryAddress = await getCustomerDeliveryAddress(db.promise(), customer_id);
 
-        const subtotal = total_amount || items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const resolvedItems = [];
+        for (const item of items) resolvedItems.push({ ...item, ...(await resolveOrderItemVariant(db.promise(), item)) });
+        const subtotal = resolvedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         const tax = subtotal * 0.18;
         const grandTotal = subtotal + tax;
 
@@ -78,7 +81,7 @@ router.post("/", async (req, res) => {
         const orderId = orderResult.insertId;
 
         // Insert order items
-        for (const item of items) {
+        for (const item of resolvedItems) {
             // Get product details
             const [product] = await db.promise().query(
                 "SELECT product_name, product_code, discount FROM products WHERE id = ?",
@@ -108,9 +111,9 @@ router.post("/", async (req, res) => {
             const itemSql = `
                 INSERT INTO salesman_order_items (
                     order_id, product_id, product_name, product_code, 
-                    quantity, price, discount, subtotal, image_url
+                    quantity, price, discount, subtotal, image_url, selected_size, selected_color
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `;
 
             await db.promise().query(itemSql, [
@@ -122,7 +125,9 @@ router.post("/", async (req, res) => {
                 item.price,
                 discount,
                 subtotalItem,
-                imageUrl
+                imageUrl,
+                item.selected_size,
+                item.selected_color
             ]);
 
             // Update product stock

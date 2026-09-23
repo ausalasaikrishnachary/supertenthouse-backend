@@ -34,6 +34,8 @@ const ensureTableWork = async () => {
           product_name VARCHAR(255),
           price DECIMAL(10, 2),
           image VARCHAR(500),
+          quantity INT NOT NULL DEFAULT 1,
+          selected_color VARCHAR(100) NULL,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           UNIQUE KEY unique_wishlist_typed (customer_id, item_type, product_id)
         )
@@ -49,6 +51,10 @@ const ensureTableWork = async () => {
         SET wi.item_type = 'package'
         WHERE wi.item_type = 'product'`);
     }
+    const quantityColumn = await query("SHOW COLUMNS FROM wishlist_items LIKE 'quantity'");
+    if (quantityColumn.length === 0) await query("ALTER TABLE wishlist_items ADD COLUMN quantity INT NOT NULL DEFAULT 1 AFTER image");
+    const colorColumn = await query("SHOW COLUMNS FROM wishlist_items LIKE 'selected_color'");
+    if (colorColumn.length === 0) await query("ALTER TABLE wishlist_items ADD COLUMN selected_color VARCHAR(100) NULL AFTER quantity");
     const oldIndex = await query("SHOW INDEX FROM wishlist_items WHERE Key_name = 'unique_wishlist_item'");
     if (oldIndex.length > 0) await query("ALTER TABLE wishlist_items DROP INDEX unique_wishlist_item");
     const typedIndex = await query("SHOW INDEX FROM wishlist_items WHERE Key_name = 'unique_wishlist_typed'");
@@ -75,6 +81,8 @@ router.post("/add", async (req, res) => {
   try {
     const { customerId, productId, productName, price, image } = req.body;
     const itemType = normalizeItemType(req.body.itemType || req.body.item_type);
+    const quantity = Math.max(1, Number.parseInt(req.body.quantity, 10) || 1);
+    const selectedColor = String(req.body.selectedColor || req.body.selected_color || '').trim() || null;
 
     console.log("📦 Adding to wishlist:", { customerId, productId, productName, price });
 
@@ -97,6 +105,8 @@ router.post("/add", async (req, res) => {
 
     if (existingItem.length > 0) {
       console.log("📦 Item already in wishlist");
+      await query(`UPDATE wishlist_items SET product_name = ?, price = ?, image = ?, quantity = ?, selected_color = ? WHERE id = ?`,
+        [productName || existingItem[0].product_name || '', price || existingItem[0].price || 0, image || existingItem[0].image || '', quantity, selectedColor, existingItem[0].id]);
       return res.json({ 
         success: true, 
         message: "Item already in wishlist",
@@ -106,15 +116,17 @@ router.post("/add", async (req, res) => {
 
     const insertResult = await query(
       `INSERT INTO wishlist_items 
-      (customer_id, product_id, item_type, product_name, price, image)
-      VALUES (?, ?, ?, ?, ?, ?)`,
+      (customer_id, product_id, item_type, product_name, price, image, quantity, selected_color)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         customerId,
         productId,
         itemType,
         productName || '',
         price || 0,
-        image || ''
+        image || '',
+        quantity,
+        selectedColor
       ]
     );
 
@@ -222,7 +234,7 @@ router.get("/:customerId", async (req, res) => {
 
     const items = await query(
       `SELECT id AS wishlist_id, product_id AS item_id, product_id, item_type,
-              product_name, price, image, created_at
+              product_name, price, image, quantity, selected_color, created_at
        FROM wishlist_items WHERE customer_id = ? ORDER BY created_at DESC`,
       [customerId]
     );

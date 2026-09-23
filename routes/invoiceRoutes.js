@@ -400,7 +400,7 @@ function generateInvoiceHTML(order) {
             <tbody>
               ${items.length > 0 ? items.map(item => `
                 <tr>
-                  <td class="item-name">${item.name || 'Item'}</td>
+                  <td class="item-name">${item.name || 'Item'}${item.size ? `<div style="font-size:11px;color:#64748b">Size: ${item.size}</div>` : ''}${item.color ? `<div style="font-size:11px;color:#64748b">Colour: ${item.color}</div>` : ''}</td>
                   <td style="text-align: center;">${item.quantity || 0}</td>
                   <td style="text-align: right;">₹${(item.price || 0).toLocaleString('en-IN')}</td>
                   <td style="text-align: right; font-weight: 600;">₹${(item.total || (item.price || 0) * (item.quantity || 0)).toLocaleString('en-IN')}</td>

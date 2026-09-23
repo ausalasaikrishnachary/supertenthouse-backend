@@ -9,9 +9,9 @@ function fixture(invoice = 'INV-CUS-2026-000001', status = 'completed') {
     queries.push(sql);
     assert.ok(sql.startsWith('SELECT'));
     if (sql.includes('FROM customers')) return [[{ name: 'Customer' }]];
-    if (sql.includes('_order_items')) return [[{ product_name: 'Tent', price: 100, quantity: 2, subtotal: 190 }]];
+    if (sql.includes('_order_items')) return [[{ product_name: 'Tent', price: 100, quantity: 2, subtotal: 190, selected_size: 'L', selected_color: 'Black' }]];
     if (params.length === 2 && params[1] !== 5) return [[]];
-    return [[{ customer_id: 5, invoice_number: invoice, status, items: JSON.stringify([{ name: 'Tent', price: 100, quantity: 2 }]), subtotal: 200, gst: 36, grand_total: 236 }]];
+    return [[{ customer_id: 5, invoice_number: invoice, status, items: JSON.stringify([{ name: 'Tent', price: 100, quantity: 2, selectedSize: 'L', selectedColor: 'Black' }]), subtotal: 200, gst: 36, grand_total: 236 }]];
   } };
 }
 test('all sources use stored invoice data, ignore tampering and permit completed orders', async () => {
@@ -20,6 +20,8 @@ test('all sources use stored invoice data, ignore tampering and permit completed
     assert.equal(result.grandTotal, 236);
     assert.equal(result.invoiceNumber, 'INV-CUS-2026-000001');
     assert.equal(result.items[0].name, 'Tent');
+    assert.equal(result.items[0].size, 'L');
+    assert.equal(result.items[0].color, 'Black');
   }
 });
 test('every non-completed status is rejected even when an invoice number exists', async () => {

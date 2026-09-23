@@ -4501,6 +4501,7 @@ const db = require("../db");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const { validateSizes } = require('../services/productVariants');
 
 // ====================================
 // CREATE UPLOAD FOLDER
@@ -5190,7 +5191,9 @@ router.post("/", upload.array("images", 10), (req, res) => {
     // Parse JSON fields
     const parsedSpecifications = specifications ? parseJSONField(specifications) : null;
     const parsedColors = colors ? parseJSONField(colors) : null;
-    const parsedSizes = sizes ? parseJSONField(sizes) : null;
+    let parsedSizes;
+    try { parsedSizes = validateSizes(sizes || []); }
+    catch (error) { return res.status(error.status || 400).json({ error: error.message }); }
     
     // ─── FIX: Process color_images with proper file mapping ──────────────────────────
     let parsedColorImages = null;
@@ -5331,7 +5334,9 @@ router.put("/:id", upload.array("images", 10), (req, res) => {
   // Parse JSON fields
   const parsedSpecifications = specifications ? parseJSONField(specifications) : null;
   const parsedColors = colors ? parseJSONField(colors) : null;
-  const parsedSizes = sizes ? parseJSONField(sizes) : null;
+  let parsedSizes;
+  try { parsedSizes = validateSizes(sizes || []); }
+  catch (error) { return res.status(error.status || 400).json({ error: error.message }); }
   
   // ─── FIX: Process color_images with proper file mapping ──────────────────────────
   let parsedColorImages = null;
