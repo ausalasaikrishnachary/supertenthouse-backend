@@ -363,14 +363,6 @@ function generateInvoiceHTML(order) {
         </div>
         <div class="invoice-body">
           <div class="company-info">
-            <div>
-              <div class="company-name">IIIQBETS EVENTS</div>
-              <div class="company-details">
-                Hyderabad, Telangana, India<br>
-                Email: info@iiqbets.com<br>
-                Phone: +91 93468 43156
-              </div>
-            </div>
             <div style="text-align: right;">
               <div style="font-size: 12px; color: #666;">Invoice Date</div>
               <div style="font-size: 14px; font-weight: 500;">${invoiceDate}</div>
@@ -432,14 +424,6 @@ function generateInvoiceHTML(order) {
                 <span class="value" style="color: #2e7d32;">-₹${(order.couponDiscount || 0).toLocaleString('en-IN')}</span>
               </div>
             ` : ''}
-            <div class="summary-row">
-              <span class="label">Delivery Charge</span>
-              <span class="value">${(order.deliveryCharge || 0) === 0 ? 'FREE' : `₹${(order.deliveryCharge || 0).toLocaleString('en-IN')}`}</span>
-            </div>
-            <div class="summary-row">
-              <span class="label">GST (18%)</span>
-              <span class="value">₹${(order.gst || 0).toLocaleString('en-IN')}</span>
-            </div>
             <div class="summary-row total">
               <span class="label">Grand Total</span>
               <span class="value">₹${(order.grandTotal || 0).toLocaleString('en-IN')}</span>
@@ -447,10 +431,6 @@ function generateInvoiceHTML(order) {
           </div>
 
           <div class="payment-info">
-            <div>
-              <span class="label">Payment Method: </span>
-              <span class="value">${(order.paymentMethod || 'N/A').toUpperCase()}</span>
-            </div>
             <div>
               <span class="label">Payment Status: </span>
               <span class="value status-${(order.paymentStatus || 'PENDING').toLowerCase()}">${(order.paymentStatus || 'PENDING').toUpperCase()}</span>

@@ -45,7 +45,7 @@ router.post("/", async (req, res) => {
         customer_id, order_number, total_amount, tax_amount, grand_total, 
         order_date, status, payment_status, payment_method, ${addressFields.join(', ')}
       )
-      VALUES (?, ?, ?, ?, ?, ?, 'approved', 'pending', 'cash', ${addressFields.map(() => '?').join(', ')})
+      VALUES (?, ?, ?, ?, ?, ?, 'approved', 'Paid', 'cash', ${addressFields.map(() => '?').join(', ')})
     `;
 
     const [orderResult] = await db.promise().query(orderSql, [
