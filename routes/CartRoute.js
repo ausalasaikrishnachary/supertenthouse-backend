@@ -468,6 +468,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db");
 const { resolveOrderItemVariant } = require('../services/productVariants');
+const { attachSelectedColors } = require('../services/colorCatalog');
 
 // ✅ Promise wrapper
 const query = (sql, values) => {
@@ -478,6 +479,53 @@ const query = (sql, values) => {
     });
   });
 };
+const ACTIVE_CART_PREDICATE = '(saved_for_later IS NULL OR saved_for_later = 0)';
+
+// The colour a customer picked is stored per cart row. Every read that feeds the
+// client must expose the product's option lists too, otherwise the client cannot
+// tell which colour is selected and falls back to the product's first colour.
+// color_images is joined in so each line can report its own colour name and image
+// instead of leaving the client to derive them.
+const CART_ITEMS_WITH_OPTIONS = `
+  SELECT ci.*, p.sizes AS available_sizes, p.colors AS available_colors,
+         p.color_images AS available_color_images
+  FROM cart_items ci LEFT JOIN products p ON p.id = ci.product_id
+  WHERE ci.customer_id = ? AND ${ACTIVE_CART_PREDICATE}
+  ORDER BY ci.updated_at DESC
+`;
+
+// Read the active cart with the selected colour resolved for display.
+const readActiveCart = async (customerId) => attachSelectedColors(
+  await query(CART_ITEMS_WITH_OPTIONS, [customerId])
+);
+
+// A cart row is identified by its variant (selected_size + selected_color). Callers
+// that know the row id get an exact match; callers that only know the product must
+// name the variant, so two colours of one product never resolve to the same row.
+const resolveCartItem = async (customerId, { cartItemId, productId, selectedSize, selectedColor }) => {
+  const hasVariant = selectedSize != null || selectedColor != null;
+  if (cartItemId != null && String(cartItemId).trim() !== '') {
+    return query(
+      `SELECT * FROM cart_items WHERE id = ? AND customer_id = ? AND ${ACTIVE_CART_PREDICATE} LIMIT 1`,
+      [cartItemId, customerId]
+    );
+  }
+  if (productId != null && hasVariant) {
+    return query(
+      `SELECT * FROM cart_items
+       WHERE customer_id = ? AND product_id = ? AND selected_size = ? AND selected_color = ? AND ${ACTIVE_CART_PREDICATE}`,
+      [customerId, productId, String(selectedSize ?? ''), String(selectedColor ?? '')]
+    );
+  }
+  if (productId == null) return [];
+  const byProduct = await query(
+    `SELECT * FROM cart_items WHERE customer_id = ? AND product_id = ? AND ${ACTIVE_CART_PREDICATE}`,
+    [customerId, productId]
+  );
+  // Only unambiguous when a single variant of the product is in the cart.
+  return byProduct.length === 1 ? byProduct : [];
+};
+
 let cartVariantSchemaPromise;
 const ensureCartVariantSchema = () => {
   if (!cartVariantSchemaPromise) cartVariantSchemaPromise = (async () => {
@@ -607,13 +655,7 @@ router.post("/cart", async (req, res) => {
       console.log("📦 Inserted new item with ID:", result.insertId);
     }
 
-    const items = await query(
-      `SELECT ci.*, p.sizes AS available_sizes, p.colors AS available_colors
-       FROM cart_items ci LEFT JOIN products p ON p.id = ci.product_id
-       WHERE ci.customer_id = ? AND (ci.saved_for_later IS NULL OR ci.saved_for_later = 0)
-       ORDER BY ci.updated_at DESC`,
-      [customerId]
-    );
+    const items = await readActiveCart(customerId);
 
     console.log("📦 Cart items after update:", items.length);
 
@@ -649,12 +691,7 @@ router.get("/cart/:customerId", async (req, res) => {
       return res.json({ success: true, data: [] });
     }
 
-    const items = await query(
-      `SELECT * FROM cart_items 
-       WHERE customer_id = ? AND (saved_for_later IS NULL OR saved_for_later = 0)
-       ORDER BY updated_at DESC`,
-      [customerId]
-    );
+    const items = await readActiveCart(customerId);
 
     console.log("📦 Active cart items found:", items.length);
 
@@ -704,11 +741,13 @@ router.put('/cart/variant', async (req, res) => {
 // ✅ UPDATE QUANTITY
 router.put("/cart", async (req, res) => {
   try {
-    const { customerId, productId, quantity } = req.body;
+    const { customerId, productId, quantity, cartItemId, selectedSize, selectedColor } = req.body;
+    const size = selectedSize ?? req.body.selected_size;
+    const color = selectedColor ?? req.body.selected_color;
 
-    console.log("📦 Update quantity:", { customerId, productId, quantity });
+    console.log("📦 Update quantity:", { customerId, productId, cartItemId, size, color, quantity });
 
-    if (!customerId || !productId || quantity == null) {
+    if (!customerId || (productId == null && cartItemId == null) || quantity == null) {
       return res.status(400).json({ success: false, message: "Missing data" });
     }
 
@@ -717,34 +756,30 @@ router.put("/cart", async (req, res) => {
       actualProductId = productId.split('_')[0];
     }
 
-    console.log("📦 Looking for productId:", actualProductId);
+    // Resolve the exact variant row. Two colours of one product are separate rows,
+    // so a quantity change must never touch a sibling variant.
+    let existingItem = await resolveCartItem(customerId, {
+      cartItemId,
+      productId: actualProductId,
+      selectedSize: size,
+      selectedColor: color,
+    });
 
-    let existingItem = await query(
-      `SELECT * FROM cart_items 
-       WHERE customer_id = ? AND product_id = ? AND (saved_for_later IS NULL OR saved_for_later = 0)`,
-      [customerId, actualProductId]
-    );
-
-    if (existingItem.length === 0) {
+    if (existingItem.length === 0 && actualProductId != null) {
       const stringMatch = await query(
         `SELECT * FROM cart_items 
-         WHERE customer_id = ? AND CAST(product_id AS CHAR) = ? AND (saved_for_later IS NULL OR saved_for_later = 0)`,
+         WHERE customer_id = ? AND CAST(product_id AS CHAR) = ? AND ${ACTIVE_CART_PREDICATE}`,
         [customerId, String(actualProductId)]
       );
-      
-      if (stringMatch.length > 0) {
+
+      if (stringMatch.length === 1) {
         existingItem = stringMatch;
       }
     }
 
     if (existingItem.length === 0) {
-      const items = await query(
-        `SELECT * FROM cart_items 
-         WHERE customer_id = ? AND (saved_for_later IS NULL OR saved_for_later = 0)
-         ORDER BY updated_at DESC`,
-        [customerId]
-      );
-      
+      const items = await readActiveCart(customerId);
+
       return res.json({ 
         success: true, 
         message: "Item not found in cart",
@@ -752,31 +787,28 @@ router.put("/cart", async (req, res) => {
       });
     }
 
-    const dbProductId = existingItem[0].product_id;
+    const target = existingItem[0];
 
     if (quantity <= 0) {
       await query(
-        `DELETE FROM cart_items 
-         WHERE customer_id = ? AND product_id = ?`,
-        [customerId, dbProductId]
+        `DELETE FROM cart_items WHERE id = ? AND customer_id = ?`,
+        [target.id, customerId]
       );
-      console.log("📦 Item deleted");
+      console.log("📦 Item deleted", { cartItemId: target.id, selected_color: target.selected_color });
     } else {
       await query(
         `UPDATE cart_items 
          SET quantity = ?, updated_at = NOW()
-         WHERE customer_id = ? AND product_id = ?`,
-        [quantity, customerId, dbProductId]
+         WHERE id = ? AND customer_id = ?`,
+        [quantity, target.id, customerId]
       );
-      console.log("📦 Item updated to quantity:", quantity);
+      console.log("📦 Item updated to quantity:", quantity, {
+        cartItemId: target.id,
+        selected_color: target.selected_color,
+      });
     }
 
-    const items = await query(
-      `SELECT * FROM cart_items 
-       WHERE customer_id = ? AND (saved_for_later IS NULL OR saved_for_later = 0)
-       ORDER BY updated_at DESC`,
-      [customerId]
-    );
+    const items = await readActiveCart(customerId);
 
     res.json({ 
       success: true, 
@@ -806,11 +838,13 @@ router.delete("/cart/item", async (req, res) => {
     console.log("📦 Request body:", req.body);
     console.log("📦 Request headers:", req.headers);
     
-    const { customerId, productId } = req.body;
+    const { customerId, productId, cartItemId, selectedSize, selectedColor } = req.body;
+    const size = selectedSize ?? req.body.selected_size;
+    const color = selectedColor ?? req.body.selected_color;
 
-    console.log("📦 DELETE Request:", { customerId, productId });
+    console.log("📦 DELETE Request:", { customerId, productId, cartItemId, size, color });
 
-    if (!customerId || !productId) {
+    if (!customerId || (productId == null && cartItemId == null)) {
       console.log("❌ Missing customerId or productId");
       return res.status(400).json({ 
         success: false, 
@@ -826,68 +860,37 @@ router.delete("/cart/item", async (req, res) => {
 
     console.log("📦 Actual productId to delete:", actualProductId);
 
-    // First check if the item exists
-    const existingItem = await query(
-      `SELECT * FROM cart_items 
-       WHERE customer_id = ? AND product_id = ? AND (saved_for_later IS NULL OR saved_for_later = 0)`,
-      [customerId, actualProductId]
-    );
+    // Remove only the requested variant row, never every colour of the product.
+    const existingItem = await resolveCartItem(customerId, {
+      cartItemId,
+      productId: actualProductId,
+      selectedSize: size,
+      selectedColor: color,
+    });
 
     console.log("📦 Existing item found:", existingItem);
 
     if (existingItem.length === 0) {
-      console.log("❌ Item not found in cart with exact match, trying string comparison...");
-      // Try with string comparison
-      const stringMatch = await query(
-        `SELECT * FROM cart_items 
-         WHERE customer_id = ? AND CAST(product_id AS CHAR) = ? AND (saved_for_later IS NULL OR saved_for_later = 0)`,
-        [customerId, String(actualProductId)]
-      );
-      
-      console.log("📦 String match result:", stringMatch);
-      
-      if (stringMatch.length > 0) {
-        console.log("✅ Found via string comparison, deleting...");
-        await query(
-          `DELETE FROM cart_items 
-           WHERE customer_id = ? AND product_id = ?`,
-          [customerId, stringMatch[0].product_id]
-        );
-        console.log("📦 Item deleted via string match");
-      } else {
-        console.log("❌ Item not found in cart, returning current cart");
-        const items = await query(
-          `SELECT * FROM cart_items 
-           WHERE customer_id = ? AND (saved_for_later IS NULL OR saved_for_later = 0)
-           ORDER BY updated_at DESC`,
-          [customerId]
-        );
-        
-        return res.json({ 
-          success: true, 
-          message: "Item not found in cart",
-          data: items 
-        });
-      }
-    } else {
-      // Delete the item
-      console.log("✅ Found item, deleting...");
-      const deleteResult = await query(
-        `DELETE FROM cart_items 
-         WHERE customer_id = ? AND product_id = ?`,
-        [customerId, actualProductId]
-      );
-      console.log("📦 Delete result:", deleteResult);
-      console.log("📦 Item deleted successfully");
+      console.log("❌ Item not found in cart, returning current cart");
+      const items = await readActiveCart(customerId);
+
+      return res.json({ 
+        success: true, 
+        message: "Item not found in cart",
+        data: items 
+      });
     }
 
-    // Get updated cart
-    const items = await query(
-      `SELECT * FROM cart_items 
-       WHERE customer_id = ? AND (saved_for_later IS NULL OR saved_for_later = 0)
-       ORDER BY updated_at DESC`,
-      [customerId]
+    console.log("✅ Found item, deleting...");
+    const deleteResult = await query(
+      `DELETE FROM cart_items WHERE id = ? AND customer_id = ?`,
+      [existingItem[0].id, customerId]
     );
+    console.log("📦 Delete result:", deleteResult);
+    console.log("📦 Item deleted successfully", { selected_color: existingItem[0].selected_color });
+
+    // Get updated cart
+    const items = await readActiveCart(customerId);
 
     console.log("📦 Cart items after deletion:", items.length);
     console.log("📦 ========== DELETE COMPLETED ==========");

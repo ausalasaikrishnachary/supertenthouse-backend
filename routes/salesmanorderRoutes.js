@@ -9,6 +9,9 @@ const {
 } = require("../services/salesmanNotificationService");
 const { addressFields, addressValues, ensureStaffOrderSnapshotColumns, getCustomerDeliveryAddress } = require('../services/staffOrderPresentation');
 const { resolveOrderItemVariant } = require('../services/productVariants');
+const deliveryDateService = require('../services/deliveryDate');
+const { resolveOrderItemImage } = require('../services/orderItemMedia');
+const orderPayments = require('../services/orderPayments');
 
 // ==============================
 // CREATE NEW ORDER (Salesman)
@@ -22,8 +25,20 @@ router.post("/", async (req, res) => {
         salesman_id,
         salesman_name,
         payment_method = 'cash',
+        advance,
         notes = null
     } = req.body;
+
+    // The day the customer is promised the goods. Validated before the transaction
+    // opens so a malformed date is refused with a clear message rather than stored
+    // as a day nobody chose, and left null when the salesman has not agreed one yet.
+    let deliveryDate;
+    try {
+        deliveryDate = deliveryDateService.normalizeDeliveryDate(
+            req.body.delivery_date ?? req.body.deliveryDate);
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
 
     if (!customer_id) {
         return res.status(400).json({ error: "Customer ID is required" });
@@ -44,9 +59,17 @@ router.post("/", async (req, res) => {
 
         const resolvedItems = [];
         for (const item of items) resolvedItems.push({ ...item, ...(await resolveOrderItemVariant(db.promise(), item)) });
-        const subtotal = resolvedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        const tax = subtotal * 0.18;
-        const grandTotal = subtotal + tax;
+        const subtotal = Math.round(resolvedItems.reduce((sum, item) => sum + (Number(item.price) * Number(item.quantity)), 0) * 100) / 100;
+        // There is no tax on this order. The business does not charge GST, so
+        // the figure the salesman's form quotes is the figure stored. A
+        // tax_amount sent by any client is ignored on purpose: it must never be
+        // able to raise the total above the price the customer was shown.
+        const tax = 0;
+        const grandTotal = subtotal;
+        if (grandTotal < 0) {
+            await db.promise().query("ROLLBACK");
+            return res.status(400).json({ message: 'Order total cannot be negative' });
+        }
 
         const date = new Date();
         const year = date.getFullYear().toString().slice(-2);
@@ -58,10 +81,10 @@ router.post("/", async (req, res) => {
         const orderSql = `
             INSERT INTO salesman_orders (
                 customer_id, order_number, total_amount, tax_amount, grand_total, 
-                order_date, status, payment_status, payment_method, notes,
+                order_date, status, payment_status, payment_method, notes, delivery_date,
                 salesman_id, salesman_name, order_by, ${addressFields.join(', ')}
             )
-            VALUES (?, ?, ?, ?, ?, ?, 'pending', 'pending', ?, ?, ?, ?, 'salesman', ${addressFields.map(() => '?').join(', ')})
+            VALUES (?, ?, ?, ?, ?, ?, 'pending', 'pending', ?, ?, ?, ?, ?, 'salesman', ${addressFields.map(() => '?').join(', ')})
         `;
 
         const [orderResult] = await db.promise().query(orderSql, [
@@ -73,6 +96,7 @@ router.post("/", async (req, res) => {
             order_date || new Date(),
             payment_method,
             notes,
+            deliveryDate ?? null,
             salesman_id,
             salesman_name,
             ...addressValues(deliveryAddress)
@@ -92,19 +116,9 @@ router.post("/", async (req, res) => {
             const productCode = product.length > 0 ? product[0].product_code : '';
             const discount = product.length > 0 ? product[0].discount : 0;
             
-            // Get product image
-            let imageUrl = '';
-            try {
-                const [images] = await db.promise().query(
-                    "SELECT image_url FROM product_images WHERE product_id = ? ORDER BY sort_order ASC, id ASC LIMIT 1",
-                    [item.product_id]
-                );
-                if (images.length > 0) {
-                    imageUrl = images[0].image_url;
-                }
-            } catch (imgErr) {
-                console.error('Error fetching product image:', imgErr);
-            }
+            // Store the image of the colour that was ordered so this line keeps
+            // showing it even after the product's images change.
+            const imageUrl = await resolveOrderItemImage(db.promise(), item);
 
             const subtotalItem = item.price * item.quantity;
 
@@ -137,6 +151,19 @@ router.post("/", async (req, res) => {
             );
         }
 
+        // Rejected before the commit so a bad advance rolls the whole order back
+        // rather than saving an order whose advance was never applied.
+        if (advance !== undefined && advance !== null && String(advance).trim() !== '') {
+            await orderPayments.recordPayment(db.promise(), {
+                source: 'salesman',
+                orderId,
+                amount: advance,
+                mode: payment_method,
+                remarks: 'Advance collected by salesman',
+                actor: { id: salesman_id, role: 'salesman', name: salesman_name }
+            });
+        }
+
         await db.promise().query("COMMIT");
 
         const [newOrder] = await db.promise().query(
@@ -149,6 +176,8 @@ router.post("/", async (req, res) => {
             [orderId]
         );
 
+        const payment = orderPayments.summarise(newOrder[0], orderPayments.parseAmount(advance ?? 0, 'Advance amount'));
+
         let invoiceWarning;
         try { newOrder[0].invoice_number = await invoiceRoutes.getOrCreateInvoiceNumber({ orderId, orderSource: 'salesman' }); }
         catch (error) { invoiceWarning = 'Order saved. Invoice generation is pending; do not place the order again.'; console.error('Invoice allocation failed:', error.message); }
@@ -160,7 +189,12 @@ router.post("/", async (req, res) => {
             order: {
                 id: orderId,
                 ...newOrder[0],
-                items: orderItems
+                items: orderItems,
+                payment,
+                order_total: payment.order_total,
+                total_paid: payment.total_paid,
+                balance_amount: payment.balance_amount,
+                payment_status: payment.payment_status
             }
         });
 
@@ -219,10 +253,14 @@ router.get("/", authenticate, requireRole("salesman", "admin"), async (req, res)
             }
         }
 
+        await orderPayments.attachPaymentSummaries(db.promise(), 'salesman', orders);
+
         res.json({
             message: "Salesman orders fetched successfully",
             count: orders.length,
-            data: orders
+            // A delivery date leaves as a bare YYYY-MM-DD day whatever the driver
+            // produced. See services/deliveryDate.js.
+            data: deliveryDateService.presentOrders(orders)
         });
 
     } catch (err) {
@@ -280,9 +318,11 @@ router.get("/:id", authenticate, requireRole("salesman", "admin"), async (req, r
             console.error("Failed to generate/fetch invoice for salesman order details:", order[0].id, err);
         }
 
+        await orderPayments.attachPaymentSummaries(db.promise(), 'salesman', order);
+
         res.json({
             message: "Salesman order fetched successfully",
-            data: order[0]
+            data: deliveryDateService.presentOrder(order[0])
         });
 
     } catch (err) {
@@ -295,13 +335,27 @@ router.get("/:id", authenticate, requireRole("salesman", "admin"), async (req, r
 });
 
 // ==============================
+// SET DELIVERY DATE
+// ==============================
+// A salesman may agree a delivery day with the customer while the order is being
+// arranged, so unlike the status route this one is not admin only. It is scoped
+// to the signed-in salesman's own orders; an order belonging to another salesman
+// is reported as not found, which is the same answer as an id that never existed.
+router.put("/:id/delivery-date", authenticate, requireRole("salesman", "admin"),
+    deliveryDateService.createHandler('salesman_orders', { salesmanScoped: true }));
+
+// ==============================
 // UPDATE SALESMAN ORDER STATUS AND PAYMENT STATUS
 // ==============================
 router.put("/:id/status-payment", ...adminOnly, async (req, res) => {
     const { status, payment_status } = req.body;
 
     const validStatuses = ['pending', 'approved', 'rejected', 'processing', 'completed', 'cancelled'];
-    const validPaymentStatuses = ['pending', 'paid', 'failed', 'blocked'];
+
+    // payment_status is derived from recorded payments, so it is never written
+    // here. It is still accepted so an older client can change the order status
+    // without erroring, but it no longer changes what any panel displays.
+    const paymentStatusIgnored = payment_status !== undefined && payment_status !== null;
 
     let updates = [];
     let params = [];
@@ -312,15 +366,6 @@ router.put("/:id/status-payment", ...adminOnly, async (req, res) => {
     } else if (status) {
         return res.status(400).json({
             error: `Invalid status. Valid values: ${validStatuses.join(', ')}`
-        });
-    }
-
-    if (payment_status && validPaymentStatuses.includes(payment_status.toLowerCase())) {
-        updates.push("payment_status = ?");
-        params.push(payment_status.toLowerCase());
-    } else if (payment_status) {
-        return res.status(400).json({
-            error: `Invalid payment_status. Valid values: ${validPaymentStatuses.join(', ')}`
         });
     }
 
@@ -379,8 +424,13 @@ router.put("/:id/status-payment", ...adminOnly, async (req, res) => {
             customer_phone: customer[0]?.customer_phone || ''
         };
 
+        await orderPayments.attachPaymentSummaries(db.promise(), 'salesman', [orderData]);
+
         res.json({ 
             message: "Salesman order updated successfully", 
+            warning: paymentStatusIgnored
+                ? 'Payment status is calculated from recorded payments and was not changed. Record a payment to update it.'
+                : undefined,
             data: orderData 
         });
     } catch (err) {

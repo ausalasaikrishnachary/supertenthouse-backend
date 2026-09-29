@@ -6,6 +6,62 @@ const db = require("../db");
 const { adminOnly } = require("../middleware/auth");
 const orderReader = require('../middleware/orderReader');
 const { ensureStaffOrderSnapshotColumns, enrichStaffOrderItems } = require('../services/staffOrderPresentation');
+const { attachSelectedColors } = require('../services/colorCatalog');
+const orderPayments = require('../services/orderPayments');
+const deliveryDateService = require('../services/deliveryDate');
+
+// Orders created before the colour snapshot existed store only the colour value.
+// Fill in the display name and image for those rows without ever changing which
+// colour the order actually recorded. Order items are camelCase JSON, so the
+// resolved fields use the same keys checkout.js snapshots.
+const withResolvedOrderColors = async (items) => {
+  const list = Array.isArray(items) ? items : [];
+  const hasName = item => Boolean(item && (item.selectedColorName || item.selected_color_name));
+  const colorValue = item => item && (item.selectedColor || item.selected_color);
+
+  const missing = list.filter(item => colorValue(item) && !hasName(item));
+  let colorImagesByProduct = new Map();
+  if (missing.length > 0) {
+    const productIds = [...new Set(missing
+      .map(item => item.product_id ?? item.productId)
+      .filter(id => id != null && String(id) !== '')
+      .map(String))];
+    if (productIds.length > 0) {
+      try {
+        const [rows] = await db.promise().query(
+          `SELECT id, color_images FROM products WHERE CAST(id AS CHAR) IN (${productIds.map(() => '?').join(',')})`,
+          productIds
+        );
+        colorImagesByProduct = new Map(rows.map(row => [String(row.id), row.color_images]));
+      } catch (err) {
+        console.error('Failed to resolve order colour names:', err);
+      }
+    }
+  }
+
+  return list.map(item => {
+    if (!colorValue(item)) return item;
+    if (!hasName(item)) {
+      const colorImages = colorImagesByProduct.get(String(item.product_id ?? item.productId ?? ''));
+      if (colorImages) {
+        return { ...item, available_color_images: colorImages };
+      }
+    }
+    return item;
+  }).map(item => {
+    if (!colorValue(item)) return item;
+    const described = attachSelectedColors([item])[0];
+    if (!described) return item;
+    if (hasName(described) && (described.selectedColorName || described.selected_color_name)) {
+      return {
+        ...item,
+        selectedColorName: described.selected_color_name ?? item.selectedColorName ?? null,
+        selectedColorImage: described.selected_color_image ?? item.selectedColorImage ?? null,
+      };
+    }
+    return item;
+  });
+};
 
 // Admin and salesman orders do not persist checkout address fields. Resolve the
 // customer's preferred address at read time, retaining the customer-profile
@@ -102,6 +158,7 @@ router.get("/", async (req, res) => {
       if (!order.items) {
         order.items = [];
       }
+      order.items = await withResolvedOrderColors(order.items);
       try {
         order.invoice_number = await invoiceRoutes.getOrCreateInvoiceNumber({ orderId: order.id, orderSource: 'customer' });
       } catch (err) {
@@ -109,11 +166,15 @@ router.get("/", async (req, res) => {
       }
     }
 
+    await orderPayments.attachPaymentSummaries(db.promise(), 'customer', orders);
+
     res.json({
       success: true,
       message: "Orders fetched successfully",
       count: orders.length,
-      data: orders
+      // A delivery date leaves as a bare YYYY-MM-DD day whatever the driver
+      // produced. See services/deliveryDate.js.
+      data: deliveryDateService.presentOrders(orders)
     });
 
   } catch (err) {
@@ -165,6 +226,7 @@ router.get("/customer/:customerId", orderReader, async (req, res) => {
       if (!order.items) {
         order.items = [];
       }
+      order.items = await withResolvedOrderColors(order.items);
       try {
         order.invoice_number = await invoiceRoutes.getOrCreateInvoiceNumber({ orderId: order.id, orderSource: 'customer' });
       } catch (err) {
@@ -180,9 +242,9 @@ router.get("/customer/:customerId", orderReader, async (req, res) => {
         o.customer_id,
         o.total_amount AS total,
         o.total_amount AS subtotal,
-        o.tax_amount AS tax,
         o.grand_total,
         o.order_date AS created_at,
+        o.delivery_date,
         o.status,
         o.payment_status,
         o.payment_method,
@@ -243,9 +305,9 @@ router.get("/customer/:customerId", orderReader, async (req, res) => {
         o.customer_id,
         o.total_amount AS total,
         o.total_amount AS subtotal,
-        o.tax_amount AS tax,
         o.grand_total,
         o.order_date AS created_at,
+        o.delivery_date,
         o.updated_at,
         o.status,
         o.payment_status,
@@ -303,11 +365,17 @@ router.get("/customer/:customerId", orderReader, async (req, res) => {
       return dateB.getTime() - dateA.getTime();
     });
 
+    // Each source is summarised against its own ledger, so a customer sees the
+    // same paid/balance figures for their own order as admin and salesman do.
+    await orderPayments.attachPaymentSummaries(db.promise(), 'customer', userOrders);
+    await orderPayments.attachPaymentSummaries(db.promise(), 'admin', adminOrders);
+    await orderPayments.attachPaymentSummaries(db.promise(), 'salesman', salesmanOrders);
+
     res.json({
       success: true,
       message: "Customer orders fetched successfully",
       count: combinedOrders.length,
-      data: combinedOrders
+      data: deliveryDateService.presentOrders(combinedOrders)
     });
 
   } catch (err) {
@@ -361,15 +429,17 @@ router.get("/:id", orderReader, async (req, res) => {
       if (!order.items) {
         order.items = [];
       }
+      order.items = await withResolvedOrderColors(order.items);
       try {
         order.invoice_number = await invoiceRoutes.getOrCreateInvoiceNumber({ orderId: order.id, orderSource: 'customer' });
       } catch (err) {
         console.error("Failed to generate/fetch invoice for user order detail:", order.id, err);
       }
+      await orderPayments.attachPaymentSummaries(db.promise(), 'customer', [order]);
       return res.json({
         success: true,
         message: "Order details fetched successfully",
-        data: order
+        data: deliveryDateService.presentOrder(order)
       });
     }
 
@@ -381,9 +451,9 @@ router.get("/:id", orderReader, async (req, res) => {
         o.customer_id,
         o.total_amount AS total,
         o.total_amount AS subtotal,
-        o.tax_amount AS tax,
         o.grand_total,
         o.order_date AS created_at,
+        o.delivery_date,
         o.status,
         o.payment_status,
         o.payment_method,
@@ -412,7 +482,6 @@ router.get("/:id", orderReader, async (req, res) => {
     if (adminOrders.length > 0) {
       const order = adminOrders[0];
       order.orderSource = 'admin';
-      order.gst = order.tax;
       Object.assign(order, await attachCustomerDeliveryAddress(order));
       
       // Fetch admin order items
@@ -439,10 +508,12 @@ router.get("/:id", orderReader, async (req, res) => {
         console.error("Failed to generate/fetch invoice for admin order detail:", order.id, err);
       }
 
+      await orderPayments.attachPaymentSummaries(db.promise(), 'admin', [order]);
+
       return res.json({
         success: true,
         message: "Order details fetched successfully (Admin Order)",
-        data: order
+        data: deliveryDateService.presentOrder(order)
       });
     }
 
@@ -453,9 +524,9 @@ router.get("/:id", orderReader, async (req, res) => {
         o.customer_id,
         o.total_amount AS total,
         o.total_amount AS subtotal,
-        o.tax_amount AS tax,
         o.grand_total,
         o.order_date AS created_at,
+        o.delivery_date,
         o.updated_at,
         o.status,
         o.payment_status,
@@ -487,7 +558,6 @@ router.get("/:id", orderReader, async (req, res) => {
     if (salesmanOrders.length > 0) {
       const order = salesmanOrders[0];
       order.orderSource = 'salesman';
-      order.gst = order.tax;
       Object.assign(order, await attachCustomerDeliveryAddress(order));
       const [items] = await db.promise().query(
         `
@@ -506,10 +576,12 @@ router.get("/:id", orderReader, async (req, res) => {
         console.error("Failed to generate/fetch invoice for salesman order detail:", order.id, err);
       }
 
+      await orderPayments.attachPaymentSummaries(db.promise(), 'salesman', [order]);
+
       return res.json({
         success: true,
         message: "Order details fetched successfully (Salesman Order)",
-        data: order
+        data: deliveryDateService.presentOrder(order)
       });
     }
 
@@ -527,6 +599,14 @@ router.get("/:id", orderReader, async (req, res) => {
     });
   }
 });
+
+// ==============================
+// SET DELIVERY DATE
+// ==============================
+// A customer can place an order themselves, and until staff say when it will be
+// delivered the customer has no promised day at all. This is how they get one.
+// Admin only: the customer app reads the date but has no way to write it.
+router.put("/:id/delivery-date", ...adminOnly, deliveryDateService.createHandler('orders'));
 
 // ==============================
 // UPDATE ORDER STATUS
@@ -599,7 +679,10 @@ router.put("/:id/status-payment", ...adminOnly, async (req, res) => {
   console.log('Updating order status and payment:', { orderId, status, payment_status });
 
   const validStatuses = ['pending', 'approved', 'rejected', 'processing', 'completed', 'cancelled'];
-  const validPaymentStatuses = ['pending', 'paid', 'failed', 'blocked'];
+
+  // payment_status is derived from recorded payments and is never written here.
+  // It stays accepted so an older client can still change the order status.
+  const paymentStatusIgnored = payment_status !== undefined && payment_status !== null;
 
   let updates = [];
   let params = [];
@@ -614,20 +697,12 @@ router.put("/:id/status-payment", ...adminOnly, async (req, res) => {
     });
   }
 
-  if (payment_status && validPaymentStatuses.includes(payment_status.toLowerCase())) {
-    updates.push("payment_status = ?");
-    params.push(payment_status.toLowerCase());
-  } else if (payment_status) {
-    return res.status(400).json({
-      success: false,
-      error: `Invalid payment_status. Valid values: ${validPaymentStatuses.join(', ')}`
-    });
-  }
-
   if (updates.length === 0) {
     return res.status(400).json({
       success: false,
-      error: "At least one field (status or payment_status) is required"
+      error: paymentStatusIgnored
+        ? "Payment status is derived from recorded payments and cannot be set directly. Order status is required."
+        : "Order status is required"
     });
   }
 
@@ -671,9 +746,14 @@ router.put("/:id/status-payment", ...adminOnly, async (req, res) => {
       await createOrderNotification(updatedOrder[0], status.toLowerCase());
     }
 
+    await orderPayments.attachPaymentSummaries(db.promise(), 'customer', updatedOrder);
+
     res.json({
       success: true,
       message: "Order updated successfully",
+      warning: paymentStatusIgnored
+        ? "Payment status is calculated from recorded payments and was not changed. Record a payment to update it."
+        : undefined,
       data: updatedOrder[0]
     });
 

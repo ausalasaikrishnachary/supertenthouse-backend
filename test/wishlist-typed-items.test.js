@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const backendRoot = path.resolve(__dirname, '..');
-const mobileRoot = path.resolve(backendRoot, '..', 'supertenthouse-mobileapp');
+const mobileRoot = path.resolve(backendRoot, '..', 'Super_Tent_House_Mobile_App');
 const read = (root, file) => fs.readFileSync(path.join(root, file), 'utf8');
 
 test('wishlist persistence uses a composite customer/type/item identity', () => {
@@ -13,11 +13,17 @@ test('wishlist persistence uses a composite customer/type/item identity', () => 
   assert.match(route, /unique_wishlist_typed \(customer_id, item_type, product_id\)/);
   assert.match(route, /WHERE customer_id = \? AND item_type = \? AND product_id = \?/);
   assert.match(route, /DELETE FROM wishlist_items WHERE customer_id = \? AND item_type = \? AND product_id = \?/);
-  assert.match(route, /id AS wishlist_id, product_id AS item_id/);
+  assert.match(route, /wi\.id AS wishlist_id, wi\.product_id AS item_id/);
   assert.match(route, /INNER JOIN packages p/);
   assert.match(route, /quantity INT NOT NULL DEFAULT 1/);
   assert.match(route, /selected_color VARCHAR\(100\)/);
   assert.match(route, /product_name, price, image, quantity, selected_color/);
+});
+
+test('wishlist rows report the name and image of their own selected colour', () => {
+  const route = read(backendRoot, 'routes/WishlistRoute.js');
+  assert.match(route, /p\.color_images AS available_color_images/);
+  assert.match(route, /attachSelectedColors\(items\)/);
 });
 
 test('mobile state distinguishes colliding product and package IDs', () => {
@@ -41,7 +47,10 @@ test('package adds and Wishlist rendering retain package type', () => {
   assert.match(wishlist, /Number\(response\.data\.affectedRows\) > 0/);
   assert.match(wishlist, /remove\(productId, itemType\)/);
   assert.match(wishlist, /Quantity: \{item\.quantity\}/);
-  assert.match(wishlist, /Colour: \{item\.selectedColor\}/);
+  // the label resolves to the colour's display name, never a raw stored code
+  assert.match(wishlist, /const colorLabel = selectedColorLabel\(item\)/);
+  assert.match(wishlist, /Colour: \{colorLabel\}/);
+  assert.doesNotMatch(wishlist, /Colour: \{item\.selectedColor\}/);
   assert.match(wishlist, /p\.id === productId && p\.itemType === itemType/);
 });
 

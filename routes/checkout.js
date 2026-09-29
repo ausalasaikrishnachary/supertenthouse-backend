@@ -760,6 +760,9 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db");
 const { resolveOrderItemVariant } = require('../services/productVariants');
+const orderPayments = require('../services/orderPayments');
+const paymentAuth = require('../middleware/paymentAuth');
+const { requireRole } = require('../middleware/auth');
 
 // ✅ Promise wrapper
 const query = (sql, values) => {
@@ -1137,7 +1140,6 @@ router.post("/order", async (req, res) => {
       items,
       subtotal,
       deliveryCharge,
-      gst,
       couponDiscount,
       couponCode,
       grandTotal,
@@ -1160,10 +1162,41 @@ router.post("/order", async (req, res) => {
       });
     }
 
+    // The advance arrives from the client, so it is validated against the server's
+    // own order total before anything is written. A negative advance, a
+    // non-numeric one, or one larger than the balance is rejected outright rather
+    // than stored as a number that contradicts the order.
+    let advancePaise;
+    try {
+      advancePaise = orderPayments.parseAmount(advanceAmount ?? 0, 'Advance amount');
+      if (advancePaise < 0) {
+        return res.status(400).json({ success: false, message: "Advance amount cannot be negative" });
+      }
+      const orderTotalPaise = orderPayments.parseAmount(grandTotal, 'Order total');
+      if (advancePaise > orderTotalPaise) {
+        return res.status(400).json({
+          success: false,
+          message: `Advance amount cannot be more than the order total of ${orderTotalPaise / 100}`
+        });
+      }
+    } catch (advanceError) {
+      return res.status(advanceError.status || 400).json({ success: false, message: advanceError.message });
+    }
+
     const resolvedItems = [];
     for (const item of items) {
       const variant = await resolveOrderItemVariant(db.promise(), { ...item, product_id: item.product_id ?? item.productId });
-      resolvedItems.push({ ...item, selectedSize: variant.selected_size, selectedColor: variant.selected_color, price: variant.price });
+      // Freeze the selected colour's display name and image into the order item so
+    // the order keeps showing what was bought even if the product's colour list or
+    // colour images change later.
+    resolvedItems.push({
+      ...item,
+      selectedSize: variant.selected_size,
+      selectedColor: variant.selected_color,
+      selectedColorName: variant.selected_color_name,
+      selectedColorImage: variant.selected_color_image,
+      price: variant.price,
+    });
     }
 
     // Generate unique order number
@@ -1208,12 +1241,12 @@ router.post("/order", async (req, res) => {
         JSON.stringify(resolvedItems),
         parseFloat(subtotal) || 0,
         parseFloat(deliveryCharge) || 0,
-        parseFloat(gst) || 0,
+        0, // no GST: the business does not charge tax, so the column stays 0
         parseFloat(couponDiscount) || 0,
         couponCode || null,
         parseFloat(grandTotal) || 0,
         parseFloat(total) || parseFloat(grandTotal) || 0, // ✅ Add total field
-        parseFloat(advanceAmount) || 0, // ✅ Add advance_amount field
+        orderPayments.fromPaise(advancePaise), // kept in step with the recorded advance
         paymentMethod || null,
         'pending',
         'pending',
@@ -1222,6 +1255,32 @@ router.post("/order", async (req, res) => {
     );
 
     console.log("✅ Order created, ID:", result.insertId, "Order Number:", orderNumber);
+    // The advance is written to the payment ledger, which is what the balance and
+    // payment status are derived from. The legacy advance_amount column above is
+    // left matching it purely so older clients reading that field stay consistent.
+    if (advancePaise > 0) {
+      try {
+        await orderPayments.recordPayment(db.promise(), {
+          source: 'customer',
+          orderId: result.insertId,
+          amount: orderPayments.fromPaise(advancePaise),
+          mode: paymentMethod || 'cod',
+          remarks: 'Advance at checkout',
+          actor: { id: customerId, role: 'customer' }
+        });
+      } catch (paymentError) {
+        console.error('Advance could not be recorded for order', result.insertId, paymentError.message);
+        // The order is not usable without its advance, and the items live inline in
+        // the orders table, so removing the row cannot leave orphaned items behind.
+        try { await query('DELETE FROM orders WHERE id = ?', [result.insertId]); } catch (cleanupError) {
+          console.error('Failed to remove order after advance failure:', cleanupError);
+        }
+        return res.status(400).json({
+          success: false,
+          message: paymentError.message || 'Advance could not be applied to this order'
+        });
+      }
+    }
     let invoiceWarning;
     try { await require('../services/invoiceNumbers').getOrCreateInvoiceNumber({ orderId: result.insertId, orderSource: 'customer' }); }
     catch (error) { invoiceWarning = 'Order saved. Invoice generation is pending; do not place the order again.'; console.error('Invoice allocation failed:', error.message); }
@@ -1230,6 +1289,8 @@ router.post("/order", async (req, res) => {
       `SELECT * FROM orders WHERE id = ?`,
       [result.insertId]
     );
+
+    await orderPayments.attachPaymentSummaries(db.promise(), 'customer', order);
 
     res.json({
       success: true,
@@ -1283,6 +1344,8 @@ router.get("/orders/:customerId", async (req, res) => {
       advance_amount: order.advance_amount || 0,
     }));
 
+    await orderPayments.attachPaymentSummaries(db.promise(), 'customer', parsedOrders);
+
     res.json({
       success: true,
       data: parsedOrders
@@ -1322,6 +1385,8 @@ router.get("/order/:orderNumber", async (req, res) => {
       total: order[0].total || order[0].grand_total || 0,
       advance_amount: order[0].advance_amount || 0,
     };
+
+    await orderPayments.attachPaymentSummaries(db.promise(), 'customer', [parsedOrder]);
 
     res.json({
       success: true,
@@ -1378,10 +1443,20 @@ router.get("/order/:orderNumber", async (req, res) => {
 });
 
 // ─── UPDATE ORDER STATUS ─────────────────────────────────────────────────────
-router.put("/order/:orderId/status", async (req, res) => {
+// Staff only. This was previously unauthenticated and accepted a paymentStatus,
+// which meant anyone could mark any customer order as paid. Order status and
+// payment status are separate concerns, so only the order status is written here.
+router.put("/order/:orderId/status", paymentAuth, requireRole("admin", "salesman"), async (req, res) => {
   try {
     const { orderId } = req.params;
     const { orderStatus, paymentStatus } = req.body;
+
+    if (paymentStatus !== undefined && paymentStatus !== null) {
+      return res.status(400).json({
+        success: false,
+        message: "Payment status is derived from recorded payments. Record a payment against the order instead."
+      });
+    }
 
     console.log("📦 Updating order status:", orderId);
     console.log("📦 New status:", orderStatus);
@@ -1389,10 +1464,12 @@ router.put("/order/:orderId/status", async (req, res) => {
     // Update both status and order_status columns for compatibility
     const updates = {};
     if (orderStatus) {
-      updates.status = orderStatus;
-      updates.order_status = orderStatus;
+      if (!['pending', 'approved', 'rejected', 'processing', 'completed', 'cancelled'].includes(String(orderStatus).toLowerCase())) {
+        return res.status(400).json({ success: false, message: "Invalid order status" });
+      }
+      updates.status = String(orderStatus).toLowerCase();
+      updates.order_status = updates.status;
     }
-    if (paymentStatus) updates.payment_status = paymentStatus;
 
     if (Object.keys(updates).length === 0) {
       return res.status(400).json({
@@ -1406,11 +1483,17 @@ router.put("/order/:orderId/status", async (req, res) => {
       [updates, orderId]
     );
 
+    const [updated] = await query(`SELECT * FROM orders WHERE id = ?`, [orderId]);
+    if (updated.length > 0) {
+      await orderPayments.attachPaymentSummaries(db.promise(), 'customer', updated);
+    }
+
     console.log("✅ Order status updated:", orderId);
 
     res.json({
       success: true,
-      message: "Order status updated successfully"
+      message: "Order status updated successfully",
+      data: updated[0] || null
     });
 
   } catch (error) {
@@ -1451,6 +1534,8 @@ router.get("/orders/all", async (req, res) => {
         order_status: order.order_status || order.status || 'pending'
       };
     });
+
+    await orderPayments.attachPaymentSummaries(db.promise(), 'customer', parsedOrders);
 
     res.json({
       success: true,

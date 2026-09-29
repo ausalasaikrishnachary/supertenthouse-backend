@@ -8,7 +8,7 @@ let browser, server;
   const executablePath = ['C:/Program Files/Google/Chrome/Application/chrome.exe', 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'].find(p => fs.existsSync(p));
   browser = await puppeteer.launch({ headless: true, executablePath, args: ['--no-sandbox'] });
   const page = await browser.newPage(); let status = 'completed'; let reads = 0;
-  const app = express(); const dist = path.join(__dirname, '../../supertenthouse-mobileapp/dist');
+  const app = express(); const dist = path.join(__dirname, '../../Super_Tent_House_Mobile_App/dist');
   app.use(express.static(dist)); app.use((req, res) => res.sendFile(path.join(dist, 'index.html')));
   server = await new Promise(resolve => { const s = app.listen(0, '127.0.0.1', () => resolve(s)); });
   await page.evaluateOnNewDocument(() => {

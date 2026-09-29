@@ -2,7 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const mobile = path.resolve(__dirname, '..', '..', 'supertenthouse-mobileapp');
+const mobile = path.resolve(__dirname, '..', '..', 'Super_Tent_House_Mobile_App');
 const read = file => fs.readFileSync(path.join(mobile, file), 'utf8');
 
 test('customer product mapping preserves real zero stock and cards display it', () => {

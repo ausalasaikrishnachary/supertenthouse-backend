@@ -6,16 +6,16 @@ const path = require('path');
 const puppeteer = require('puppeteer');
 let browser, server;
 (async () => {
-  const cartSource = fs.readFileSync(path.join(__dirname, '../../supertenthouse-mobileapp/app/(tabs)/cart.tsx'), 'utf8');
+  const cartSource = fs.readFileSync(path.join(__dirname, '../../Super_Tent_House_Mobile_App/app/(tabs)/cart.tsx'), 'utf8');
   const activeCart = cartSource.slice(cartSource.lastIndexOf('// app/(tabs)/cart.tsx'));
   assert.doesNotMatch(activeCart, /<div\b/);
-  assert.match(fs.readFileSync(path.join(__dirname, '../../supertenthouse-mobileapp/utils/storage.ts'), 'utf8'), /AsyncStorage\.getItem/);
-  const cartStore = fs.readFileSync(path.join(__dirname, '../../supertenthouse-mobileapp/store/cart.tsx'), 'utf8');
+  assert.match(fs.readFileSync(path.join(__dirname, '../../Super_Tent_House_Mobile_App/utils/storage.ts'), 'utf8'), /AsyncStorage\.getItem/);
+  const cartStore = fs.readFileSync(path.join(__dirname, '../../Super_Tent_House_Mobile_App/store/cart.tsx'), 'utf8');
   const activeStore = cartStore.slice(cartStore.lastIndexOf('// store/cart.tsx'));
   assert.ok(activeStore.indexOf("dispatch({ type: 'ADD_ITEM', payload: cartItem })") < activeStore.indexOf('await axios.post(`${API_BASE_URL}/cart`'));
 
   const app = express();
-  const dist = path.join(__dirname, '../../supertenthouse-mobileapp/dist');
+  const dist = path.join(__dirname, '../../Super_Tent_House_Mobile_App/dist');
   app.use(express.static(dist));
   app.use((req, res) => res.sendFile(path.join(dist, 'index.html')));
   server = await new Promise(resolve => { const s = app.listen(0, '127.0.0.1', () => resolve(s)); });

@@ -8,7 +8,7 @@ let browser;
 let server;
 (async () => {
   const app = express();
-  const dist = path.join(__dirname, '../../supertenthouse-mobileapp/dist');
+  const dist = path.join(__dirname, '../../Super_Tent_House_Mobile_App/dist');
   app.use(express.static(dist));
   app.use((req, res) => res.sendFile(path.join(dist, 'index.html')));
   server = await new Promise(resolve => {

@@ -20,10 +20,10 @@ function fixture() {
     if (sql.includes('FROM admin_order_items')) return [[{ name: 'Admin Tent', price: 100, quantity: 1 }]];
     if (sql.includes('FROM salesman_order_items')) return [[{ name: 'Salesman Tent', price: 100, quantity: 1 }]];
     if (sql.includes('FROM salesman_orders') && sql.includes('WHERE o.customer_id = ?')) {
-      return [[{ id: 25, customer_id: 7, order_number: 'SALESMAN-25', tax: 18, address_line1: 'Snapshot Road' }]];
+      return [[{ id: 25, customer_id: 7, order_number: 'SALESMAN-25', address_line1: 'Snapshot Road' }]];
     }
     if (params[0] !== '25' || (params.length > 1 && params[1] !== 7)) return [[]];
-    return [[{ id: 25, customer_id: 7, order_number: sql.includes('FROM salesman_orders') ? 'SALESMAN-25' : sql.includes('FROM admin_orders') ? 'ADMIN-25' : 'CUSTOMER-25', tax: 18, items: '[]', address_line1: 'Snapshot Road' }]];
+    return [[{ id: 25, customer_id: 7, order_number: sql.includes('FROM salesman_orders') ? 'SALESMAN-25' : sql.includes('FROM admin_orders') ? 'ADMIN-25' : 'CUSTOMER-25', items: '[]', address_line1: 'Snapshot Road' }]];
   } }) };
   const imports = {
     express: { Router: () => router }, '../db': db,
@@ -32,6 +32,18 @@ function fixture() {
     '../services/staffOrderPresentation': { ensureStaffOrderSnapshotColumns: async () => {}, enrichStaffOrderItems: async (_connection, table) => {
       const [items] = await db.promise().query(`SELECT * FROM ${table}`, ['25']); return items;
     } },
+    '../services/colorCatalog': require('../services/colorCatalog'),
+    // Reads no connection until a request arrives, so the real module is safe
+    // to load here and keeps the delivery-date route wired to a real handler.
+    '../services/deliveryDate': require('../services/deliveryDate'),
+    // Orders now carry a derived payment block; the fixture has no ledger, so
+    // every order simply comes back pending.
+    '../services/orderPayments': {
+      ...require('../services/orderPayments'),
+      attachPaymentSummaries: async (_connection, _source, orders) => orders,
+      getPaymentSummary: async () => ({ payment: { order_total: 0, total_paid: 0, balance_amount: 0, payment_status: 'pending' } }),
+      listPayments: async () => []
+    },
   };
   vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../routes/customerorderRoutes.js'), 'utf8'), {
     require: name => { if (!(name in imports)) throw new Error(name); return imports[name]; }, module: { exports: {} }, console,
@@ -47,8 +59,10 @@ for (const source of ['customer', 'admin', 'salesman']) {
     assert.equal(res.body.data.orderSource, source);
     assert.equal(res.body.data.order_number, `${source.toUpperCase()}-25`);
     assert.equal(f.invoices[0].orderSource, source);
+  // This business charges no tax, so no tax is sent to a customer on any source.
+  assert.ok(!('gst' in res.body.data), source + ' order must not carry a gst field');
+  assert.ok(!('tax' in res.body.data), source + ' order must not carry a tax field');
     assert.match(f.queries[0].sql, /AND o.customer_id = \?/);
-    if (source === 'admin' || source === 'salesman') assert.equal(res.body.data.gst, 18);
   });
 }
 
@@ -105,7 +119,7 @@ test('legacy links default to customer orders, while staff reads retain admin ac
 });
 
 test('customer list, details and invoice keep the source discriminator', () => {
-  const root = path.join(__dirname, '../../supertenthouse-mobileapp/app');
+  const root = path.join(__dirname, '../../Super_Tent_House_Mobile_App/app');
   const list = fs.readFileSync(path.join(root, '(tabs)/orders.tsx'), 'utf8');
   const details = fs.readFileSync(path.join(root, 'order-details/[id].tsx'), 'utf8');
   assert.match(list, /\?source=\$\{item.orderSource/);

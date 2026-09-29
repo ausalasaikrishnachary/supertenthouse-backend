@@ -7,7 +7,7 @@ const puppeteer = require('puppeteer');
 let browser, server;
 (async () => {
   const app = express();
-  const dist = path.join(__dirname, '../../supertenthouse-mobileapp/dist');
+  const dist = path.join(__dirname, '../../Super_Tent_House_Mobile_App/dist');
   app.use(express.static(dist));
   app.use((req, res) => res.sendFile(path.join(dist, 'index.html')));
   server = await new Promise(resolve => { const s = app.listen(0, '127.0.0.1', () => resolve(s)); });
@@ -24,7 +24,7 @@ let browser, server;
     const url = request.url();
     if (url.includes('/uploads/products/fixture.png')) {
       imageRequests++;
-      return request.respond({ status: 200, contentType: 'image/png', body: fs.readFileSync(path.join(__dirname, '../../supertenthouse-mobileapp/assets/images/icon.png')) });
+      return request.respond({ status: 200, contentType: 'image/png', body: fs.readFileSync(path.join(__dirname, '../../Super_Tent_House_Mobile_App/assets/images/icon.png')) });
     }
     if (url.includes('/api/')) {
       const headers = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Authorization,Content-Type' };

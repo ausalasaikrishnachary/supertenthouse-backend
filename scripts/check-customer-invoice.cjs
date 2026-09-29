@@ -20,7 +20,7 @@ const db = { promise: () => ({ query: async (sql, params) => {
     require: name => name === '../db' ? db : require(name), module: moduleObject, process, console, Buffer,
   });
   const app = express(); app.use(express.json()); app.use('/api/invoice', moduleObject.exports);
-  const dist = path.join(__dirname, '../../supertenthouse-mobileapp/dist');
+  const dist = path.join(__dirname, '../../Super_Tent_House_Mobile_App/dist');
   app.use(express.static(dist)); app.use((req, res) => res.sendFile(path.join(dist, 'index.html')));
   server = await new Promise(resolve => { const s = app.listen(0, '127.0.0.1', () => resolve(s)); });
   const base = `http://127.0.0.1:${server.address().port}`;

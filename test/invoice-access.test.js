@@ -3,10 +3,13 @@ const assert = require('node:assert/strict');
 const jwt = require('jsonwebtoken');
 const reader = require('../middleware/orderReader');
 const { loadInvoice, escapeInvoice } = require('../services/invoiceData');
-function fixture(invoice = 'INV-CUS-2026-000001', status = 'completed') {
+function fixture(invoice = 'INV-CUS-2026-000001', status = 'completed', paid = 236) {
   const queries = [];
   return { queries, query: async (sql, params) => {
     queries.push(sql);
+    // The payment ledger guard and its grouped total are read-only lookups.
+    if (sql.includes('information_schema.tables')) return [[{ count: 1 }]];
+    if (sql.includes('SUM(amount)')) return [[{ order_id: params[1], total_paid: paid }]];
     assert.ok(sql.startsWith('SELECT'));
     if (sql.includes('FROM customers')) return [[{ name: 'Customer' }]];
     if (sql.includes('_order_items')) return [[{ product_name: 'Tent', price: 100, quantity: 2, subtotal: 190, selected_size: 'L', selected_color: 'Black' }]];
@@ -39,6 +42,35 @@ test('wrong owner, missing invoice and invalid source fail without writes', asyn
   await assert.rejects(loadInvoice(fixture(), { orderId: 1 }, 99), { status: 404 });
   await assert.rejects(loadInvoice(fixture(''), { orderId: 1 }, 5), { status: 409 });
   await assert.rejects(loadInvoice(fixture(), { orderId: 1, orderSource: 'constructor' }, 5), { status: 400 });
+});
+test('the invoice reports the ledger figures, not the legacy payment column', async () => {
+  const settled = await loadInvoice(fixture('INV-1', 'completed', 236), { orderId: 1, orderSource: 'customer' }, 5);
+  assert.equal(settled.totalPaid, 236);
+  assert.equal(settled.balanceAmount, 0);
+  assert.equal(settled.paymentStatus, 'paid');
+
+  const partPaid = await loadInvoice(fixture('INV-1', 'completed', 100), { orderId: 1, orderSource: 'customer' }, 5);
+  assert.equal(partPaid.totalPaid, 100);
+  assert.equal(partPaid.balanceAmount, 136);
+  assert.equal(partPaid.paymentStatus, 'partially_paid');
+
+  const unpaid = await loadInvoice(fixture('INV-1', 'completed', 0), { orderId: 1, orderSource: 'customer' }, 5);
+  assert.equal(unpaid.totalPaid, 0);
+  assert.equal(unpaid.balanceAmount, 236);
+  assert.equal(unpaid.paymentStatus, 'pending');
+});
+test('an unreadable payment ledger still produces an invoice', async () => {
+  const broken = {
+    async query(sql) {
+      if (sql.includes('information_schema.tables')) throw new Error('no such table');
+      if (sql.includes('FROM customers')) return [[{ name: 'Customer' }]];
+      return [[{ customer_id: 5, invoice_number: 'INV-1', status: 'completed', items: '[]', subtotal: 200, gst: 36, grand_total: 236 }]];
+    }
+  };
+  const result = await loadInvoice(broken, { orderId: 1, orderSource: 'customer' }, 5);
+  assert.equal(result.grandTotal, 236);
+  assert.equal(result.totalPaid, 0);
+  assert.equal(result.paymentStatus, 'pending');
 });
 test('authentication accepts Admin/customer, rejects missing, expired and salesman tokens', () => {
   for (const [role, secret, allowed] of [['admin', process.env.JWT_SECRET || 'your_secret_key_here', true], ['customer', process.env.JWT_SECRET || 'my_super_secret_key', true], ['salesman', process.env.JWT_SECRET || 'your_secret_key_here', false]]) {

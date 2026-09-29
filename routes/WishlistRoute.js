@@ -2,6 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
+const { attachSelectedColors } = require("../services/colorCatalog");
 const ITEM_TYPES = new Set(["product", "package"]);
 const normalizeItemType = value => ITEM_TYPES.has(String(value || "product").toLowerCase())
   ? String(value || "product").toLowerCase()
@@ -232,10 +233,16 @@ router.get("/:customerId", async (req, res) => {
 
     await ensureTable();
 
+    // color_images is joined in so a saved colour reports its own name and image.
+    // Rows with no selected colour stay unadorned rather than inheriting the
+    // product's first colour.
     const items = await query(
-      `SELECT id AS wishlist_id, product_id AS item_id, product_id, item_type,
-              product_name, price, image, quantity, selected_color, created_at
-       FROM wishlist_items WHERE customer_id = ? ORDER BY created_at DESC`,
+      `SELECT wi.id AS wishlist_id, wi.product_id AS item_id, wi.product_id, wi.item_type,
+              wi.product_name, wi.price, wi.image, wi.quantity, wi.selected_color, wi.created_at,
+              p.color_images AS available_color_images, p.colors AS available_colors
+       FROM wishlist_items wi
+       LEFT JOIN products p ON p.id = CAST(wi.product_id AS UNSIGNED)
+       WHERE wi.customer_id = ? ORDER BY wi.created_at DESC`,
       [customerId]
     );
 
@@ -243,7 +250,7 @@ router.get("/:customerId", async (req, res) => {
 
     res.json({ 
       success: true, 
-      data: items 
+      data: attachSelectedColors(items)
     });
 
   } catch (err) {

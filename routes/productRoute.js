@@ -4501,7 +4501,16 @@ const db = require("../db");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-const { validateSizes } = require('../services/productVariants');
+const { authenticate, requireRole, adminOnly } = require('../middleware/auth');
+const { validateSizes, validateColors, normalizeColors } = require('../services/productVariants');
+const { describeColorOptions, COLOR_CATALOG } = require('../services/colorCatalog');
+
+// Staff may edit the sellable variants (sizes and colours) of any product.
+// Colour IMAGES stay admin-only: they are written from multipart uploads, and
+// the mapping in PUT /:id passes through any string containing
+// "uploads/products/" verbatim, so exposing it here would let a salesman store an
+// arbitrary path.
+const staffOnly = [authenticate, requireRole("admin", "salesman")];
 
 // ====================================
 // CREATE UPLOAD FOLDER
@@ -4724,6 +4733,11 @@ function getProductsWithImages(sql, params, callback) {
         product.color_images = {};
       }
 
+      // Pair every colour with its own display name and image. Added here so all
+      // product listings expose the same colour records, and no client has to
+      // keep its own hex-to-name table or infer which image belongs to a colour.
+      product.color_options = describeColorOptions(product.colors, product.color_images);
+
       if (!product.images || product.images.length === 0) {
         getProductImages(product.id, (imgErr, images) => {
           if (imgErr) {
@@ -4747,6 +4761,15 @@ function getProductsWithImages(sql, params, callback) {
     });
   });
 }
+
+// ====================================
+// SELECTABLE COLOURS
+// ====================================
+// The single catalogue of selectable colours. Clients render and store these
+// values, so the list lives here rather than being repeated per panel.
+router.get("/colors", (req, res) => {
+  res.json({ success: true, data: COLOR_CATALOG.map(({ name, hex }) => ({ name, value: hex, hex })) });
+});
 
 // ====================================
 // TEST ENDPOINT
@@ -4984,7 +5007,7 @@ function getProductAddons(productId, callback) {
 // ====================================
 // PRODUCT ADDON MANAGEMENT
 // ====================================
-router.post("/:id/addons", (req, res) => {
+router.post("/:id/addons", adminOnly, (req, res) => {
   const productId = req.params.id;
   const { addon_ids } = req.body; // Array of integers
 
@@ -5135,6 +5158,11 @@ router.get("/:id", (req, res) => {
           product.addons = addons || [];
         }
 
+        // Each colour option carries its own display name and image, both derived
+        // from the same colour value, so the client never has to keep its own
+        // hex-to-name table or guess which image belongs to a colour.
+        product.color_options = describeColorOptions(product.colors, product.color_images);
+
         // If no images found in product_images field, fetch from product_images table
         if (!product.images || product.images.length === 0) {
           getProductImages(productId, (imgErr, images) => {
@@ -5157,7 +5185,7 @@ router.get("/:id", (req, res) => {
 // ====================================
 // CREATE PRODUCT - FIXED with proper color_images handling
 // ====================================
-router.post("/", upload.array("images", 10), (req, res) => {
+router.post("/", adminOnly, upload.array("images", 10), (req, res) => {
   try {
     const {
       product_category_id,
@@ -5296,9 +5324,233 @@ router.post("/", upload.array("images", 10), (req, res) => {
 });
 
 // ====================================
+// UPDATE PRODUCT VARIANTS (sizes + colors) - scoped, non-destructive
+// ====================================
+// Deliberately separate from PUT /:id. That handler rebuilds 19 columns out of
+// whatever the body happens to contain, so a partial body silently zeroes `price`
+// and `available_stock` and nulls every text field. This one only ever assigns
+// `sizes` and `colors`; price, stock, images and all copy are left alone.
+//
+// Colour photos are rejected here rather than ignored: they arrive as multipart
+// uploads on their own endpoints, and silently dropping the field would just hide a
+// broken client.
+router.patch("/:id/variants", staffOnly, async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id <= 0) {
+    return res.status(400).json({ success: false, message: "Invalid product id" });
+  }
+
+  const body = req.body || {};
+  if (Object.prototype.hasOwnProperty.call(body, "color_images")) {
+    return res.status(400).json({ success: false, message: "Colour photos are uploaded through /variant-colors" });
+  }
+
+  const hasSizes = Object.prototype.hasOwnProperty.call(body, "sizes");
+  const hasColors = Object.prototype.hasOwnProperty.call(body, "colors");
+  if (!hasSizes && !hasColors) {
+    return res.status(400).json({ success: false, message: "Nothing to update: send sizes, colors, or both" });
+  }
+
+  // Build the column list from the keys actually sent, so an absent field keeps its
+  // stored value instead of being overwritten with an empty array.
+  const assignments = [];
+  const values = [];
+  try {
+    if (hasSizes) {
+      assignments.push("sizes = ?");
+      values.push(JSON.stringify(validateSizes(body.sizes)));
+    }
+    if (hasColors) {
+      assignments.push("colors = ?");
+      values.push(JSON.stringify(validateColors(body.colors)));
+    }
+  } catch (error) {
+    return res.status(error.status || 400).json({ success: false, message: error.message });
+  }
+
+  const connection = db.promise();
+
+  // Existence is checked with a SELECT rather than inferred from UPDATE's
+  // affectedRows: MySQL reports 0 affected rows when the new value equals the old
+  // one, which would turn a legitimate no-op save into a bogus 404.
+  let current;
+  try {
+    const [rows] = await connection.query("SELECT id, sizes, colors FROM products WHERE id = ? LIMIT 1", [id]);
+    current = rows[0];
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+  if (!current) {
+    return res.status(404).json({ success: false, message: "Product not found" });
+  }
+
+  values.push(id);
+  try {
+    await connection.query(`UPDATE products SET ${assignments.join(", ")} WHERE id = ?`, values);
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+
+  // Re-read instead of echoing the request, so the client is shown exactly what the
+  // database now holds after the JSON column round-trip.
+  const [rows] = await connection.query("SELECT id, sizes, colors FROM products WHERE id = ? LIMIT 1", [id]);
+  const stored = rows[0] || [];
+
+  return res.status(200).json({
+    success: true,
+    message: "Product variants updated",
+    product: {
+      id: stored.id ?? id,
+      sizes: parseJSONField(stored.sizes) || [],
+      colors: parseJSONField(stored.colors) || [],
+    },
+  });
+});
+
+// Resolves the submitted colour to the key actually stored in `products.colors`.
+// `color_images` is keyed by that same value, so writing a key from the request
+// instead of the stored one would quietly create a second, unreachable entry.
+function resolveStoredColorKey(colors, submitted) {
+  const wanted = String(submitted ?? '').trim().toLowerCase();
+  if (!wanted) return null;
+  return colors.find(color => String(color).trim().toLowerCase() === wanted) ?? null;
+}
+
+function readColorImages(value) {
+  const parsed = parseJSONField(value);
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return {};
+  const out = {};
+  for (const [color, images] of Object.entries(parsed)) {
+    if (Array.isArray(images)) out[color] = images.map(image => String(image)).filter(Boolean);
+  }
+  return out;
+}
+
+// ====================================
+// COLOUR PHOTOS - staff
+// ====================================
+// Split from PATCH /:id/variants on purpose. Uploading a file and editing a size
+// list have nothing in common, and mixing them would mean re-introducing the
+// `color_images` passthrough that PUT /:id uses, where any string containing
+// "uploads/products/" is stored verbatim. Here every stored path is built from
+// `file.filename`, which multer generates server-side, so there is no way for a
+// caller to choose what gets written.
+//
+// The colour must already be in `products.colors`, otherwise the photo would be
+// attached to a value the customer can never select. Add the colour first.
+
+router.post("/:id/variant-colors", staffOnly, upload.array("color_images", 10), async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id <= 0) {
+    return res.status(400).json({ success: false, message: "Invalid product id" });
+  }
+
+  const files = Array.isArray(req.files) ? req.files : [];
+  if (!files.length) {
+    return res.status(400).json({ success: false, message: "Choose at least one photo to upload" });
+  }
+
+  const connection = db.promise();
+  let current;
+  try {
+    const [rows] = await connection.query("SELECT id, colors, color_images FROM products WHERE id = ? LIMIT 1", [id]);
+    current = rows[0];
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+  if (!current) {
+    return res.status(404).json({ success: false, message: "Product not found" });
+  }
+
+  const colors = normalizeColors(parseJSONField(current.colors) || []);
+  const key = resolveStoredColorKey(colors, req.body?.color);
+  if (!key) {
+    return res.status(400).json({ success: false, message: "Add this colour to the product before attaching a photo" });
+  }
+
+  const map = readColorImages(current.color_images);
+  // Append rather than replace, matching how the admin form treats colour uploads:
+  // picking a second photo should add to the colour, not discard the first.
+  map[key] = [...(map[key] || []), ...files.map(file => `uploads/products/${file.filename}`)];
+
+  try {
+    await connection.query("UPDATE products SET color_images = ? WHERE id = ?", [JSON.stringify(map), id]);
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+
+  return res.status(201).json({
+    success: true,
+    message: "Colour photo added",
+    color: key,
+    images: map[key],
+  });
+});
+
+router.delete("/:id/variant-colors", staffOnly, async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id <= 0) {
+    return res.status(400).json({ success: false, message: "Invalid product id" });
+  }
+
+  const body = req.body || {};
+  const requested = Array.isArray(body.images) ? body.images.map(image => String(image)) : [];
+  if (!requested.length) {
+    return res.status(400).json({ success: false, message: "No photos were selected for removal" });
+  }
+
+  const connection = db.promise();
+  let current;
+  try {
+    const [rows] = await connection.query("SELECT id, colors, color_images FROM products WHERE id = ? LIMIT 1", [id]);
+    current = rows[0];
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+  if (!current) {
+    return res.status(404).json({ success: false, message: "Product not found" });
+  }
+
+  const colors = normalizeColors(parseJSONField(current.colors) || []);
+  const key = resolveStoredColorKey(colors, body.color);
+  if (!key) {
+    return res.status(400).json({ success: false, message: "Unknown colour for this product" });
+  }
+
+  const map = readColorImages(current.color_images);
+  const stored = map[key] || [];
+
+  // Every requested path has to be one this product already stores for this colour.
+  // Matching on the exact stored value is what keeps a crafted path from being used
+  // to reach an unrelated row.
+  const unknown = requested.filter(image => !stored.includes(image));
+  if (unknown.length) {
+    return res.status(400).json({ success: false, message: "One or more photos are not attached to this colour" });
+  }
+
+  const remove = new Set(requested);
+  const kept = stored.filter(image => !remove.has(image));
+  if (kept.length) map[key] = kept;
+  else delete map[key];
+
+  try {
+    await connection.query("UPDATE products SET color_images = ? WHERE id = ?", [JSON.stringify(map), id]);
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: "Colour photo removed",
+    color: key,
+    images: map[key] || [],
+  });
+});
+
+// ====================================
 // UPDATE PRODUCT - FIXED with proper color_images handling
 // ====================================
-router.put("/:id", upload.array("images", 10), (req, res) => {
+router.put("/:id", adminOnly, upload.array("images", 10), (req, res) => {
   const id = req.params.id;
 
   const {
@@ -5686,7 +5938,7 @@ router.put("/:id", upload.array("images", 10), (req, res) => {
 // ====================================
 // DELETE PRODUCT
 // ====================================
-router.delete("/:id", (req, res) => {
+router.delete("/:id", adminOnly, (req, res) => {
   const productId = req.params.id;
 
   db.query(
@@ -5742,7 +5994,7 @@ router.delete("/:id", (req, res) => {
 // ====================================
 // UPLOAD PRODUCT IMAGES
 // ====================================
-router.post("/:id/images", upload.array("images", 10), (req, res) => {
+router.post("/:id/images", adminOnly, upload.array("images", 10), (req, res) => {
   const productId = req.params.id;
 
   db.query(
@@ -5825,7 +6077,7 @@ router.post("/:id/images", upload.array("images", 10), (req, res) => {
 // ====================================
 // DELETE PRODUCT IMAGE
 // ====================================
-router.delete("/:productId/images/:imageId", (req, res) => {
+router.delete("/:productId/images/:imageId", adminOnly, (req, res) => {
   const { productId, imageId } = req.params;
 
   db.query(

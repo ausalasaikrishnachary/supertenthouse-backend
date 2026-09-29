@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const backendRoot = path.resolve(__dirname, '..');
-const mobileRoot = path.resolve(backendRoot, '..', 'supertenthouse-mobileapp');
+const mobileRoot = path.resolve(backendRoot, '..', 'Super_Tent_House_Mobile_App');
 const read = (root, file) => fs.readFileSync(path.join(root, file), 'utf8');
 
 test('customer password reset uses purpose-scoped OTP and one-time reset token', () => {

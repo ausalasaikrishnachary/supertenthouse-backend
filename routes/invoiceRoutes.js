@@ -18,6 +18,15 @@ function normalizeOrderSource(orderSource) {
   return INVOICE_SOURCES[normalized] ? normalized : 'customer';
 }
 
+// Paints the colour as a small circle so the invoice shows the chosen colour
+// alongside its name. The value is only ever used as a CSS colour; a name that is
+// not a plain colour code is ignored so nothing unexpected reaches the styles.
+function swatch(colorValue) {
+  const value = String(colorValue || '').trim();
+  if (!/^#[0-9a-fA-F]{3}$|^#[0-9a-fA-F]{6}$/.test(value)) return '';
+  return `<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${value};border:1px solid #cbd5e1;flex:none;"></span>`;
+}
+
 function formatInvoiceNumber(source, sequence) {
   const year = new Date().getFullYear();
   const prefix = INVOICE_SOURCES[source].prefix;
@@ -162,19 +171,20 @@ function generateInvoiceHTML(order) {
   const items = Array.isArray(order.items) ? order.items : [];
   
   // ─── FIX: Properly format the event date ──────────────────────────────────
+  // A DATE column is sent as a plain YYYY-MM-DD day, so it is taken apart by hand
+  // and rebuilt at local midnight. `new Date('2026-09-27')` would be UTC midnight
+  // and print the 26th in any timezone behind Greenwich.
   let eventDateFormatted = 'N/A';
   if (order.eventDate) {
+    const day = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(order.eventDate).trim());
     try {
-      const eventDate = new Date(order.eventDate);
-      if (!isNaN(eventDate.getTime())) {
-        eventDateFormatted = eventDate.toLocaleDateString('en-IN', { 
-          day: 'numeric', 
-          month: 'long', 
-          year: 'numeric' 
-        });
-      } else {
-        eventDateFormatted = order.eventDate;
-      }
+      eventDateFormatted = day
+        ? new Date(Number(day[1]), Number(day[2]) - 1, Number(day[3])).toLocaleDateString('en-IN', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+          })
+        : String(order.eventDate);
     } catch (e) {
       eventDateFormatted = order.eventDate;
     }
@@ -400,7 +410,7 @@ function generateInvoiceHTML(order) {
             <tbody>
               ${items.length > 0 ? items.map(item => `
                 <tr>
-                  <td class="item-name">${item.name || 'Item'}${item.size ? `<div style="font-size:11px;color:#64748b">Size: ${item.size}</div>` : ''}${item.color ? `<div style="font-size:11px;color:#64748b">Colour: ${item.color}</div>` : ''}</td>
+                  <td class="item-name">${item.name || 'Item'}${item.size ? `<div style="font-size:11px;color:#64748b">Size: ${item.size}</div>` : ''}${item.color ? `<div style="font-size:11px;color:#64748b;display:flex;align-items:center;gap:6px">${swatch(item.colorValue)}<span>Colour: ${item.color}</span></div>` : ''}</td>
                   <td style="text-align: center;">${item.quantity || 0}</td>
                   <td style="text-align: right;">₹${(item.price || 0).toLocaleString('en-IN')}</td>
                   <td style="text-align: right; font-weight: 600;">₹${(item.total || (item.price || 0) * (item.quantity || 0)).toLocaleString('en-IN')}</td>
@@ -426,7 +436,7 @@ function generateInvoiceHTML(order) {
             ` : ''}
             <div class="summary-row total">
               <span class="label">Grand Total</span>
-              <span class="value">₹${(order.grandTotal || 0).toLocaleString('en-IN')}</span>
+              <span class="value">₹${(order.subtotal || 0).toLocaleString('en-IN')}</span>
             </div>
           </div>
 
